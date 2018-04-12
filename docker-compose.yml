@@ -1,0 +1,28 @@
+version: '3.6'
+services:
+  api:
+    build: ./api/
+    ports:
+     - 8080:8088
+    volumes:
+     - ./api:/home/api/code
+  gui:
+    build: ./gui/
+    ports:
+     - 80:3000
+    volumes:
+     - ./gui:/home/gui/code
+  db:
+    image: mysql:5.7.21
+    environment:
+      MYSQL_ROOT_PASSWORD: dev_root #Username is just 'root'
+  adminer:
+    image: adminer:4.6.2-standalone
+    ports:
+      - 5050:8080
+  img:
+    build: ./img/
+    ports:
+     - 8888:8888
+    volumes:
+     - ./img:/home/img/code
