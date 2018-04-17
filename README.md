@@ -9,9 +9,11 @@ API: Pending but, http://localhost:8080/
 IMG: Pending but, http://localhost:8888/
 Adminer: http://localhost:5050/
 
-To get running, just use `docker-compose up`. Dependencies will be automatically installed, and thanks to volume mapping changes will be immediately applied to the running containers.
+To get running, just use `docker-compose up`. Dependencies will be automatically installed, and thanks to volume mapping changes will be immediately applied to the running containers. The command can be run from the root project folder and all folders it contains.
 
-To stop use `ctrl + c` in the console previously used.
+To stop use `ctrl + c` in the console previously used. (or use `docker-compose down` if you managed to close the console)
+
+To reset everything, run `docker-compose rm`.
 
 ### Troubleshooting
 

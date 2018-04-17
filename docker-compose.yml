@@ -1,28 +1,49 @@
+# This docker-compose configuration is only to be run in a development context.
+# When its closer to the submission date, a production ready version will be created.
 version: '3.6'
 services:
-  api:
+  api: # Hosts the API portion of the system.
+    depends_on:
+      - migrator
     build: ./api/
     ports:
-     - 8080:8088
+      - 8080:8088
     volumes:
-     - ./api:/home/api/code
-  gui:
+      - ./api:/home/api/code
+      - ./db:/home/api/db
+  gui: # Hosts the GUI portion of the system.
+    depends_on:
+      - api
     build: ./gui/
     ports:
-     - 80:3000
+      - 80:3000
     volumes:
-     - ./gui:/home/gui/code
-  db:
+      - ./gui:/home/gui/code
+  img: # Hosts the image server portion of the system.
+    depends_on:
+      - migrator
+    build: ./img/
+    ports:
+      - 8888:8888
+    volumes:
+      - ./img:/home/img/code
+      - ./db:/home/img/db
+  db: # Hosts the database. This currently will not persist database contents.
     image: mysql:5.7.21
     environment:
-      MYSQL_ROOT_PASSWORD: dev_root #Username is just 'root'
-  adminer:
+      MYSQL_DATABASE: "carsharedb"
+      MYSQL_ROOT_PASSWORD: dev_root # Username is just 'root'
+  adminer: # This is a tool for interacting with the database, and it not essential for systems functionality.
+    depends_on:
+      - db
     image: adminer:4.6.2-standalone
     ports:
       - 5050:8080
-  img:
-    build: ./img/
-    ports:
-     - 8888:8888
+# A migrator service will also be used, but is not yet implemented.
+  migrator:
+    depends_on:
+      - db
+    build: ./db/
     volumes:
-     - ./img:/home/img/code
+      - ./db:/home/migrator/code
+    
