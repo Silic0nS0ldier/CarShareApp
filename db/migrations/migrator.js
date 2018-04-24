@@ -64,9 +64,14 @@ async function Main() {
         await DB.Knex.transaction(async trx => {
             let start = new Date().getMilliseconds();
             let comment = await require(`./${version}.js`)(trx);
+
+            // Prevent quirks.
+            let dur = new Date().getMilliseconds() - start;
+            if (dur < 0) dur = 0;
+
             await trx("migrations").insert({
                 version: version,
-                duration: new Date().getMilliseconds() - start,
+                duration: dur,
                 comment: comment
             });
         });
