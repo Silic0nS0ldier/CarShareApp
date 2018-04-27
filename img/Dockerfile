@@ -6,7 +6,7 @@ RUN addgroup -S nupp && adduser -S -g nupp img
 # Set HOME environment variable
 ENV HOME=/home/img
 
-WORKDIR $HOME/code
+WORKDIR $HOME/code/img
 
 # Set a non-root user as default
 USER img

@@ -23,11 +23,9 @@ async function Run(trx) {
     // Images table
     await trx.schema.createTable("images", table => {
         table.comment("Stores site images.");
-        table.increments("id")
-            .primary();
-        table.string("name")
-            .notNullable()
-            .comment("Image file name.");
+        table.integer("id")
+            .unsigned()
+            .comment("Used to uniquely identify images when the data_hash of 2 unique images collide.");
         table.string("extension")
             .notNullable()
             .comment("Image file extension.");
@@ -38,11 +36,11 @@ async function Run(trx) {
             .notNullable()
             .comment("When file was first uploaded to the database.");
         table.binary("data")
-            .notNullable()
             .comment("File data as binary.");
         table.string("data_hash")
             .notNullable()
             .comment("Hash of file data, used to assist in duplicate detection.");
+        table.primary(["id", "data_hash", "extension"]);
     });
 
     // Images dependency table

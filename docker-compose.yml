@@ -26,8 +26,8 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./img:/home/img/code
-      - ./db:/home/img/db
+      - ./img:/home/img/code/img
+      - ./db:/home/img/code/db
   db: # Hosts the database. This currently will not persist database contents.
     image: mysql:5.7.21
     environment:
@@ -39,11 +39,12 @@ services:
     image: adminer:4.6.2-standalone
     ports:
       - 5050:8080
-# A migrator service will also be used, but is not yet implemented.
   migrator:
     depends_on:
       - db
     build: ./db/
     volumes:
       - ./db:/home/migrator/code
+
+# should there be a special installer service? might allow for ways to reduce start time, and race conditions.
     
