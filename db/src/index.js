@@ -1,9 +1,11 @@
 const { Model } = require("objection");
 const Knex = require("knex");
 
-// Initialise Knex
+// Initialise Knex, with a delay to account for MySQL quirks
+// Retry logic not possible due to unhandled async exceptions within libraries which cannot be caught up here a.k.a. "bad code"
+require("thread-sleep")(10000);
 const KnexInstance = Knex({
-    client: "mysql2",
+    client: "mysql",
     //useNullAsDefault: true,
     connection: {
         host: "db",
@@ -16,32 +18,19 @@ const KnexInstance = Knex({
 // Give Objection a copy.
 Model.knex(KnexInstance);
 
-class FileModel extends Model {
+class ImageModel extends Model {
     static get tableName() {
-        return "files";
+        return "images";
     }
 }
 
-async function createFilesTable() {
-    await KnexInstance.schema.createTable("files", table => {
-        table.increments(id).primary();
-        table.string("name").notNullable();
-        table.string("extension");
-        table.integer("size_bytes").notNullable();
-        table.timestamp("first_uploaded_at").defaultTo(KnexInstance.fn.now()).notNullable().comment("When file was first uploaded to the database. ");
-        table.binary("data").notNullable().comment("File data as binary.");
-        table.string("data_hash").comment("Hash of file data, used to assist in duplicate detection.");// No need to store duplicate images. But this should be improved as collisions could occur for different images.
-    });
-}
-
-// Stores logs for various aspects of the system such as migrations, errors, 
-async function createLogsTable() {
-    await KnexInstance.schema.createTable("logs", table => {
-        table.string("category").comment("Category entry belongs too.");
-        table.integer("severity").comment("0 = Information; 1 = Warning; 2 = Error;");
-    });
+class LogModel extends Model {
+    static get tableName() {
+        return "logs";
+    }
 }
 
 module.exports = {
-    Knex: KnexInstance
+    Knex: KnexInstance,
+    ImageModel
 };

@@ -21,6 +21,10 @@ You might see a share request appear on the first run. You will need to authoris
 
 Docker for Windows has recently gained native support for Windows containers. However this is implemented as a mode, and while in the Windows containers mode you won't be able to use Linux containers. Before running `docker-compose up` ensure that Docker is running in Linux containers mode.
 
+## Best Practices
+
+- The database code should only be required at server start as it carries a 10 second "safety delay". This safety delay is required due to improper exception bubbling within the used libraries causing uncatchable exceptions to fatally crash Node.
+
 ## Code Style
 
 This code style guide is not exhaustive, and simply exists to advise in circumstances where a particular code style does change semantics, and to ensure styling has some consistences.
