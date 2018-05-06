@@ -24,6 +24,7 @@ async function Run(trx) {
     await trx.schema.createTable("images", table => {
         table.comment("Stores site images.");
         table.increments()
+            .unsigned()
             .comment("Unique identifier for image, used for internal purposes.");
         table.integer("num")
             .unsigned()
@@ -42,14 +43,89 @@ async function Run(trx) {
         table.string("data_hash")
             .notNullable()
             .comment("Hash of file data, used to assist in duplicate detection.");
-        table.primary(["id", "data_hash", "extension"]);
+        table.unique(["id", "data_hash", "extension"]);
     });
 
     // Images dependency table
     // If we had more time, this would be a table used to track where an image is being used, thus enabling clean up operations later for images that are unused.
     // This would work in addition to the duplicate detection logic.
+    // In the meantime, accidental deletions are prevented via consistency contraints in the database.
 
-    return "'logs' and 'images' tables created."
+    // Users table
+    await trx.schema.createTable("users", table => {
+        table.comment("Contains user account data.");
+        table.increments("id")
+            .unsigned()
+            .comment("Used by system to efficiently retrieve user data.");
+        table.string("fname")
+            .notNullable()
+            .comment("Users first name.");
+        table.string("mnames")
+            .comment("Users middle name(s), optional.")
+        table.string("lname")
+            .notNullable()
+            .comment("Users last name.");
+        table.string("email")
+            .notNullable()
+            .comment("Users email address.");
+        table.boolean("email_verified")
+            .defaultTo(false)
+            .notNullable()
+            .comment("Verification status of users email.");
+        table.string("password")
+            .notNullable()
+            .comment("Users hashed password with Argon2.");
+        table.boolean("disabled")
+            .defaultTo(false)
+            .notNullable()
+            .comment("If the account disabled.");
+        table.integer("user_image")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("ID of users image.");
+        table.integer("license_image")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("ID of users license image.");
+    });
+
+    // Roles table
+    await trx.schema.createTable("roles", table => {
+        table.comment("Defines roles a user can have. Roles control access.")
+        table.increments("id")
+            .unsigned()
+            .comment("Unqiue identifier for role.");
+        table.string("name")
+            .notNullable()
+            .comment("A user friendly name for the role.");
+    });
+
+    // Seed roles
+    await trx("roles").insert([
+        {
+            name: "Staff"
+        }
+    ]);
+
+    // User-Role link table
+    await trx.schema.createTable("users_roles", table => {
+        table.comment("Establishes association between users and roles.");
+        table.integer("user_id")
+            .unsigned()
+            .notNullable()
+            .references("users.id")
+            .comment("Reference to user.");
+        table.integer("role_id")
+            .unsigned()
+            .notNullable()
+            .references("roles.id")
+            .comment("Reference to role.");
+        table.primary(["user_id", "role_id"]);
+    });
+
+    return "'logs', 'images', 'users', 'roles', and 'users_roles' tables created."
 }
 
 module.exports = Run;
