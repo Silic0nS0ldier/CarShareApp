@@ -61,7 +61,7 @@ async function Run(trx) {
             .notNullable()
             .comment("Users first name.");
         table.string("mnames")
-            .comment("Users middle name(s), optional.")
+            .comment("Users middle name(s). Optional.")
         table.string("lname")
             .notNullable()
             .comment("Users last name.");
@@ -125,7 +125,96 @@ async function Run(trx) {
         table.primary(["user_id", "role_id"]);
     });
 
-    return "'logs', 'images', 'users', 'roles', and 'users_roles' tables created."
+    // Vehicle listing table
+    await trx.schema.createTable("listings", table => {
+        table.comment("Contains listing data.");
+        table.string("VIN")
+            .notNullable()
+            .primary()
+            .comment("Vehicle Identification Number");
+        table.dateTime("created_at")
+            .notNullable()
+            .defaultTo(trx.fn.now())
+            .comment("Date listing created. Change dates tracked in changes table.");
+        table.integer("owner_user_id")
+            .unsigned()
+            .notNullable()
+            .references("users.id")
+            .comment("Reference to owner.");
+        table.string("summary")
+            .comment("Description summary. Optional.");
+        table.text("description")
+            .notNullable()
+            .comment("Description of listed vehicle.");
+        table.integer("image_front")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("Reference to image of vehicle front.");
+        table.integer("image_back")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("Reference to image of vehicle back.");
+        table.integer("image_left")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("Reference to image of vehicle left.");
+        table.integer("image_right")
+            .unsigned()
+            .notNullable()
+            .references("images.id")
+            .comment("Reference to image of vehicle right.");
+        table.integer("odometer")
+            .unsigned()
+            .notNullable()
+            .comment("Odometer value in thousands.");
+        table.date("odometer_last_update")
+            .notNullable()
+            .defaultTo(trx.fn.now())
+            .comment("Date odometer value was last changed.");
+        table.string("brand")
+            .comment("Vehicle brand. NULL indicates custom.");
+        table.string("model")
+            .comment("Vehicle model. May be NULL if custom.");
+        table.string("type")
+            .notNullable()
+            .comment("Vehicle type, e.g. Sedan.");
+        table.string("year")
+            .notNullable()
+            .comment("Model year. Year of completion for custom.");
+        table.boolean("ac")
+            .notNullable()
+            .comment("Whether or not vehicle has air conditioning.");
+        table.integer("seat_min")
+            .unsigned()
+            .comment("Minimum vehicle can seat subject to configuration.");
+        table.integer("seat_max")
+            .unsigned()
+            .comment("Maximum vehicle can seat subject to configuration.");
+        table.json("misc_json")
+            .comment("Miscellaneous details. Optional");
+    });
+
+    // Listing changes
+    await trx.schema.createTable("listing_changes", table => {
+        table.comment("Documents modifications to listings");
+        table.string("VIN")
+            .notNullable()
+            .references("listings.VIN")
+            .comment("Reference to listing via VIN.");
+        table.dateTime("occured_at")
+            .defaultTo(trx.fn.now())
+            .notNullable()
+            .comment("Date change occured.");
+        table.json("modified_data")
+            .notNullable()
+            .comment("Removed or modified listing data.");
+    });
+
+
+    return "'logs', 'images', 'users', 'roles', 'users_roles', and 'listings' tables created."
 }
 
 module.exports = Run;
