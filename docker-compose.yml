@@ -39,7 +39,7 @@ services:
     image: adminer:4.6.2-standalone
     ports:
       - 5050:8080
-  migrator:
+  migrator: # Handles database migration process.
     depends_on:
       - db
     build: ./db/
