@@ -25,7 +25,7 @@ app.get("/*", (req, res) => {
     // 3 Query database, returning file with 200 or nothing with 404 depending on result.
     ImageModel.query()
         .where({
-            id: imageIds[0],
+            num: imageIds[0],
             data_hash: imageIds[1],
             extension: imageIds[2]
         })

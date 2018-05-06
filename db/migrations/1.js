@@ -23,7 +23,9 @@ async function Run(trx) {
     // Images table
     await trx.schema.createTable("images", table => {
         table.comment("Stores site images.");
-        table.integer("id")
+        table.increments()
+            .comment("Unique identifier for image, used for internal purposes.");
+        table.integer("num")
             .unsigned()
             .comment("Used to uniquely identify images when the data_hash of 2 unique images collide.");
         table.string("extension")
