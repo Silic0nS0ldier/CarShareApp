@@ -83,6 +83,14 @@ export default function DB(config) {
                         },
                         to: "roles.id"
                     }
+                },
+                sessions: {
+                    relation: Model.HasManyRelation,
+                    modelClass: SessionModel,
+                    join: {
+                        from: "users.id",
+                        to: "sessions.user_id"
+                    }
                 }
             }
         }
@@ -187,6 +195,25 @@ export default function DB(config) {
                     join: {
                         from: "listing_changes.VIN",
                         to: "listing.VIN"
+                    }
+                }
+            }
+        }
+    }
+
+    class SessionModel extends Model {
+        static get tableName() {
+            return "sessions";
+        }
+
+        static get relationMappings() {
+            return {
+                user: {
+                    relation: Model.HasOneRelation,
+                    modelClass: UserModel,
+                    join: {
+                        from: "sessions.user_id",
+                        to: "users.id"
                     }
                 }
             }
