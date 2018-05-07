@@ -1,0 +1,11 @@
+{
+    "__comment": "Each key (besides this) represents an environment.",
+    "production": {
+    },
+    "staging": {
+        "__comment": "Inherits properties of production."
+    },
+    "development": {
+        "__comment": "Inherits properties of staging."
+    }
+}
