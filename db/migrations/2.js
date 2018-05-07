@@ -15,7 +15,26 @@ async function Run(trx) {
             .comment("Unique identifier used for internal purposes.");
     });
 
-    return "Updated 'logs' and 'listing_changes' table with a primary key on 'id'.";
+    // Sessions table
+    await trx.schema.createTable("sessions", table => {
+        table.comment("Stores user sessions.");
+        table.string("id")
+            .primary()
+            .comment("Unique session identifier.");
+        table.integer("user_id")
+            .unsigned()
+            .notNullable()
+            .references("users.id")
+            .comment("User account associated with session.");
+        table.string("ip_address")
+            .notNullable()
+            .comment("IP address of session.");
+        table.dateTime("end_date")
+            .notNullable()
+            .comment("Date session terminates.")
+    });
+
+    return "Updated 'logs' and 'listing_changes' table with a primary key on 'id'. Created table 'sessions'.";
 }
 
 export default Run;
