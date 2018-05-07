@@ -1,7 +1,7 @@
 /**
  * @param {Knex.Transaction} trx 
  */
-async function Run(trx) {
+export default async function Run(trx) {
     // System logs table
     await trx.schema.createTable("logs", table => {
         table.comment("System logs.");
@@ -215,5 +215,3 @@ async function Run(trx) {
 
     return "'logs', 'images', 'users', 'roles', 'users_roles', and 'listings' tables created.";
 }
-
-module.exports = Run;
