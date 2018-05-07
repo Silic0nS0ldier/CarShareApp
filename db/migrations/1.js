@@ -23,7 +23,6 @@ export default async function Run(trx) {
     await trx.schema.createTable("images", table => {
         table.comment("Stores site images.");
         table.increments()
-            .unsigned()
             .comment("Unique identifier for image, used for internal purposes.");
         table.integer("num")
             .unsigned()
@@ -53,8 +52,7 @@ export default async function Run(trx) {
     // Users table
     await trx.schema.createTable("users", table => {
         table.comment("Contains user account data.");
-        table.increments("id")
-            .unsigned()
+        table.increments()
             .comment("Used by system to efficiently retrieve user data.");
         table.string("fname")
             .notNullable()
@@ -93,8 +91,7 @@ export default async function Run(trx) {
     // Roles table
     await trx.schema.createTable("roles", table => {
         table.comment("Defines roles a user can have. Roles control access.")
-        table.increments("id")
-            .unsigned()
+        table.increments()
             .comment("Unqiue identifier for role.");
         table.string("name")
             .notNullable()
