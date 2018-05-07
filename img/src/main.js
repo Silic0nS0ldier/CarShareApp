@@ -24,8 +24,6 @@ const app = express();
 app.get("/*", (req, res) => {
     // 1. Extract image name from URL (system immune to directory traversal attacks)
     let imageName = req.url.substring(1);// Strips the leading slash
-    console.log(imageName);
-    console.log(req.url);
     
     // 2. Map to file in database (if possible) with pattern id.datahash.extension
     // 2.1. Split value into array
