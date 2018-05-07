@@ -1,13 +1,13 @@
+import { Knex } from "../src/index";
+import { existsSync } from "fs";
+import { performance } from "perf_hooks";
+
 console.log("************************" + "\n" +
             "* CarShareApp Migrator *" + "\n" +
             "************************");
 
 // Wrap everything in an async function to allow await to bring order to chaos
 async function Main() {
-    const { Knex } = require("../src/index");
-    const { existsSync } = require("fs");
-    const { performance } = require("perf_hooks")
-
         if (!await Knex.schema.hasTable("migrations")) {
             console.log("Table 'migrations' does not exist and will be created.");
             

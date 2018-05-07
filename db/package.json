@@ -3,9 +3,10 @@
     "private": true,
     "main": "src/index.js",
     "scripts": {
-        "migrate": "npm install -silent && node migrations/migrator.js"
+        "migrate": "npm install -silent && node -r esm migrations/migrator.js"
     },
     "dependencies": {
+        "esm": "^3.0.30",
         "knex": "^0.14.6",
         "mysql": "^2.15.0",
         "objection": "^1.1.3",
