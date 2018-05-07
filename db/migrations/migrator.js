@@ -92,7 +92,7 @@ async function Main() {
         await Knex.transaction(async trx => {
             try {
                 performance.mark("ms");
-                let comment = await require(`./${version}.js`)(trx);
+                let comment = await (await import(`./${version}.js`)).default(trx);
 
                 // Prepare times
                 performance.mark("me");
