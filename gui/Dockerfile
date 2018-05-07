@@ -15,4 +15,4 @@ USER gui
 EXPOSE 3000
 
 # Start node server. Container will shut down if this terminates.
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]

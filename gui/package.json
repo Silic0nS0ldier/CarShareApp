@@ -1,15 +1,33 @@
 {
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-scripts": "1.1.4"
-  },
   "scripts": {
-    "start": "npm install -silent && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "if-env SCENARIO=production && npm run -s serve || npm run -s dev",
+    "build": "preact build",
+    "serve": "preact build && preact serve",
+    "dev": "preact -p 3000 watch",
+    "lint": "eslint src"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-synacor",
+    "rules": {
+      "no-unused-vars": "warn",
+      "react/sort-comp": "off",
+      "lines-around-comment": "off",
+      "react/prefer-stateless-function": "off"
+    }
+  },
+  "eslintIgnore": [
+    "build/*"
+  ],
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-synacor": "^1.1.0",
+    "if-env": "^1.0.0",
+    "preact-cli": "^2.0.0"
+  },
+  "dependencies": {
+    "preact": "^8.2.1",
+    "preact-router": "^2.5.5",
+    "preact-material-components": "^1.4.0"
   }
 }
