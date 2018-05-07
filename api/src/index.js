@@ -1,10 +1,8 @@
-const express = require("express");
-
 // Initialise express application
-const app = express();
+const app = require("express")();
 
 app.get("/", (req, res) => {
-    res.send("Hello World!")
+    res.send("Hello World!");
 })
 
 app.listen(8088);

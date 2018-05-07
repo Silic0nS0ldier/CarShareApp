@@ -1,4 +1,3 @@
-const Knex = require("knex");
 /**
  * @param {Knex.Transaction} trx 
  */
@@ -214,7 +213,7 @@ async function Run(trx) {
     });
 
 
-    return "'logs', 'images', 'users', 'roles', 'users_roles', and 'listings' tables created."
+    return "'logs', 'images', 'users', 'roles', 'users_roles', and 'listings' tables created.";
 }
 
 module.exports = Run;
