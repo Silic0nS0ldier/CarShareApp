@@ -1,6 +1,22 @@
-import { Knex } from "../src/index";
-import { existsSync } from "fs";
+import DB from "../src/index";
+import { existsSync, readFileSync } from "fs";
 import { performance } from "perf_hooks";
+import objectMerge from "object-merge";
+
+// Load configuration
+const config = (() => {
+    const rawConfig = JSON.parse(readFileSync("../config/config.json", "utf8"));
+    switch (process.env.SCENARIO) {
+        case "production":
+            return rawConfig.production;
+        case "staging":
+            return objectMerge(rawConfig.production, rawConfig.staging);
+        case "development":
+            return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
+        default:
+            throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+    }
+})();
 
 console.log("************************" + "\n" +
             "* CarShareApp Migrator *" + "\n" +
@@ -8,55 +24,58 @@ console.log("************************" + "\n" +
 
 // Wrap everything in an async function to allow await to bring order to chaos
 async function Main() {
-        if (!await Knex.schema.hasTable("migrations")) {
-            console.log("Table 'migrations' does not exist and will be created.");
-            
-            // Attempt to create table within transaction
-            await Knex.transaction(async trx => {
-                try {
-                    performance.mark("ims");
-                    await trx.schema.createTable("migrations", table => {
-                        table.comment("Logs migrations, by migrator.");
-                        table.increments()
-                            .unsigned()
-                            .primary()
-                            .comment("Used to get last migration.");
-                        table.integer("version")
-                            .unsigned()
-                            .notNullable()
-                            .unique()
-                            .comment("Migration version.");
-                        table.timestamp("completed_at")
-                            .defaultTo(trx.fn.now())
-                            .notNullable()
-                            .comment("Time migration was completed.");
-                        table.bigInteger("duration")
-                            .unsigned()
-                            .notNullable()
-                            .comment("Time migration took to complete in milliseconds.");
-                        table.string("comment")
-                            .comment("Optional migration comment.");
-                    });
-                    performance.mark("ime");
+    // Import Knex
+    const { Knex } = DB(config);
 
-                    performance.measure("im", "ims", "ime");
+    if (!await Knex.schema.hasTable("migrations")) {
+        console.log("Table 'migrations' does not exist and will be created.");
+        
+        // Attempt to create table within transaction
+        await Knex.transaction(async trx => {
+            try {
+                performance.mark("ims");
+                await trx.schema.createTable("migrations", table => {
+                    table.comment("Logs migrations, by migrator.");
+                    table.increments()
+                        .unsigned()
+                        .primary()
+                        .comment("Used to get last migration.");
+                    table.integer("version")
+                        .unsigned()
+                        .notNullable()
+                        .unique()
+                        .comment("Migration version.");
+                    table.timestamp("completed_at")
+                        .defaultTo(trx.fn.now())
+                        .notNullable()
+                        .comment("Time migration was completed.");
+                    table.bigInteger("duration")
+                        .unsigned()
+                        .notNullable()
+                        .comment("Time migration took to complete in milliseconds.");
+                    table.string("comment")
+                        .comment("Optional migration comment.");
+                });
+                performance.mark("ime");
 
-                    await trx("migrations").insert({
-                        version: 0,
-                        duration: performance.getEntriesByName("im")[0].duration,
-                        comment: "Creation of this migrations table."
-                    });
+                performance.measure("im", "ims", "ime");
 
-                    performance.clearMarks()
-                    performance.clearMeasures();
+                await trx("migrations").insert({
+                    version: 0,
+                    duration: performance.getEntriesByName("im")[0].duration,
+                    comment: "Creation of this migrations table."
+                });
 
-                    console.log("Ready to migrate.");
-                } catch (error) {
-                    console.log("Creation of 'migrations' table failed. Database is in an unknown state.");
-                    throw error;
-                }
-            });
-        }
+                performance.clearMarks()
+                performance.clearMeasures();
+
+                console.log("Ready to migrate.");
+            } catch (error) {
+                console.log("Creation of 'migrations' table failed. Database is in an unknown state.");
+                throw error;
+            }
+        });
+    }
 
     // Determine what migrations, if any, need to be performed.
 

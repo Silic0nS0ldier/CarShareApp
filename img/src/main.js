@@ -1,5 +1,5 @@
 import express from "express";
-import { ImageModel } from "../../db/src/index";
+import DB from "../../db/src/index";
 import { readFileSync } from "fs";
 import objectMerge from "object-merge";
 
@@ -17,6 +17,9 @@ const config = (() => {
             throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
     }
 })();
+
+// Import required database bits
+const { ImageModel } = DB(config);
 
 // Initialise express application
 const app = express();
