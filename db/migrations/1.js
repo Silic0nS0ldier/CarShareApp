@@ -169,9 +169,9 @@ async function Run(trx) {
             .unsigned()
             .notNullable()
             .comment("Odometer value in thousands.");
-        table.date("odometer_last_update")
-            .notNullable()
+        table.dateTime("odometer_last_update")
             .defaultTo(trx.fn.now())
+            .notNullable()
             .comment("Date odometer value was last changed.");
         table.string("brand")
             .comment("Vehicle brand. NULL indicates custom.");
