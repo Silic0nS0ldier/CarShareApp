@@ -1,10 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "start": "if-env SCENARIO=production && npm run -s serve || npm run -s dev",
     "build": "preact build",
     "serve": "preact build && preact serve",
-    "dev": "preact -p 3000 watch",
+    "dev": "npm i -silent && preact -p 3000 watch",
     "lint": "eslint src"
   },
   "eslintConfig": {
