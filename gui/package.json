@@ -2,26 +2,10 @@
   "private": true,
   "scripts": {
     "build": "preact build",
-    "serve": "preact build && preact serve",
-    "dev": "npm i -silent && preact -p 3000 watch",
-    "lint": "eslint src"
+    "serve": "preact serve",
+    "dev": "npm i && preact -p 3000 watch"
   },
-  "eslintConfig": {
-    "extends": "eslint-config-synacor",
-    "rules": {
-      "no-unused-vars": "warn",
-      "react/sort-comp": "off",
-      "lines-around-comment": "off",
-      "react/prefer-stateless-function": "off"
-    }
-  },
-  "eslintIgnore": [
-    "build/*"
-  ],
   "devDependencies": {
-    "eslint": "^4.5.0",
-    "eslint-config-synacor": "^1.1.0",
-    "if-env": "^1.0.0",
     "preact-cli": "^2.0.0"
   },
   "dependencies": {
