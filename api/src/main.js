@@ -11,9 +11,13 @@ const config = (() => {
         case "staging":
             return objectMerge(rawConfig.production, rawConfig.staging);
         case "development":
-            return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
-        default:
-            throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+        default: {
+            if (process.env.DOCKER == true) throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+            else {
+                console.log("Assuming local non-docker development environment.");
+                return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
+            }
+        }
     }
 })();
 
