@@ -19,6 +19,11 @@
                 "password": "dev_root",
                 "database": "carshareapp"
             }
+        },
+        "url": {
+            "api": "http://localhost:8080/",
+            "img": "http://localhost:8888/",
+            "gui": "http://localhost/"
         }
     }
 }

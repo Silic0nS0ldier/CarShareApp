@@ -1,17 +1,20 @@
 {
   "private": true,
   "scripts": {
-    "build": "preact build",
+    "build": "node -r esm configbuild.js && preact build",
     "serve": "preact serve",
-    "dev": "preact -p 80 watch",
-    "dockerDev": "npm i && preact -p 3000 watch"
+    "dev": "node -r esm configbuild.js && preact -p 80 watch",
+    "dockerDev": "npm i && node -r esm configbuild.js && preact -p 3000 watch"
   },
   "devDependencies": {
+    "esm": "^3.0.32",
+    "object-merge": "^2.5.1",
     "preact-cli": "^2.0.0"
   },
   "dependencies": {
     "preact": "^8.2.1",
+    "preact-material-components": "^1.4.0",
     "preact-router": "^2.5.5",
-    "preact-material-components": "^1.4.0"
+    "unistore": "^3.0.5"
   }
 }
