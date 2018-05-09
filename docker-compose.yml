@@ -14,6 +14,8 @@ services:
       - ./config:/home/api/config
     environment:
       - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerStart
   gui: # Hosts the GUI portion of the system.
     depends_on:
       - api
@@ -23,6 +25,10 @@ services:
     volumes:
       - ./gui:/home/gui/code
       - ./config:/home/gui/config
+    environment:
+      - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerDev
   img: # Hosts the image server portion of the system.
     depends_on:
       - migrator
@@ -35,6 +41,8 @@ services:
       - ./config:/home/img/config
     environment:
       - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerStart
   db: # Hosts the database. This currently will not persist database contents.
     image: mysql:5.7.21
     environment:
@@ -55,6 +63,8 @@ services:
       - ./config:/home/migrator/config
     environment:
       - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerMigrate
 
-# should there be a special installer service? might allow for ways to reduce start time, and race conditions.
+# For later: Production deployment should handle install operations, not each container. Automatic install here is for convenience.
     

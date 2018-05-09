@@ -1,6 +1,6 @@
 # CarShareApp
 
-tl;dr, fastest way to get started is install Docker and run `docker-compose up` from this folder. Ignore any links ommitted in the console, and use those in the Docker section.
+tl;dr, fastest way to get started is install Docker and run `docker-compose up` from this folder. Ignore any links ommitted in the console, and use those in the Docker section. Running this natively is fully supported, but will take more work to get set up (though you also gain the ability to restart a single component compared to compose).
 
 ## Docker
 

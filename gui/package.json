@@ -3,7 +3,8 @@
   "scripts": {
     "build": "preact build",
     "serve": "preact serve",
-    "dev": "npm i && preact -p 3000 watch"
+    "dev": "preact -p 80 watch",
+    "dockerDev": "npm i && preact -p 3000 watch"
   },
   "devDependencies": {
     "preact-cli": "^2.0.0"

@@ -11,12 +11,13 @@ export default async function DB(config) {
     const KnexInstance = Knex({
         client: "mysql",
         //useNullAsDefault: true,
-        connection: {
-            host: "db",
-            user: "root",
-            password: "dev_root",
-            database: "carsharedb"
-        }
+        connection: (() => {
+            if (process.env.DOCKER == true) {
+                return config.db.docker;
+            } else {
+                return config.db.self;
+            }
+        })()
     });
 
     // Wait for stable connection

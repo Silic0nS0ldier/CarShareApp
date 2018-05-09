@@ -24,4 +24,9 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 })
 
-app.listen(8088);
+if (process.env.DOCKER == true) {
+    app.listen(8088);
+} else {
+    app.listen(8080);
+}
+

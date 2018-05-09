@@ -13,6 +13,3 @@ USER img
 
 # Expose server port
 EXPOSE 8888
-
-# Start node server. Container will shut down if this terminates.
-CMD [ "npm", "start" ]

@@ -2,7 +2,8 @@
     "private": true,
     "main": "src/index.js",
     "scripts": {
-        "migrate": "npm i && node -r esm migrations/migrator.js"
+        "migrate": "node -r esm migrations/migrator.js",
+        "dockerMigrate": "npm i && node -r esm migrations/migrator.js"
     },
     "dependencies": {
         "esm": "^3.0.30",

@@ -13,6 +13,3 @@ USER api
 
 # Expose server port
 EXPOSE 8088
-
-# Start node server. Container will shut down if this terminates.
-CMD [ "npm", "start" ]

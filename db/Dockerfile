@@ -10,6 +10,3 @@ WORKDIR $HOME/code
 
 # Set a non-root user as default
 USER migrator
-
-# Start node server. Container will shut down if this terminates.
-CMD [ "npm", "run", "migrate" ]

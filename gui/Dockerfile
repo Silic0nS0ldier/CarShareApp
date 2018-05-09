@@ -13,6 +13,3 @@ USER gui
 
 # Expose server port
 EXPOSE 3000
-
-# Start node server. Container will shut down if this terminates.
-CMD [ "npm", "run", "dev" ]

@@ -1,11 +1,24 @@
 {
     "__comment": "Each key (besides this) represents an environment.",
-    "production": {
-    },
+    "production": {},
     "staging": {
         "__comment": "Inherits properties of production."
     },
     "development": {
-        "__comment": "Inherits properties of staging."
+        "__comment": "Inherits properties of staging.",
+        "db": {
+            "docker": {
+                "host": "db",
+                "user": "root",
+                "password": "dev_root",
+                "database": "carsharedb"
+            },
+            "self": {
+                "host": "localhost",
+                "user": "root",
+                "password": "dev_root",
+                "database": "carshareapp"
+            }
+        }
     }
 }

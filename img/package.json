@@ -3,7 +3,8 @@
   "private": true,
   "main": "src/index.js",
   "scripts": {
-    "start": "npm i && node src/index.js"
+    "start": "node src/index.js",
+    "dockerStart": "npm i && node src/index.js"
   },
   "dependencies": {
     "esm": "^3.0.30",
