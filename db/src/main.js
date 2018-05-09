@@ -1,7 +1,6 @@
-import { Model } from "objection";
 import Knex from "knex";
 import { readFileSync } from "fs";
-import objectMerge from "object-merge";
+import { Model } from "objection";
 
 /**
  * Returns system database access components.

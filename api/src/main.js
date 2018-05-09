@@ -1,6 +1,6 @@
+import objectMerge from "object-merge";
 import express from "express";
 import { readFileSync } from "fs";
-import objectMerge from "object-merge";
 
 // Load configuration
 const config = (() => {

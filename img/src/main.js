@@ -1,7 +1,8 @@
-import express from "express";
-import DB from "../../db/src/index";
-import { readFileSync } from "fs";
 import objectMerge from "object-merge";
+import express from "express";
+import { readFileSync } from "fs";
+
+import DB from "../../db/src/index";
 
 // Load configuration
 const config = (() => {
