@@ -1,6 +1,5 @@
 import DB from "../src/index";
 import { existsSync, readFileSync } from "fs";
-import { performance } from "perf_hooks";
 import objectMerge from "object-merge";
 
 // Load configuration
@@ -25,7 +24,7 @@ console.log("************************" + "\n" +
 // Wrap everything in an async function to allow await to bring order to chaos
 async function Main() {
     // Import Knex
-    const { Knex } = DB(config);
+    const { Knex } = await DB(config);
 
     if (!await Knex.schema.hasTable("migrations")) {
         console.log("Table 'migrations' does not exist and will be created.");
@@ -33,7 +32,6 @@ async function Main() {
         // Attempt to create table within transaction
         await Knex.transaction(async trx => {
             try {
-                performance.mark("ims");
                 await trx.schema.createTable("migrations", table => {
                     table.comment("Logs migrations, by migrator.");
                     table.increments()
@@ -56,23 +54,18 @@ async function Main() {
                     table.string("comment")
                         .comment("Optional migration comment.");
                 });
-                performance.mark("ime");
-
-                performance.measure("im", "ims", "ime");
-
+                
                 await trx("migrations").insert({
                     version: 0,
-                    duration: performance.getEntriesByName("im")[0].duration,
+                    duration: 0,
                     comment: "Creation of this migrations table."
                 });
-
-                performance.clearMarks()
-                performance.clearMeasures();
 
                 console.log("Ready to migrate.");
             } catch (error) {
                 console.log("Creation of 'migrations' table failed. Database is in an unknown state.");
-                throw error;
+                console.log(error);
+                process.exit();
             }
         });
     }
@@ -91,26 +84,19 @@ async function Main() {
         console.log(`Applying migration "./migrations/${version}.js"...`);
         await Knex.transaction(async trx => {
             try {
-                performance.mark("ms");
                 let comment = await (await import(`./${version}.js`)).default(trx);
-
-                // Prepare times
-                performance.mark("me");
-                performance.measure("m", "ms", "me");
 
                 await trx("migrations").insert({
                     version: version,
-                    duration: performance.getEntriesByName("m")[0].duration,
+                    duration: 0,
                     comment: comment
                 });
-
-                performance.clearMarks();
-                performance.clearMeasures();
 
                 console.log("Migration succeeded!");
             } catch (error) {
                 console.log("Migration failed! Database is in an unknown state.");
-                throw error;
+                console.log(error);
+                process.exit(1);
             }
         });
         migrations++;
@@ -122,12 +108,10 @@ async function Main() {
     else {
         console.log(`${migrations} migration(s) performed successfully!`);
     }
+    Knex.destroy(() => {
+        process.exit(0);
+    });
 }
 
-try {
-    Main().catch(err => {
-        throw err;
-    });
-} catch (err) {
-    throw err;
-}
+
+Main();

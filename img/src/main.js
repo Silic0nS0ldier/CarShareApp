@@ -18,6 +18,8 @@ const config = (() => {
     }
 })();
 
+async function Main() {
+    
 // Import required database bits
 const { ImageModel } = DB(config);
 
@@ -83,3 +85,7 @@ app.get("/*", (req, res) => {
 })
 
 app.listen(8888);
+
+}
+
+Main();

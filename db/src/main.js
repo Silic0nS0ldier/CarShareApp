@@ -7,10 +7,8 @@ import objectMerge from "object-merge";
  * Returns system database access components.
  * @param {object} config - System configuration object
  */
-export default function DB(config) {
-    // Initialise Knex, with a delay to account for MySQL quirks
-    // Retry logic not possible due to unhandled async exceptions within libraries which cannot be caught up here a.k.a. "bad code"
-    require("thread-sleep")(10000);
+export default async function DB(config) {
+    // Create Knex instance
     const KnexInstance = Knex({
         client: "mysql",
         //useNullAsDefault: true,
@@ -21,6 +19,20 @@ export default function DB(config) {
             database: "carsharedb"
         }
     });
+
+    // Wait for stable connection
+    let unstable = true;
+    const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+    while (unstable) {
+        await KnexInstance.raw("SELECT 1 + 1")
+            .then(() => {
+                unstable = false;
+            })
+            .catch(async error => {
+                console.log("DB could not be accessed. Retrying in 1 second...");
+                await snooze(1000);
+            });
+    }
 
     // Give Objection a copy.
     Model.knex(KnexInstance);
