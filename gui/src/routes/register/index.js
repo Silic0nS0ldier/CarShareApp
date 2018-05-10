@@ -10,8 +10,6 @@ import LinearProgress from "preact-material-components/LinearProgress";
 import "preact-material-components/LinearProgress/style";
 import style from "./style";
 
-//import style from './style';
-
 export default class Register extends Component {
     register = e => {
         // Prevent regular form submission
@@ -28,7 +26,8 @@ export default class Register extends Component {
         // Attemt to log user in
         fetch(form.action, {
             method: "POST",
-            body: formData
+            body: formData,
+            cache: "no-cache"
         }).then(response => {
             // Inspect response type
             if (response.status === "200") {
@@ -131,10 +130,10 @@ export default class Register extends Component {
         }
     };
 
-    render = () => {
+    render = ({ config }) => {
         return (
             <div class={style.register}>
-                <form method="POST" action={this.props.config.url.api + "register"} onSubmit={this.register}>
+                <form method="POST" action={config.url.api + "register"} onSubmit={this.register}>
                     <div><Typography headline4>Register</Typography></div>
                     <div><Typography subtitle1 id="register_alerts"></Typography></div>
                     <FormField class={style.pad_right}>
