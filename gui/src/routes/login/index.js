@@ -72,7 +72,7 @@ export default class Login extends Component {
         form.pwd.disabled = true;
         form.login_submit.disabled = true;
 
-        document.getElementById("login_progress").hidden = false;
+        document.getElementById("login_progress").removeAttribute("hidden");
     };
 
     formUnlock = form => {
@@ -80,7 +80,7 @@ export default class Login extends Component {
         form.pwd.disabled = false;
         form.login_submit.disabled = false;
 
-        document.getElementById("login_progress").hidden = true;
+        document.getElementById("login_progress").setAttribute("hidden", "");
     };
 
     formAlerts = (message, isError) => {

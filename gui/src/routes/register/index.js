@@ -72,7 +72,7 @@ export default class Register extends Component {
         form.register_submit.disabled = true;
         
         // ...and show loading indicator
-        document.getElementById("register_progress").hidden = false;
+        document.getElementById("register_progress").removeAttribute("hidden");
     };
 
     formUnlock = form => {
@@ -92,7 +92,7 @@ export default class Register extends Component {
         form.register_submit.disabled = false;
 
         // Hide progress bar
-        document.getElementById("register_progress").hidden = true;
+        document.getElementById("register_progress").setAttribute("hidden", "");
     };
 
     formAlerts = (message, isError) => {
