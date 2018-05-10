@@ -23,7 +23,7 @@ export default class Register extends Component {
         this.formLock(form);
         this.formAlertsClear();
 
-        // Attemt to log user in
+        // Attemt to register user
         fetch(form.action, {
             method: "POST",
             body: formData,
