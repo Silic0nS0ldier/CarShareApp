@@ -6,6 +6,7 @@ import { h, Component } from 'preact';
 
 import Profile from '../routes/profile';
 import Login from "../routes/login";
+import Register from "../routes/register";
 import Home from '../routes/home';
 import Header from './header';
 // import Home from 'async!../routes/home';
@@ -36,8 +37,8 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
 					<Profile path="/profile" />{/*Actual profile page... or something*/}
-					<Login path="/login" config={config} />{/*login page here*/}
-					<div path="/register" />{/*register page here*/}
+					<Login path="/login" config={config}/>{/*login page here*/}
+					<Register path="/register" config={config}/>{/*register page here*/}
 					<div path="/:catchall" />{/*Need to flesh this out to an actual 404 page*/}
 				</Router>
 			</div>
