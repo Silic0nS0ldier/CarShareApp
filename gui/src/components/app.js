@@ -22,23 +22,28 @@ export default class App extends Component {
 	 */
 	handleRoute = event => {
 		// Check if session is still active
-		fetch(config.url.api + "session", {
-			methd: "HEAD",
-			cache: "no-cache"
-		}).then(response => {
-			// Non-200 response indications expired session
-			if (response.status !== 200) {
-				store.setState({
-					user: null,
-					session_id: null,
-					url: null
-				});
-				localStorage.removeItem("session_id");
-				route("/login/" + encodeURIComponent(event.url));
-			}
-		}).catch(error => {
-			route("/error");
-		});		
+		if (localStorage.getItem("session_id")) {
+			fetch(config.url.api + "session", {
+				methd: "HEAD",
+				body: JSON.stringify({
+					session_id: localStorage.getItem("session_id")
+				}),
+				cache: "no-cache"
+			}).then(response => {
+				// Non-200 response indications expired session
+				if (response.status !== 200) {
+					store.setState({
+						user: null,
+						session_id: null,
+						url: null
+					});
+					localStorage.removeItem("session_id");
+					route("/login/" + encodeURIComponent(event.url));
+				}
+			}).catch(error => {
+				route("/error");
+			});
+		}
 
 		// Guard access to pages that pull protected resources.
 		if (store.getState().user == null
