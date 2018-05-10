@@ -1,14 +1,14 @@
-import { h, Component } from "preact";
-import TextField from "preact-material-components/TextField";
-import "preact-material-components/TextField/style";
-import FormField from "preact-material-components/FormField";
-import "preact-material-components/FormField/style";
 import Typography from "preact-material-components/Typography";
-import "preact-material-components/Typography/style";
-import "preact-material-components/Button/style";
-import LinearProgress from "preact-material-components/LinearProgress";
-import "preact-material-components/LinearProgress/style";
+import TextField from "preact-material-components/TextField";
 import style from "./style";
+import LinearProgress from "preact-material-components/LinearProgress";
+import FormField from "preact-material-components/FormField";
+import { h, Component } from "preact";
+import "preact-material-components/Typography/style";
+import "preact-material-components/TextField/style";
+import "preact-material-components/LinearProgress/style";
+import "preact-material-components/FormField/style";
+import "preact-material-components/Button/style";
 
 export default class Register extends Component {
     register = e => {

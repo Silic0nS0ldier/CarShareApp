@@ -1,8 +1,8 @@
-import { h, Component } from "preact";
-import { route } from "preact-router";
 import Typography from "preact-material-components/Typography";
-import "preact-material-components/Typography/style";
 import style from "./style";
+import { route } from "preact-router";
+import { h, Component } from "preact";
+import "preact-material-components/Typography/style";
 
 export default class Verify extends Component {
     start = (_this) => {

@@ -1,8 +1,8 @@
-import Button from 'preact-material-components/Button';
-import { h, Component } from 'preact';
-import 'preact-material-components/Button/style.css';
+import Button from "preact-material-components/Button";
+import { h, Component } from "preact";
+import "preact-material-components/Button/style.css";
 
-import style from './style';
+import style from "./style";
 
 export default class Profile extends Component {
 	state = {
@@ -41,7 +41,7 @@ export default class Profile extends Component {
 
 				<p>
 					<Button raised ripple onClick={this.increment}>Click Me</Button>
-					{' '}
+					{" "}
 					Clicked {count} times.
 				</p>
 			</div>
