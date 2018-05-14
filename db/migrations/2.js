@@ -34,7 +34,22 @@ async function Run(trx) {
             .comment("Date session terminates.")
     });
 
-    return "Updated 'logs' and 'listing_changes' table with a primary key on 'id'. Created table 'sessions'.";
+    await trx.schema.createTable("email_verifications", table => {
+        table.comment("Stores email verification and change requests");
+        table.string("code")
+            .notNullable();
+        table.dateTime("expires")
+            .notNullable();
+        table.integer("user_id")
+            .unsigned()
+            .notNullable()
+            .references("users.id")
+            .primary();
+        table.string("new_email")
+            .unique();
+    });
+
+    return "Updated 'logs' and 'listing_changes' table with a primary key on 'id'. Created tables 'sessions' and 'email_verifications'.";
 }
 
 export default Run;

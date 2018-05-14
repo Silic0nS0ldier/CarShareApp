@@ -13,6 +13,7 @@ const config = (() => {
         case "staging":
             return objectMerge(rawConfig.production, rawConfig.staging);
         case "development":
+            return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
         default: {
             if (process.env.DOCKER == true) throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
             else {
