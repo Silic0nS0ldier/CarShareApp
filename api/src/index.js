@@ -1,8 +1,9 @@
-import objectMerge from "object-merge";
-import express from "express";
-import DB from "../../db";
 import { readFileSync } from "fs";
 import AuthRegister from "./routes/auth";
+import cors from "cors";
+import DB from "../../db";
+import express from "express";
+import objectMerge from "object-merge";
 
 // Load configuration
 const config = (() => {
@@ -31,8 +32,11 @@ async function Main() {
     // Initialise express application
     const app = express();
 
+    // Enable CORS
+    app.use(cors());
+
     // Register auth routes
-    await AuthRegister(FullDB);
+    app.use(AuthRegister(FullDB));
     
     app.use("/:session_id", (req, res, next) => {
         // 1. look for session in sessions table
