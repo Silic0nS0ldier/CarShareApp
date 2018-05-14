@@ -3,7 +3,7 @@ import express from "express";
 /**
  * Registers all auth related routes.
  */
-export default async function register({ ImageModel, LogModel, UserModel }) {
+export default function register({ ImageModel, LogModel, UserModel }) {
     const router = express.Router();
     // Session restore
     router.get("/session", (req, res) => {
@@ -29,4 +29,6 @@ export default async function register({ ImageModel, LogModel, UserModel }) {
     router.post("/verify", (req, res) => {
 
     });
+
+    return router;
 };
