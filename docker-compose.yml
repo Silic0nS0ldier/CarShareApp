@@ -16,19 +16,19 @@ services:
       - SCENARIO=development
       - DOCKER=1
     command: npm run dockerStart
-  gui: # Hosts the GUI portion of the system.
-    depends_on:
-      - api
-    build: ./gui/
-    ports:
-      - 80:3000
-    volumes:
-      - ./gui:/home/gui/code
-      - ./config:/home/gui/config
-    environment:
-      - SCENARIO=development
-      - DOCKER=1
-    command: npm run dockerDev
+#  gui: # Hosts the GUI portion of the system.
+#    depends_on:
+#      - api
+#    build: ./gui/
+#    ports:
+#      - 80:3000
+#    volumes:
+#      - ./gui:/home/gui/code
+#      - ./config:/home/gui/config
+#    environment:
+#      - SCENARIO=development
+#      - DOCKER=1
+#    command: npm run dockerDev
   img: # Hosts the image server portion of the system.
     depends_on:
       - migrator
