@@ -40,7 +40,7 @@ export default class Register extends Component {
                     <TextField type="text" label="Middle name" name="mname" />
                     <TextField type="text" label="Last name" name="lname" required />
                     <br/>
-                    <TextField type="email" label="Emaile" name="email" required />
+                    <TextField type="email" label="Email" name="email" required />
                     <br/>
                     <TextField type="password" label="Password" name="pwd" required onInput={this.validatePassword} />
                     <TextField type="password" label="Verify password" name="pwd_verify" required onInput={this.validatePassword} />
