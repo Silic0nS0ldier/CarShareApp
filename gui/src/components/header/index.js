@@ -30,6 +30,7 @@ export default class Header extends Component {
 
 	goHome = this.linkTo("/");
 	goToMyProfile = this.linkTo("/profile");
+	goToVehicleListings = this.linkTo("/vehicles");
 
 	render() {
 		return (
@@ -56,6 +57,10 @@ export default class Header extends Component {
 						<Drawer.DrawerItem onClick={this.goToMyProfile}>
 							<List.ItemGraphic>account_circle</List.ItemGraphic>
 							Profile
+						</Drawer.DrawerItem>
+						<Drawer.DrawerItem onClick={this.goToVehicleListings}>
+							<List.ItemGraphic>view_list</List.ItemGraphic>
+							Vehicles
 						</Drawer.DrawerItem>
 					</Drawer.DrawerContent>
 				</Drawer.TemporaryDrawer>
