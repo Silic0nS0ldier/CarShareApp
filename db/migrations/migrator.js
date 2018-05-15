@@ -12,14 +12,19 @@ const config = (() => {
             return objectMerge(rawConfig.production, rawConfig.staging);
         case "development":
             return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
-        default:
-            throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+        default: {
+            if (process.env.DOCKER == true) throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+            else {
+                console.log("Assuming local non-docker development environment.");
+                return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
+            }
+        }
     }
 })();
 
 console.log("************************" + "\n" +
-            "* CarShareApp Migrator *" + "\n" +
-            "************************");
+    "* CarShareApp Migrator *" + "\n" +
+    "************************");
 
 // Wrap everything in an async function to allow await to bring order to chaos
 async function Main() {
@@ -28,7 +33,7 @@ async function Main() {
 
     if (!await Knex.schema.hasTable("migrations")) {
         console.log("Table 'migrations' does not exist and will be created.");
-        
+
         // Attempt to create table within transaction
         await Knex.transaction(async trx => {
             try {
@@ -54,7 +59,7 @@ async function Main() {
                     table.string("comment")
                         .comment("Optional migration comment.");
                 });
-                
+
                 await trx("migrations").insert({
                     version: 0,
                     duration: 0,
@@ -101,7 +106,7 @@ async function Main() {
         });
         migrations++;
     }
-    
+
     if (migrations === 0) {
         console.log("Already up to date!");
     }

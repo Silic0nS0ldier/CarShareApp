@@ -62,3 +62,9 @@ typings/
 # lock files
 yarn.lock
 package-lock.json
+
+# built files
+build
+
+# config
+src/config.json
