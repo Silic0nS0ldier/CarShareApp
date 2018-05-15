@@ -4,10 +4,19 @@ import 'preact-material-components/LayoutGrid/style.css';
 
 import style from './style';
 
-export default class Vehicle extends Component {
+export default class VehicleListing extends Component {
     render() {
         return (
             <div>
+                <LayoutGrid>
+                    <LayoutGrid.Inner>
+                        <LayoutGrid.Cell cols="12">
+                            <h1>
+                                Car Listing Title
+                            </h1>
+                        </LayoutGrid.Cell>
+                    </LayoutGrid.Inner>
+                </LayoutGrid>
                 <LayoutGrid>
                     <LayoutGrid.Inner>
                         <LayoutGrid.Cell cols="8">

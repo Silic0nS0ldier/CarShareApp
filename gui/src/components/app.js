@@ -10,7 +10,9 @@ import Profile from "../routes/profile";
 import Login from "../routes/login";
 import Home from "../routes/home";
 import Header from "./header";
-import Vehicle from '../routes/vehicle';
+import VehicleListings from '../routes/vehicle/listings';
+import VehicleListing from '../routes/vehicle/listing';
+import VehicleModify from '../routes/vehicle/modify';
 // import Home from 'async!../routes/home';
 // import Profile from 'async!../routes/profile';
 
@@ -22,6 +24,9 @@ export default class App extends Component {
 	 *	@param {string} event.url	The newly routed URL
 	 */
 	handleRoute = event => {
+		// Used to bypass login lockout during dev
+		this.currentUrl = event.url;
+		return;
 		// Check if session is still active
 		if (localStorage.getItem("session_id")) {
 			fetch(config.url.api + "session", {
@@ -115,7 +120,9 @@ export default class App extends Component {
 					<Login path="/login/:redirect" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:otp" config={config} store={store} />
-					<Vehicle path="/vehicle/listing" />
+					<VehicleListings path="/vehicles" config={config} />
+					<VehicleListing path="/vehicle/listing" config={config} />
+					<VehicleModify path="/vehicle/modify" config={config} />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>
