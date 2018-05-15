@@ -22,11 +22,13 @@ export default class Form extends Component {
                     refChildren(children[i].children);
                 else {
                     if (typeof children[i].nodeName !== "string") {
-                        if (["TextFormField"].indexOf(children[i].nodeName.name) !== -1) {
+                        if (["TextFormField", "FileFormField"].indexOf(children[i].nodeName.name) !== -1) {
                             // Handle field component
                             children[i] = cloneElement(children[i], {
                                 ref: (ref) => this.state.fields.push(ref)
                             });
+                            // Do we need the required text?
+                            if (children[i].attributes.required) this.state.requiredFields = true;
                         }
                     }
                 }
@@ -187,6 +189,16 @@ export default class Form extends Component {
                 })}
                 <fieldset class={style.fieldset} ref={(ref) => this.state.fieldset = ref}>
                     {children}
+                    {(() => {
+                        if (this.state.requiredFields) {
+                            return (
+                                <div>
+                                    <Typography caption>*required fields</Typography>
+                                </div>
+                            );
+                        }
+                    })()}
+
                 </fieldset>
                 <LinearProgress indeterminate={true} hidden={hideProgress} />
             </form>
