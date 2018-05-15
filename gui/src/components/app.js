@@ -10,6 +10,7 @@ import Profile from "../routes/profile";
 import Login from "../routes/login";
 import Home from "../routes/home";
 import Header from "./header";
+import Vehicle from '../routes/vehicle';
 // import Home from 'async!../routes/home';
 // import Profile from 'async!../routes/profile';
 
@@ -114,6 +115,7 @@ export default class App extends Component {
 					<Login path="/login/:redirect" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:otp" config={config} store={store} />
+					<Vehicle path="/vehicle/listing" />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>

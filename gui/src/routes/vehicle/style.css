@@ -1,0 +1,41 @@
+.divSpacer {
+    margin-bottom: 40px;
+}
+
+.divSpacerMini {
+    margin-bottom: 20px;
+}
+
+.centreText {
+    text-align: center;
+}
+
+.gallery {
+    background: red;
+    height: 300px;
+}
+
+.listingInfo {
+    background: #efefef;
+    height: 200px;
+}
+
+.desc {
+    background: #0c4dda;
+    height: 500px;
+}
+
+.owner {
+    background: midnightblue;
+    height: 150px;
+}
+
+.dates {
+    background: orange;
+    height: 150px;
+}
+
+.reviews {
+    background: #00e1ff;
+    height: 150px;
+}
