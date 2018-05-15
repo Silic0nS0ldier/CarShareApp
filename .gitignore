@@ -3,3 +3,6 @@ node_modules
 
 # Ignore package-lock.json (commit log getting filled with nonsense changes)
 package-lock.json
+
+# Begone .vs!
+.vs
