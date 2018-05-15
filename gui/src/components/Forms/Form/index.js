@@ -174,27 +174,22 @@ export default class Form extends Component {
     }
 
     render({ children }, { messageClass, messageContent, hideProgress }) {
-        if (messageContent) {
-            return (
-                <form ref={(ref) => this.state.form = ref} onSubmit={this.submitStart}>
-                    <div class={style.formMessage + " " + messageClass}>
-                        <Typography subtitle1>{messageContent}</Typography>
-                    </div>
-                    <fieldset class={style.fieldset} ref={(ref) => this.state.fieldset = ref}>
-                        {children}
-                    </fieldset>
-                    <LinearProgress indeterminate={true} hidden={hideProgress} />
-                </form>
-            );
-        } else {
-            return (
-                <form ref={(ref) => this.state.form = ref} onSubmit={this.submitStart}>
-                    <fieldset class={style.fieldset} ref={(ref) => this.state.fieldset = ref}>
-                        {children}
-                    </fieldset>
-                    <LinearProgress indeterminate={true} hidden={hideProgress} />
-                </form>
-            );
-        }
+        return (
+            <form ref={(ref) => this.state.form = ref} onSubmit={this.submitStart}>
+                {(() => {
+                    if (messageContent) {
+                        return (
+                            <div class={style.formMessage + " " + messageClass}>
+                                <Typography subtitle1>{messageContent}</Typography>
+                            </div>
+                        );
+                    }
+                })}
+                <fieldset class={style.fieldset} ref={(ref) => this.state.fieldset = ref}>
+                    {children}
+                </fieldset>
+                <LinearProgress indeterminate={true} hidden={hideProgress} />
+            </form>
+        );
     }
 }

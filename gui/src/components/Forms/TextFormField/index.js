@@ -20,6 +20,6 @@ export default class TextFormField extends AbstractField {
     }
 
     render(props) {
-        return <TextField {...props} onChange={linkState(this, "value")} />;
+        return <TextField {...props} id={props.name} onChange={linkState(this, "value")} />;
     }
 }

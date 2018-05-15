@@ -78,7 +78,7 @@ export default class FileFormField extends AbstractField {
                         if (props.required) return "*";
                     })()}
                     </div>
-                    <input {...props} type="file" ref={(ref) => this.state.input = ref} oninvalid={this.pingInvalidStyles} onChange={this.grabData} onFocus={this.pingStyles} />
+                    <input {...props} id={props.name} type="file" ref={(ref) => this.state.input = ref} oninvalid={this.pingInvalidStyles} onChange={this.grabData} onFocus={this.pingStyles} />
                 </label>
                 <br/>
                 <i>{this.state.value.length} files selected</i>
