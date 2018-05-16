@@ -1,13 +1,18 @@
-.home {
-	padding: 20px;
-	min-height: 100%;
-	width: 100%;
-}
-
 .cardHeader {
   padding: 16px;
 }
 
 .cardBody {
   padding: 16px;
+}
+
+.bg:after {
+	background: orange;
+	padding: 20px;
+	z-index: 0;
+	width: 500%;
+	height: 100px;
+	margin-left: -200%;
+	overflow: hidden;
+	display: block;
 }
