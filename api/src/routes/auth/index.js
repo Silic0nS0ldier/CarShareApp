@@ -129,9 +129,10 @@ export default function register({ ImageModel, LogModel, UserModel }) {
             }).toString();
 
             // Duplicate check
-            let results = await ImageModel.query().where("integrity", integrityHash);
-            for (let result in results) {
-                if (result.data === pngBuffer) {
+            // We could check the data itself, but node acts a little weird with binary data. For now bytes is enough.
+            let results = await ImageModel.query().where("integrity", integrityHash).select("id", "size_bytes");
+            for (let result of results) {
+                if (result.size_bytes === bytes) {
                     im = result.id;
                     break;
                 }
