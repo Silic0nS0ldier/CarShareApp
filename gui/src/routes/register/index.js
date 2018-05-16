@@ -10,7 +10,7 @@ import Typography from "preact-material-components/Typography";
 export default class Register extends Component {
     register = response => {
         this.setState({
-            successMessage: "We've sent you an email. Please use the enclosed link to complete registration."
+            successMessage: "We've sent you an email. Please use the enclosed link to continue to the final phase of registration."
         });
     };
 

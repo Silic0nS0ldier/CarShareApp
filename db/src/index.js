@@ -41,6 +41,27 @@ export default async function DB(config) {
         static get tableName() {
             return "images";
         }
+
+        static get jsonSchema() {
+            return {
+                type: "object",
+                required: [
+                    "num",
+                    "extension",
+                    "size_bytes",
+                    "data",
+                    "integrity"
+                ],
+                properties: {
+                    num: { type: "integer" },
+                    extension: { type: "string", minLength: 3, maxLength: 255 },
+                    size_bytes: { type: "integer" },
+                    first_uploaded_at: { type: "string", format: "date-time" },
+                    // Best way to handle data is to leave it as a buffer, which the valdiation doesn't understand. Hence not defined.
+                    integrity: { type: "string", maxLength: 255 }
+                }
+            }
+        }
     }
 
     class LogModel extends Model {
@@ -60,19 +81,11 @@ export default async function DB(config) {
 
         static get relationMappings() {
             return {
-                user_image: {
+                userImage: {
                     relation: Model.HasOneRelation,
                     modelClass: ImageModel,
                     join: {
                         from: "users.user_image",
-                        to: "images.id"
-                    }
-                },
-                license_image: {
-                    relation: Model.HasOneRelation,
-                    modelClass: ImageModel,
-                    join: {
-                        from: "users.license_image",
                         to: "images.id"
                     }
                 },
@@ -103,6 +116,30 @@ export default async function DB(config) {
                         from: "users.id",
                         to: "sessions.user_id"
                     }
+                }
+            }
+        }
+
+        static get jsonSchema() {
+            return {
+                type: "object",
+                required: [
+                    "fname",
+                    "lname",
+                    "email",
+                    "password",
+                    "user_image"
+                ],
+                properties: {
+                    id: { type: "integer" },
+                    fname: { type: "string", minLength: 1, maxLength: 255 },
+                    mnames: { type: ["string", "null"], maxLength: 255 },
+                    lname: { type: "string", minLength: 1, maxLength: 255 },
+                    email: { type: "string", format: "email", maxLength: 255 },
+                    email_verified: { type: "boolean" },
+                    password: { type: "string", maxLength: 255 },
+                    disabled: { type: "boolean" },
+                    user_image: { type: "integer" }
                 }
             }
         }

@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import AuthRegister from "./routes/auth";
+import bodyParser from "body-parser";
 import cors from "cors";
 import DB from "../../db";
 import express from "express";
@@ -34,6 +35,11 @@ async function Main() {
 
     // Enable CORS
     app.use(cors());
+
+    // Implement body-parser middleware to support JSON in body
+    app.use(bodyParser.json({
+        limit: "5MB"
+    }));
 
     // Register auth routes
     app.use(AuthRegister(FullDB));

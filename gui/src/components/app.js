@@ -126,7 +126,7 @@ export default class App extends Component {
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>
-					<div path="/:catchall">
+					<div default>
 						Are you lost? Did we get lost? (404) 🤷
 					</div>
 				</Router>
