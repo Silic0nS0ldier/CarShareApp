@@ -1,15 +1,11 @@
-import Toolbar from "preact-material-components/Toolbar";
-import Switch from "preact-material-components/Switch";
-import List from "preact-material-components/List";
-import Drawer from "preact-material-components/Drawer";
-import Dialog from "preact-material-components/Dialog";
-import { route } from "preact-router";
-import { h, Component } from "preact";
-import "preact-material-components/Toolbar/style.css";
-import "preact-material-components/Switch/style.css";
-import "preact-material-components/List/style.css";
 import "preact-material-components/Drawer/style.css";
-import "preact-material-components/Dialog/style.css";
+import "preact-material-components/List/style.css";
+import "preact-material-components/Toolbar/style.css";
+import { h, Component } from "preact";
+import { route } from "preact-router";
+import Drawer from "preact-material-components/Drawer";
+import List from "preact-material-components/List";
+import Toolbar from "preact-material-components/Toolbar";
 // import style from "./style";
 
 export default class Header extends Component {
@@ -18,8 +14,6 @@ export default class Header extends Component {
 	}
 
 	openDrawer = () => (this.drawer.MDComponent.open = true);
-
-	openSettings = () => this.dialog.MDComponent.show();
 
 	drawerRef = drawer => (this.drawer = drawer);
 
@@ -32,7 +26,7 @@ export default class Header extends Component {
 	goToMyProfile = this.linkTo("/profile");
 	goToVehicleListings = this.linkTo("/vehicles");
 
-	render() {
+	render({ config, store }) {
 		return (
 			<div>
 				<Toolbar className="toolbar">
@@ -41,11 +35,20 @@ export default class Header extends Component {
 							<Toolbar.Icon menu onClick={this.openDrawer}>
 								menu
 							</Toolbar.Icon>
-							<Toolbar.Title>CareShare</Toolbar.Title>
+							<Toolbar.Title>Car Share</Toolbar.Title>
 						</Toolbar.Section>
-						<Toolbar.Section align-end onClick={this.openSettings}>
-							<Toolbar.Icon>settings</Toolbar.Icon>
-						</Toolbar.Section>
+						{
+							(() => {
+								if (store.getState().user) {
+									return (
+										<Toolbar.Section align-end>
+											<Toolbar.Icon>settings</Toolbar.Icon>
+											<img src={config.url.img + store.getState().user.image} width="48" height="48" style="border-radius: 50%;"/>
+										</Toolbar.Section>
+									)
+								}
+							})()
+						}
 					</Toolbar.Row>
 				</Toolbar>
 				<Drawer.TemporaryDrawer ref={this.drawerRef}>
