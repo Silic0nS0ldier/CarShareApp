@@ -22,12 +22,12 @@
 }
 
 .file_form_field.disabled {
-    border-color: rgba(0, 0, 0, 0.37);
-    color: rgba(0, 0, 0, 0.37);
-    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0.37) !important;
+    color: rgba(0, 0, 0, 0.37) !important;
+    pointer-events: none !important;
 }
 
 .file_form_field.invalid {
-    border-color: #c51162;
-    color: #c51162;
+    border-color: #c51162 !important;
+    color: #c51162 !important;
 }

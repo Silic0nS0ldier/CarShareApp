@@ -54,7 +54,7 @@ async function Main() {
         ImageModel.query()
             .where({
                 num: imageIds[0],
-                data_hash: imageIds[1],
+                integrity: imageIds[1],
                 extension: imageIds[2]
             })
             .select(["size_bytes", "data"])//data should be "binary" stored as a string, probably. worst case we do base64
@@ -62,8 +62,9 @@ async function Main() {
                 // Make sure there is actually an image
                 if (images.length === 0) {
                     res.status(404).send();
+                    return;
                 }
-                // ...and not more than 1 (in the even this every happens: HOW!? WHAT!?)
+                // ...and not more than 1 (in the event this every happens: HOW!? WHAT!?)
                 if (images.length !== 1) {
                     res.status(500).send();
                     return;
@@ -79,8 +80,8 @@ async function Main() {
                 // Send file
                 res.status(200)
                     .attachment(imageName)
-                    .append("Content-Trasfer-Encoding", "binary")
-                    .append("Content-Length", 1)
+                    .append("Content-Transfer-Encoding", "binary")
+                    .append("Content-Length", image.size_bytes)
                     .send(image.data);
             })
             .catch(reason => {
@@ -92,6 +93,7 @@ async function Main() {
 
     app.listen(8888);
 
+    console.log("IMG is ready.");
 }
 
 Main();

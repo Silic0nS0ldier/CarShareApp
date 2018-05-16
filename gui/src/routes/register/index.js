@@ -8,12 +8,6 @@ import TextField from "../../components/Forms/TextFormField";
 import Typography from "preact-material-components/Typography";
 
 export default class Register extends Component {
-    register = response => {
-        this.setState({
-            successMessage: "We've sent you an email. Please use the enclosed link to complete registration."
-        });
-    };
-
     // Validate password
     validatePassword = e => {
         let pwd = e.target.form.pwd;
@@ -32,10 +26,9 @@ export default class Register extends Component {
         return (
             <div class={style.register}>
                 <div><Typography headline4>Register</Typography></div>
-                <div>
-                    {successMessage}
-                </div>
-                <Form method="POST" action={config.url.api + "register"} onSuccess={this.register}>
+                <Form method="POST" action={config.url.api + "register"}
+                messageOnSuccess="We've sent you an email. Please use the enclosed link to continue to the final phase of registration."
+                resetOnSuccess={true}>
                     <TextField type="text" label="First name" name="fname" required />
                     <TextField type="text" label="Middle name" name="mname" />
                     <TextField type="text" label="Last name" name="lname" required />

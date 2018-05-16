@@ -6,7 +6,20 @@ import LinearProgress from "preact-material-components/LinearProgress";
 import style from "./style.css";
 import Typography from "preact-material-components/Typography";
 
-
+/**
+ * A convient form wrapper component.
+ * 
+ * Some tips:
+ * - Only the (name)FormField components will work with this.
+ * - Server response is formatted to JSON to all but GET method types. DON'T USE HEAD!
+ * - Files (via the necessary component) will be base64 encoded
+ * - `method` and `action` work as per normal
+ * - There is an `onSuccess` callback parameter.
+ * - There is a `redirectOnSuccess` string parameter.
+ * - There is a `messageOnSuccess` callback parameter for setting custom text in the alerts region.
+ * - There is a `resetOnSuccess` boolean parameter for restting the form.
+ * - There is a `errorFormatter` callback parameter for formatting error resposes from the server (not 200 and 404)
+ */
 export default class Form extends Component {
     constructor(props, context) {
         super(props, context);
@@ -110,15 +123,16 @@ export default class Form extends Component {
             if (this.props.resetOnSuccess) {
                 this.state.form.reset();
             }
-
         } else if (response.status === 404) {
+            // Server couldn't resolve the specified resource
             this.setState({
                 messageClass: style.formWarning,
                 messageContent: "An error occured while submitting the form. (404)"
             });
         } else {
-            // General error or supplied
+            // General error (response code not 200 nor 404)
             if (this.props.errorFormatter) {
+                // Invoke custom error formatter
                 this.props.errorFormatter(response)
                     .then(({ messageContent, isError }) => {
                         if (isError) {
@@ -132,7 +146,23 @@ export default class Form extends Component {
                                 messageContent: messageContent
                             });
                         }
+                    });
+            } else if (response.status === 400) {
+                // Use standard error formatting (a.k.a. server preformatted in response body)
+                response.json()
+                    .then(payload => {
+                        this.setState({
+                            messageClass: style.formWarning,
+                            messageContent: payload.feedback
+                        });
                     })
+                    .catch(error => {
+                        // Generic it is!
+                        this.setState({
+                            messageClass: style.formWarning,
+                            messageContent: "Please double check provided details and try again."
+                        });
+                    });
             } else {
                 this.setState({
                     messageClass: style.formWarning,
@@ -182,11 +212,11 @@ export default class Form extends Component {
                     if (messageContent) {
                         return (
                             <div class={style.formMessage + " " + messageClass}>
-                                <Typography subtitle1>{messageContent}</Typography>
+                                <Typography subtitle1 dangerouslySetInnerHTML={{__html: messageContent}}></Typography>
                             </div>
                         );
                     }
-                })}
+                })()}
                 <fieldset class={style.fieldset} ref={(ref) => this.state.fieldset = ref}>
                     {children}
                     {(() => {

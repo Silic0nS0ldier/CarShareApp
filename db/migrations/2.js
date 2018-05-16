@@ -1,4 +1,3 @@
-import Knex from "knex";
 /**
  * @param {Knex.Transaction} trx 
  */
