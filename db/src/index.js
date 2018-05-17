@@ -274,6 +274,10 @@ export default async function DB(config) {
             return "email_verifications";
         }
 
+        static get idColumn() {
+            return "code";
+        }
+
         static get relationMappings() {
             return {
                 user: {
