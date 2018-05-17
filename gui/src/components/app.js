@@ -114,7 +114,7 @@ export default class App extends Component {
 	render = () => {
 		return (
 			<div id="app">
-				<Header />
+				<Header config={config} store={store}/>
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
 					<Profile path="/profile" />{/*Actual profile page... or something*/}
