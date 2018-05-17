@@ -13,6 +13,8 @@ import Header from "./header";
 import VehicleListings from '../routes/vehicle/listings';
 import VehicleListing from '../routes/vehicle/listing';
 import VehicleModify from '../routes/vehicle/modify';
+import BookingNew from '../routes/booking/new';
+import BookingModify from '../routes/booking/modify';
 // import Home from 'async!../routes/home';
 // import Profile from 'async!../routes/profile';
 
@@ -123,6 +125,8 @@ export default class App extends Component {
 					<VehicleListings path="/vehicles" config={config} />
 					<VehicleListing path="/vehicle/listing" config={config} />
 					<VehicleModify path="/vehicle/modify" config={config} />
+					<BookingNew path="/booking/new" config={config} />
+					<BookingModify path="/booking/modify" config={config} />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>

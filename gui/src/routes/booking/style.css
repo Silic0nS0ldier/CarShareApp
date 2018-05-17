@@ -1,0 +1,95 @@
+.divSpacer {
+    margin-bottom: 40px;
+}
+
+.divSpacerMini {
+    margin-bottom: 20px;
+}
+
+.centreText {
+    text-align: center;
+}
+
+.gallery {
+    background: red;
+    height: 300px;
+}
+
+.listingInfo {
+    background: #efefef;
+    height: 200px;
+}
+
+.desc {
+    background: #0c4dda;
+    height: 500px;
+}
+
+.owner {
+    background: midnightblue;
+    height: 150px;
+}
+
+.dates {
+    background: orange;
+    height: 150px;
+}
+
+.reviews {
+    background: #00e1ff;
+    height: 150px;
+}
+
+
+/*
+ * Modify
+ **********/
+.formSection {
+    background: #c4c4c4;
+    padding: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/*
+ * Listings
+ **********/
+
+.filters:first-of-type {
+    margin-top: 0;
+}
+
+.filters:last-of-type {
+    margin-bottom: 0;
+}
+
+.filters {
+    background: #cacaca;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.results:first-of-type {
+    margin-top: 0;
+}
+
+.results:last-of-type {
+    margin-bottom: 0;
+}
+
+.results {
+    background: #d9d9d9;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/*
+ * General
+ **********/
+
+ .searchBar {
+    background: #df8926;
+    padding: 10px;
+ }
