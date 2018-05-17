@@ -269,6 +269,42 @@ export default async function DB(config) {
         }
     }
 
+    class EmailVerificationModel extends Model {
+        static get tableName() {
+            return "email_verifications";
+        }
+
+        static get relationMappings() {
+            return {
+                user: {
+                    relation: Model.HasOneRelation,
+                    modelClass: UserModel,
+                    join: {
+                        from: "email_verifications.user_id",
+                        to: "users.id"
+                    }
+                }
+            }
+        }
+
+        static get jsonSchema() {
+            return {
+                type: "object",
+                required: [
+                    "code",
+                    "expires",
+                    "user_id"
+                ],
+                properties: {
+                    code: { type: "string", minLength: 10, maxLength: 255 },
+                    expires: { type: "string" },// This should be validated, but jsonSchema doesn't have a mysql compatible format
+                    user_id: { type: "integer" },
+                    new_email: { type: "string", format: "email" }
+                }
+            }
+        }
+    }
+
     return {
         Knex: KnexInstance,
         ImageModel,
@@ -276,6 +312,8 @@ export default async function DB(config) {
         UserModel,
         RoleModel,
         ListingModel,
-        ListingChangeModel
+        ListingChangeModel,
+        SessionModel,
+        EmailVerificationModel
     };
 }

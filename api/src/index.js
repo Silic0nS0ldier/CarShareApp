@@ -42,7 +42,7 @@ async function Main() {
     }));
 
     // Register auth routes
-    app.use(AuthRegister(FullDB));
+    app.use(AuthRegister(FullDB, config));
     
     app.use("/:session_id", (req, res, next) => {
         // 1. look for session in sessions table
