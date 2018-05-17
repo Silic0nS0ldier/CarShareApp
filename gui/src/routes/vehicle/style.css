@@ -40,10 +40,10 @@
     height: 150px;
 }
 
-
 /*
  * Modify
  **********/
+
 .formSection {
     background: #c4c4c4;
     padding: 40px;
@@ -89,7 +89,12 @@
  * General
  **********/
 
- .searchBar {
+.searchBar {
     background: #df8926;
     padding: 10px;
- }
+}
+
+.searchBar > form {
+    padding: 0;
+    padding-left: 5px;
+}
