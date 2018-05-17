@@ -76,9 +76,10 @@ export default class VehicleListings extends Component {
                                         </div>
                                     </LayoutGrid.Cell>
                                 );
-                            } else {
+                            } else {console.log(vehicles[0]);
                                 let formattedListings = [];
-                                for (let vehicle in vehicles) {
+                                
+                                for (let vehicle of vehicles) {
                                     formattedListings.push(
                                         <LayoutGrid.Cell cols="12">
                                             <a href={config.url.gui + "vehicle/" + vehicle.VIN}>{vehicle.VIN}</a>
