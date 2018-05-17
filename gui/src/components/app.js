@@ -36,7 +36,7 @@ export default class App extends Component {
 				body: JSON.stringify({
 					session_id: localStorage.getItem("session_id")
 				}),
-				cache: "no-cache"
+				cache: "no-store"
 			}).then(response => {
 				// Non-200 response indications expired session
 				if (response.status !== 200) {
@@ -66,7 +66,7 @@ export default class App extends Component {
 					body: JSON.stringify({
 						session_id: localStorage.getItem("session_id")
 					}),
-					cache: "no-cache"
+					cache: "no-store"
 				}).then(response => {
 					// Handle response
 					if (response.status === 200) {
@@ -121,7 +121,7 @@ export default class App extends Component {
 					<Login path="/login" config={config} store={store} />
 					<Login path="/login/:redirect" config={config} store={store} />
 					<Register path="/register" config={config} />
-					<Verify path="/verify/:email/:otp" config={config} store={store} />
+					<Verify path="/verify/:email/:code" config={config} store={store} />
 					<VehicleListings path="/vehicles" config={config} />
 					<VehicleListing path="/vehicle/:vin" config={config} />
 					<VehicleModify path="/vehicle/modify" config={config} />

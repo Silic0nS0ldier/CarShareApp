@@ -44,7 +44,7 @@ async function Main() {
     }));
 
     // Register auth routes
-    app.use(AuthRegister(FullDB));
+    app.use(AuthRegister(FullDB, config));
     app.use(BookingRegister(FullDB));
     app.use(VehicleRegister(FullDB));
     

@@ -1,13 +1,14 @@
 import argon2 from "argon2";
 import dataUriToBuffer from "data-uri-to-buffer";
 import express from "express";
+import randomString from "crypto-random-string";
 import sharp from "sharp";
 import ssri from "ssri";
 
 /**
  * Registers all auth related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel }) {
+export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, config) {
     const router = express.Router();
     // Session restore
     router.get("/session", (req, res) => {
@@ -172,7 +173,7 @@ export default function register({ ImageModel, LogModel, UserModel }) {
         // Handle image (store if duplicate wasn't found)
         try {
             if (typeof im !== "number") {
-                um.user_image = (await ImageModel.query().insert(im)).id;
+                um.user_image = (await ImageModel.query().insert(im).select("id")).id;
             } else {
                 um.user_image = im;
             }
@@ -187,7 +188,7 @@ export default function register({ ImageModel, LogModel, UserModel }) {
         
         // Save user details
         try {
-            um = await UserModel.query().insert(um);
+            um = await UserModel.query().insert(um).select("id", "email");
         }
         catch (error) {
             /** @todo Log error */
@@ -198,15 +199,96 @@ export default function register({ ImageModel, LogModel, UserModel }) {
         }
 
         /** @todo Verification/2nd stage registration email */
+        try {
+            let evm = await EmailVerificationModel
+                .query()
+                .insert({
+                    code: randomString(25),
+                    expires: (new Date(new Date().getTime() + 30 * 60000)).toISOString().slice(0, 19).replace('T', ' '),
+                    user_id: um.id
+                })
+                .select("code");
 
+            // Pretend we sent an email
+            console.log("Verification link: " + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code);
+        } catch (error) {
+            /** @todo Log error */
+            res.status(400).send({
+                feedback: "<ul><li>We hit a snag preparing your verification email. Please contact support.</li></ul>"
+            });
+            return;
+        }
         
         res.status(200).send();
     });
 
     // Verify
     // need to rail road this into a credit checker system
-    router.post("/verify", (req, res) => {
+    router.post("/verify", async (req, res) => {
+        // Verify code
+        let evm = null;
+        let um = null;
+        try {
+            um = await UserModel
+                .query()
+                .where("email", req.body.email)
+                .select("id");
+            if (um.length !== 1) {
+                throw new Error("No or too many users returned!");
+            }
+            um = um[0];
+            evm = await EmailVerificationModel
+                .query()
+                .andWhere("user_id", um.id);
+            if (evm.length !== 1) {
+                throw new Error("No or too many email verifications returned!");
+            }
+            evm = evm[0];
+        } catch (error) {
+            res.status(400).send({
+                feedback: "We shit a snag processing your request. Try again or contact support."
+            });
+            return;
+        }
 
+        // Make sure code matches
+        if (evm.code !== req.body.code) {
+            res.status(400).send({
+                feedback: "This link has been replaced or is invalid. If you came here from the verification email, place look for a newer email or contact support."
+            });
+            return;
+        }
+
+        // Mark email as verified and 'lodge' credit check
+        try {
+            let update = {
+                email_verified: true
+            };
+            // Blacklist logic (for demonstration purposes, we hate people who have a license number containing 1)
+            if (req.body.license_num.indexOf("1") !== -1) {
+                console.log("Your (" + req.body.email + ") credit is bad. Site access has been denied.");
+            } else {
+                console.log("Your (" + req.body.email + ") credit is good. Welcome! Head to "  + config.url.gui + "login");
+                update.credit_approved = true;
+            }
+            await UserModel
+                .query()
+                .patch(update)
+                .where("id", um.id);
+            await EmailVerificationModel
+                .query()
+                .delete()
+                .where("code", evm.code);
+        } catch (error) {
+            res.status(400).send({
+                feedback: "We hit a snag while processing your request. Please contact support."
+            });
+            return;
+        }
+
+        // Note success (and end request)
+        res.sendStatus(200);
+        return;
     });
 
     return router;
