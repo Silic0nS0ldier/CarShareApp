@@ -71,13 +71,13 @@ export default class Form extends Component {
                         .join("&");
                 })(this.props.action), {
                         method: this.props.method,
-                        cache: "no-cache"
+                        cache: "no-store"
                     });
             } else {
                 // Everything else
                 return fetch(this.props.action, {
                     method: this.props.method,
-                    cache: "no-cache",
+                    cache: "no-store",
                     body: JSON.stringify(this.getValues()),
                     headers: {
                         "Accept": "application/json",
