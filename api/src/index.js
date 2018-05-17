@@ -1,5 +1,7 @@
 import { readFileSync } from "fs";
 import AuthRegister from "./routes/auth";
+import BookingRegister from "./routes/booking";
+import VehicleRegister from "./routes/vehicle";
 import bodyParser from "body-parser";
 import cors from "cors";
 import DB from "../../db";
@@ -43,6 +45,8 @@ async function Main() {
 
     // Register auth routes
     app.use(AuthRegister(FullDB));
+    app.use(BookingRegister(FullDB));
+    app.use(VehicleRegister(FullDB));
     
     app.use("/:session_id", (req, res, next) => {
         // 1. look for session in sessions table

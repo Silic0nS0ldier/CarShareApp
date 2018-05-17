@@ -2,13 +2,13 @@ import {h, Component} from 'preact';
 import LayoutGrid from 'preact-material-components/LayoutGrid';
 import Icon from 'preact-material-components/Icon';
 import 'preact-material-components/LayoutGrid/style.css';
-
+import global from '../globals';
 import style from './style';
 
 export default class BookingNew extends Component {
     render() {
         return (
-            <div>
+            <div class={global.wrapper}>
                 <LayoutGrid>
                     <LayoutGrid.Inner>
                         <LayoutGrid.Cell cols="12">

@@ -123,7 +123,7 @@ export default class App extends Component {
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:otp" config={config} store={store} />
 					<VehicleListings path="/vehicles" config={config} />
-					<VehicleListing path="/vehicle/listing" config={config} />
+					<VehicleListing path="/vehicle/:vin" config={config} />
 					<VehicleModify path="/vehicle/modify" config={config} />
 					<BookingNew path="/booking/new" config={config} />
 					<BookingModify path="/booking/modify" config={config} />
