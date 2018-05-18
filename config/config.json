@@ -20,6 +20,9 @@
                 "database": "carshareapp"
             }
         },
+        "mail": {
+            "connectionString": "smtp://mail:1025/?pool=true"
+        },
         "url": {
             "api": "http://localhost:8080/",
             "img": "http://localhost:8888/",

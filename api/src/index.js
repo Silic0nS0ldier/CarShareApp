@@ -1,12 +1,13 @@
 import { readFileSync } from "fs";
 import AuthRegister from "./routes/auth";
-import BookingRegister from "./routes/booking";
-import VehicleRegister from "./routes/vehicle";
 import bodyParser from "body-parser";
+import BookingRegister from "./routes/booking";
 import cors from "cors";
 import DB from "../../db";
 import express from "express";
+import { createTransport as nmCreateTransport } from "nodemailer";
 import objectMerge from "object-merge";
+import VehicleRegister from "./routes/vehicle";
 
 // Load configuration
 const config = (() => {
@@ -42,6 +43,9 @@ async function Main() {
     app.use(bodyParser.json({
         limit: "5MB"
     }));
+
+    // Set up nodemailer
+    const mailer = nmCreateTransport(config.mail.connectionString);
 
     // Register auth routes
     app.use(AuthRegister(FullDB, config));
