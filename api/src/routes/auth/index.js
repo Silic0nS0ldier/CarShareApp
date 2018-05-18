@@ -8,7 +8,7 @@ import ssri from "ssri";
 /**
  * Registers all auth related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, config) {
+export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
     const router = express.Router();
     // Session restore
     router.get("/session", (req, res) => {
@@ -185,7 +185,7 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             });
             return;
         }
-        
+
         // Save user details
         try {
             um = await UserModel.query().insert(um).select("id", "email");
@@ -209,8 +209,15 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
                 })
                 .select("code");
 
-            // Pretend we sent an email
+            // Send email (and put to console)
             console.log("Verification link: " + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code);
+            mailer.sendMail({
+                from: "\"Car Share\" <carshare@example.com>", // sender address
+                to: um.email, // list of receivers
+                subject: "Car Share - Continue Registration", // Subject line
+                text: "Please visit " + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + " to complete complete registration.", // plain text body
+                html: "Please visit <a href=\"" + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + "\">" + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + "</a> to complete complete registration." // html body
+            });
         } catch (error) {
             /** @todo Log error */
             res.status(400).send({
@@ -218,7 +225,7 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             });
             return;
         }
-        
+
         res.status(200).send();
     });
 
@@ -251,6 +258,8 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             return;
         }
 
+        /** @todo Create new link if expired (and delete old) */
+
         // Make sure code matches
         if (evm.code !== req.body.code) {
             res.status(400).send({
@@ -266,9 +275,21 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             };
             // Blacklist logic (for demonstration purposes, we hate people who have a license number containing 1)
             if (req.body.license_num.indexOf("1") !== -1) {
+                mailer.sendMail({
+                    from: "\"Car Share\" <carshare@example.com>", // sender address
+                    to: req.body.email, // list of receivers
+                    subject: "Car Share - Credit Assessment Outcome", // Subject line
+                    text: "Your (" + req.body.email + ") credit is bad. Site access has been denied.", // plain text body
+                });
                 console.log("Your (" + req.body.email + ") credit is bad. Site access has been denied.");
             } else {
-                console.log("Your (" + req.body.email + ") credit is good. Welcome! Head to "  + config.url.gui + "login");
+                mailer.sendMail({
+                    from: "\"Car Share\" <carshare@example.com>", // sender address
+                    to: req.body.email, // list of receivers
+                    subject: "Car Share - Your In!", // Subject line
+                    text: "Your (" + req.body.email + ") credit is good. Welcome! Head to " + config.url.gui + "login", // plain text body
+                });
+                console.log("Your (" + req.body.email + ") credit is good. Welcome! Head to " + config.url.gui + "login");
                 update.credit_approved = true;
             }
             await UserModel

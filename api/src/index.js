@@ -48,7 +48,7 @@ async function Main() {
     const mailer = nmCreateTransport(config.mail.connectionString);
 
     // Register auth routes
-    app.use(AuthRegister(FullDB, config));
+    app.use(AuthRegister(FullDB, mailer, config));
     app.use(BookingRegister(FullDB));
     app.use(VehicleRegister(FullDB));
     
