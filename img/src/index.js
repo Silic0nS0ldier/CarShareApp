@@ -32,15 +32,21 @@ async function Main() {
     // Initialise express application
     const app = express();
 
-    app.get("/:access_token/:image_reference", (req, res) => {
-        // 1. Check authorisation
+    app.get("/*", (req, res) => {
+        let slashStripped = req.url.substring(1);// Strips the leading slash
+        let imageName = slashStripped.substring(slashStripped.indexOf("/") + 1);
+
+        // Extract auth
+
+        // Handle auth
         /** @todo This is dead simple, just need to verify access token */
 
-        // (system immune to directory traversal attacks)
+        // 1. Extract image name from URL (system immune to directory traversal attacks)
+        
 
         // 2. Map to file in database (if possible) with pattern id.datahash.extension
         // 2.1. Split value into array
-        let imageIds = req.params.image_reference.split(".");
+        let imageIds = imageName.split(".");
         // 2.2. Ensure array length is 3
         if (imageIds.length != 3) {
             res.status(400).send();
