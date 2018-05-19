@@ -1,12 +1,14 @@
+import { createTransport as nmCreateTransport } from "nodemailer";
 import { readFileSync } from "fs";
 import AuthRegister from "./routes/auth";
-import BookingRegister from "./routes/booking";
-import VehicleRegister from "./routes/vehicle";
 import bodyParser from "body-parser";
+import BookingRegister from "./routes/booking";
 import cors from "cors";
 import DB from "../../db";
 import express from "express";
+import jws from "jws";
 import objectMerge from "object-merge";
+import VehicleRegister from "./routes/vehicle";
 
 // Load configuration
 const config = (() => {
@@ -43,20 +45,43 @@ async function Main() {
         limit: "5MB"
     }));
 
-    // Register auth routes
-    app.use(AuthRegister(FullDB, config));
-    app.use(BookingRegister(FullDB));
-    app.use(VehicleRegister(FullDB));
-    
-    app.use("/:session_id", (req, res, next) => {
-        // 1. look for session in sessions table
+    // Set up nodemailer
+    const mailer = nmCreateTransport(config.mail.connectionString);
 
-        // 2. if session exists ensure not expired
-            // Grab user from users table
-            // Add to res.locals
-        // 2. Else
-            // Return unauthorised response (400?)
-    });
+    // Handy authentication middleware
+    const authGuard = (req, res, next) => {
+        if (req.header("authorization")) {
+            try {
+                // Verify token
+                if (!jws.verify(req.header("authorization"), "HS256", config.jwt_secret)) {
+                    res.sendStatus(401);
+                    return;
+                }
+                // Check expiry
+                if (new Date(jws.decode(req.header("authorization")).exp) <= new Date()) {
+                    res.sendStatus(401);
+                    return;
+                }
+            } catch (error) {
+                res.sendStatus(500);
+                return;
+            }
+        } else {
+            // Abort! ⚡🔥😱
+            res.status(400).send({
+                feedback: "Authentication header not found."
+            });
+            return;
+        }
+
+        // Continue
+        next();
+    };
+
+    // Register auth routes
+    app.use(AuthRegister(authGuard, FullDB, mailer, config));
+    app.use(BookingRegister(authGuard, FullDB));
+    app.use(VehicleRegister(authGuard, FullDB));
 
     if (process.env.DOCKER == true) {
         app.listen(8088);

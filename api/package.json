@@ -13,6 +13,8 @@
     "data-uri-to-buffer": "^2.0.0",
     "esm": "^3.0.30",
     "express": "^4.16.3",
+    "jws": "^3.1.5",
+    "nodemailer": "^4.6.4",
     "object-merge": "^2.5.1",
     "random-hash": "^4.0.1",
     "sharp": "^0.20.2",

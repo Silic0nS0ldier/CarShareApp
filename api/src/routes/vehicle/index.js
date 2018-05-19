@@ -7,8 +7,11 @@ import ssri from "ssri";
 /**
  * Registers all vehicle related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel, ListingModel }) {
+export default function register(authGuard, { ImageModel, LogModel, UserModel, ListingModel }) {
     const router = express.Router();
+
+    // Bind middleware
+    router.use(authGuard);
 
     // GET: Search results
     router.get("/vehicle/search", async (req, res) => {

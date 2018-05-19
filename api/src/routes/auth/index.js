@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import dataUriToBuffer from "data-uri-to-buffer";
 import express from "express";
+import jws from "jws";
 import randomString from "crypto-random-string";
 import sharp from "sharp";
 import ssri from "ssri";
@@ -8,21 +9,88 @@ import ssri from "ssri";
 /**
  * Registers all auth related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, config) {
+export default function register(authGuard, { ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
     const router = express.Router();
-    // Session restore
-    router.get("/session", (req, res) => {
-
-    });
-
-    // Session status check
-    router.head("/session", (req, res) => {
-
-    });
 
     // Login
-    router.post("/login", (req, res) => {
+    router.post("/login", async (req, res) => {
+        let um = null;
+        let img = null;
+        // Locate account via email
+        if (req.body.email) {
+            try {
+                um = await UserModel
+                    .query()
+                    .where("email", req.body.email)
+                    .select("id", "password", "fname", "mnames", "lname", "user_image");
+                if (um.length === 0) {
+                    res.status(400).send({
+                        feedback: "Email or password incorrect."
+                    });
+                    return;
+                } else {
+                    um = um[0];
+                }
 
+                // Grab user image
+                img = await um.$relatedQuery("userImage").select("num", "integrity", "extension");
+            } catch (error) {
+                res.sendStatus(500);
+                return;
+            }
+        } else {
+            res.status(400).send({
+                feedback: "Email is required."
+            });
+            return;
+        }
+
+        // Verify password
+        if (req.body.pwd) {
+            try {
+                if (!await argon2.verify(um.password, req.body.pwd)) {
+                    res.status(400).send({
+                        feedback: "Email or password incorrect."
+                    });
+                    return;
+                }
+            } catch (error) {
+                res.sendStatus(500);
+                return;
+            }
+        } else {
+            res.status(400).send({
+                feedback: "Password is required."
+            });
+            return;
+        }
+
+        // Create session (and generate JWT)
+        let token = null;
+        try {
+            token = jws.sign({
+                header: {
+                    alg: "HS256",// There are better algorithms, but they are a pita to set up
+                    typ: "JWT"
+                },
+                payload: {
+                    user_id: um.id,
+                    iat: new Date().valueOf(),
+                    exp: new Date(new Date().getTime() + 1209600000).valueOf(),// Current time + 14 days
+                    img: `${img.num}.${img.integrity}.${img.extension}`
+                },
+                secret:  config.jwt_secret
+            });
+        } catch (error) {
+            res.sendStatus(500);
+            return;
+        }
+
+        // Send access token
+        res.status(200).send({
+            access_token: token
+        });
+        return;
     });
 
     // Register
@@ -150,7 +218,6 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             }
         } catch (error) {
             /** @todo Log error *///ImageModel.ValidationError
-            console.log(error)
             res.status(400).send({
                 feedback: "<ul><li>We hit a snag processing the provided photo. Try again or use another photo.</li></ul>"
             });
@@ -185,7 +252,7 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             });
             return;
         }
-        
+
         // Save user details
         try {
             um = await UserModel.query().insert(um).select("id", "email");
@@ -198,19 +265,26 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             return;
         }
 
-        /** @todo Verification/2nd stage registration email */
+        // Send verificaion/2nd registration email
         try {
             let evm = await EmailVerificationModel
                 .query()
                 .insert({
                     code: randomString(25),
-                    expires: (new Date(new Date().getTime() + 30 * 60000)).toISOString().slice(0, 19).replace('T', ' '),
+                    expires: (new Date(new Date().getTime() + 1800000)).toISOString().slice(0, 19).replace('T', ' '),// Current time + 30 min to mysql format
                     user_id: um.id
                 })
                 .select("code");
 
-            // Pretend we sent an email
+            // Send email (and put to console)
             console.log("Verification link: " + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code);
+            mailer.sendMail({
+                from: "\"Car Share\" <carshare@example.com>", // sender address
+                to: um.email, // list of receivers
+                subject: "Car Share - Continue Registration", // Subject line
+                text: "Please visit " + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + " to complete complete registration.", // plain text body
+                html: "Please visit <a href=\"" + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + "\">" + config.url.gui + "verify/" + encodeURIComponent(um.email) + "/" + evm.code + "</a> to complete complete registration." // html body
+            });
         } catch (error) {
             /** @todo Log error */
             res.status(400).send({
@@ -218,12 +292,11 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             });
             return;
         }
-        
+
         res.status(200).send();
     });
 
     // Verify
-    // need to rail road this into a credit checker system
     router.post("/verify", async (req, res) => {
         // Verify code
         let evm = null;
@@ -251,6 +324,8 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             return;
         }
 
+        /** @todo Create new link if expired (and delete old) */
+
         // Make sure code matches
         if (evm.code !== req.body.code) {
             res.status(400).send({
@@ -266,9 +341,21 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             };
             // Blacklist logic (for demonstration purposes, we hate people who have a license number containing 1)
             if (req.body.license_num.indexOf("1") !== -1) {
+                mailer.sendMail({
+                    from: "\"Car Share\" <carshare@example.com>", // sender address
+                    to: req.body.email, // list of receivers
+                    subject: "Car Share - Credit Assessment Outcome", // Subject line
+                    text: "Your (" + req.body.email + ") credit is bad. Site access has been denied.", // plain text body
+                });
                 console.log("Your (" + req.body.email + ") credit is bad. Site access has been denied.");
             } else {
-                console.log("Your (" + req.body.email + ") credit is good. Welcome! Head to "  + config.url.gui + "login");
+                mailer.sendMail({
+                    from: "\"Car Share\" <carshare@example.com>", // sender address
+                    to: req.body.email, // list of receivers
+                    subject: "Car Share - Your In!", // Subject line
+                    text: "Your (" + req.body.email + ") credit is good. Welcome! Head to " + config.url.gui + "login", // plain text body
+                });
+                console.log("Your (" + req.body.email + ") credit is good. Welcome! Head to " + config.url.gui + "login");
                 update.credit_approved = true;
             }
             await UserModel

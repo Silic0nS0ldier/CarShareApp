@@ -7,7 +7,7 @@ import ssri from "ssri";
 /**
  * Registers all booking related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel }) {
+export default function register(authGuard, { ImageModel, LogModel, UserModel }) {
     const router = express.Router();
 
     

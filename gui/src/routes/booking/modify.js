@@ -26,7 +26,7 @@ export default class VehicleModify extends Component {
                 <LayoutGrid>
                     <LayoutGrid.Cell cols="12">
                         <div>
-                            <Form method="POST" action={config.url.api + "vehicle/modify"}>
+                            <Form method="POST" action={config.url.api + "vehicle/modify"} loginRequired={true}>
                                 <div class={style.formSection}>
                                     <TextField type="email" label="Email" name="email" required />
                                     <br/>

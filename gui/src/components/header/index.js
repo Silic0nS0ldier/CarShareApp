@@ -1,14 +1,33 @@
+import "preact-material-components/Button/style.css"
 import "preact-material-components/Drawer/style.css";
 import "preact-material-components/List/style.css";
 import "preact-material-components/Toolbar/style.css";
 import { h, Component } from "preact";
 import { route } from "preact-router";
+import Button from "preact-material-components/Button"
 import Drawer from "preact-material-components/Drawer";
 import List from "preact-material-components/List";
 import Toolbar from "preact-material-components/Toolbar";
+import 'preact-material-components/Theme/style.css';
 // import style from "./style";
 
 export default class Header extends Component {
+	constructor(props, context) {
+		super(props, context);
+		props.store.subscribe(data => {
+			if (data.user_id) {
+				this.setState({
+					loggedIn: true
+				});
+			} else {
+				this.setState({
+					loggedIn: false
+				});
+			}
+		});
+		this.state.loggedIn = props.store.getState().user_id ? true : false;
+	}
+
 	closeDrawer() {
 		this.drawer.MDComponent.open = false;
 	}
@@ -22,11 +41,22 @@ export default class Header extends Component {
 		this.closeDrawer();
 	};
 
+	logout = () => {
+		// These will trigger other events.
+		localStorage.removeItem("access_token");
+		this.props.store.setState({
+			user_id: null,
+			userImgURL: null,
+			imgURL: null
+		});
+		route("/login");
+	};
+
 	goHome = this.linkTo("/");
 	goToMyProfile = this.linkTo("/profile");
 	goToVehicleListings = this.linkTo("/vehicles");
 
-	render({ config, store }) {
+	render({ config, store }, { loggedIn }) {
 		return (
 			<div>
 				<Toolbar className="toolbar">
@@ -39,11 +69,11 @@ export default class Header extends Component {
 						</Toolbar.Section>
 						{
 							(() => {
-								if (store.getState().user) {
+								if (loggedIn) {
 									return (
 										<Toolbar.Section align-end>
-											<Toolbar.Icon>settings</Toolbar.Icon>
-											<img src={config.url.img + store.getState().user.image} width="48" height="48" style="border-radius: 50%;"/>
+											<Button raised secondary ripple style="align-self: center;right: 10px;" onClick={this.logout}>Logout</Button>
+											<img src={store.getState().userImgURL} width="48" height="48" style="border-radius: 50%;"/>
 										</Toolbar.Section>
 									)
 								}

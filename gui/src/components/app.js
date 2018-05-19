@@ -1,8 +1,9 @@
 import config from "../config.json";
 
-import createStore from "unistore";
-import { Router, route } from "preact-router";
 import { h, Component } from "preact";
+import { Router, route } from "preact-router";
+import createStore from "unistore";
+import jwtDecode from "jwt-decode";
 
 import Verify from "../routes/verify";
 import Register from "../routes/register";
@@ -15,8 +16,6 @@ import VehicleListing from '../routes/vehicle/listing';
 import VehicleModify from '../routes/vehicle/modify';
 import BookingNew from '../routes/booking/new';
 import BookingModify from '../routes/booking/modify';
-// import Home from 'async!../routes/home';
-// import Profile from 'async!../routes/profile';
 
 const store = createStore();
 
@@ -26,85 +25,43 @@ export default class App extends Component {
 	 *	@param {string} event.url	The newly routed URL
 	 */
 	handleRoute = event => {
-		// Used to bypass login lockout during dev
-		this.currentUrl = event.url;
-		return;
-		// Check if session is still active
-		if (localStorage.getItem("session_id")) {
-			fetch(config.url.api + "session", {
-				methd: "HEAD",
-				body: JSON.stringify({
-					session_id: localStorage.getItem("session_id")
-				}),
-				cache: "no-store"
-			}).then(response => {
-				// Non-200 response indications expired session
-				if (response.status !== 200) {
-					store.setState({
-						user: null,
-						session_id: null,
-						url: null
-					});
-					localStorage.removeItem("session_id");
-					route("/login/" + encodeURIComponent(event.url));
-				}
-			}).catch(error => {
-				route("/error");
-			});
+		// Handle session
+		if (localStorage.getItem("access_token")) {
+			// Decode token
+			const token = jwtDecode(localStorage.getItem("access_token"));
+
+			// Check expiry and expire is necessary
+			if (new Date(token.exp) <= new Date()) {
+				store.setState({
+					user_id: null,
+					userImgURL: null,
+					imgURL: null
+				});
+				localStorage.removeItem("access_token");
+			} else if (store.getState().user_id == null) {
+				// Regenerate if not in store
+				store.setState({
+					user_id: token.user_id,
+					userImgURL: config.url.img + localStorage.getItem("access_token") + "/" + token.img,
+					imgURL: config.url.img + localStorage.getItem("access_token") + "/"
+				});
+			}
+		} else {
+			// Make sure store is clear
+			if (store.getState().user_id) {
+				store.setState({
+					user_id: null
+				})
+			}
 		}
 
-		// Guard access to pages that pull protected resources.
-		if (store.getState().user == null
-			&& event.url !== "/login"
-			&& event.url !== "/register"
-			&& event.url !== "/error"
-			&& !event.url.startsWith("/verify")) {
-			// Attempt to restore session if 
-			if (localStorage.getItem("session_id")) {
-				fetch(config.url.api + "session", {
-					method: "GET",
-					body: JSON.stringify({
-						session_id: localStorage.getItem("session_id")
-					}),
-					cache: "no-store"
-				}).then(response => {
-					// Handle response
-					if (response.status === 200) {
-						// 200 = session restored
-						response.json().then(payload => {
-							store.setState({
-								user: payload.user,
-								session_id: localStorage.getItem("session_id"),
-								url: {
-									api: config.url.api + localStorage.getItem("session_id") + "/",
-									img: config.url.img + localStorage.getItem("session_id") + "/"
-								}
-							});
-							route(event.url);
-						}).catch(error => {
-							// This shouldn't happen, but we can never be sure.
-							// Redirect to the error page
-							route("/error");
-						});
-					} else if (response.status === 400) {
-						// 400 = session has since expired
-						localStorage.removeItem("session_id");
-						route("/login");
-					} else {
-						// Something bad happened.
-						throw new Error("Failure attempting to restore session");
-					}
-
-				}).catch(error => {
-					// We failed to reach the server or something broke the connection
-					// Redirect to error page
-					route("/error");
-				})
-			} else {
-				// Route to login page
-				route("/login");
-			}
-
+		// Restrict access for logged out users
+		if (store.getState().user_id == null
+		&& !event.url.startsWith("/login")
+		&& !event.url.startsWith("/register")
+		&& !event.url.startsWith("/error")
+		&& !event.url.startsWith("/verify")) {
+			route("/login/" + encodeURIComponent(event.url));
 		} else {
 			// Route as normal
 			this.currentUrl = event.url;
@@ -118,8 +75,7 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
 					<Profile path="/profile" />{/*Actual profile page... or something*/}
-					<Login path="/login" config={config} store={store} />
-					<Login path="/login/:redirect" config={config} store={store} />
+					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:code" config={config} store={store} />
 					<VehicleListings path="/vehicles" config={config} />

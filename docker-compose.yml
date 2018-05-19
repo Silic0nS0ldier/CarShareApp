@@ -65,6 +65,9 @@ services:
       - SCENARIO=development
       - DOCKER=1
     command: npm run dockerMigrate
-
+  mail: # Catches sent emails
+    image: schickling/mailcatcher
+    ports:
+      - 1080:1080
 # For later: Production deployment should handle install operations, not each container. Automatic install here is for convenience.
     
