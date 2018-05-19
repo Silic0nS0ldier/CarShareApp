@@ -2,6 +2,7 @@ import 'preact-material-components/LayoutGrid/style.css';
 import { h, Component } from 'preact';
 import authorizedFetch from "../../lib/authorizedFetch";
 import LayoutGrid from 'preact-material-components/LayoutGrid';
+import Icon from 'preact-material-components/Icon';
 
 import style from './style';
 
@@ -33,7 +34,7 @@ export default class VehicleListing extends Component {
                     });
             },
             () => {
-                alert("Server is holidays. Come back later");
+                alert("Server is on holidays. Come back later");
             }
         );
     }
@@ -65,72 +66,107 @@ export default class VehicleListing extends Component {
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="8">
                                 <div class={style.divSpacer + " " + style.gallery}>
-                                    IMG GALL
+                                    <div class={style.innerGall}>
+                                        <div>
+                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png"/>
+                                        </div>
+                                        <div>
+                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                        </div>
+                                        <div>
+                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                        </div>
+                                        <div>    
+                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class={style.divSpacer + " " + style.listingInfo}>
-                                    <div class={style.centreText}>
+                                    <div>
+                                        <LayoutGrid.Inner>
+                                            <LayoutGrid.Cell cols="12">
+                                                <h2>
+                                                    Car Specs
+                                                </h2>
+                                            </LayoutGrid.Cell>
+                                        </LayoutGrid.Inner>
+                                    </div>
+                                    <div>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Brand: {vehicle.brand}
+                                                    <Icon>drive_eta</Icon> Brand: {vehicle.brand}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Model: {vehicle.make}
+                                                <Icon>drive_eta</Icon> Model: {vehicle.model}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Year: {vehicle.year}
+                                                    <Icon>calendar_today</Icon> Year: {vehicle.year}
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Type: {vehicle.type}
+                                                    <Icon>directions_car</Icon> Type: {vehicle.type}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    AC: {ac ? 'yes' : 'no'}
+                                                    <Icon>ac_unit</Icon> AC: {ac ? 'yes' : 'no'}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Minimum Seating: {vehicle.seat_min}
-                                                </div>
-                                            </LayoutGrid.Cell>
-                                        </LayoutGrid.Inner>
-                                        <LayoutGrid.Inner>
-                                            <LayoutGrid.Cell cols="4">
-                                                <div class={style.divSpacerMini}>
-                                                    Maximum Seating: {vehicle.seat_max}
-                                                </div>
-                                            </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
-                                                <div class={style.divSpacerMini}>
-                                                    VIN: {vehicle.VIN}
-                                                </div>
-                                            </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
-                                                <div class={style.divSpacerMini}>
-                                                    KMS: {vehicle.odometer}
+                                                    <Icon>person</Icon> Minimum Seating: {vehicle.seat_min}
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    Odometer last updated: {vehicle.odometer_last_update}
+                                                    <Icon>group</Icon> Maximum Seating: {vehicle.seat_max}
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                            <LayoutGrid.Cell cols="4">
+                                                <div class={style.divSpacerMini}>
+                                                    <Icon>call_to_action</Icon> VIN: {vehicle.VIN}
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                            <LayoutGrid.Cell cols="4">
+                                                <div class={style.divSpacerMini}>
+                                                    <Icon>map</Icon> KMS: {vehicle.odometer}
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                        </LayoutGrid.Inner>
+                                        <LayoutGrid.Inner>
+                                            <LayoutGrid.Cell cols="4">
+                                                <div class={style.divSpacerMini}>
+                                                    <Icon>calendar_today</Icon> Odometer last updated: {vehicle.odometer_last_update}
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
                                     </div>
                                 </div>
                                 <div class={style.divSpacer + " " + style.desc}>
-                                    {vehicle.description}
+                                    <LayoutGrid.Inner>
+                                        <LayoutGrid.Cell cols="12">
+                                            <h2>
+                                                Description
+                                            </h2>
+                                        </LayoutGrid.Cell>
+                                    </LayoutGrid.Inner>
+                                    <LayoutGrid.Inner>
+                                        <LayoutGrid.Cell cols="12">
+                                            <p>
+                                                {vehicle.description}
+                                            </p>
+                                        </LayoutGrid.Cell>
+                                    </LayoutGrid.Inner>
                                 </div>
                             </LayoutGrid.Cell>
                             <LayoutGrid.Cell cols="4">

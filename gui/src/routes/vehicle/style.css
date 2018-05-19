@@ -11,18 +11,45 @@
 }
 
 .gallery {
-    background: red;
     height: 300px;
+    max-height: 300px;
+}
+
+.innerGall {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    max-height: 300px;
+    width: 100%;
+    min-width: 100%;
+    white-space: nowrap;
+}
+
+.gallery .innerGall div {
+    width: 300px;
+    display: inline-block;
+}
+
+.gallery .innerGall img {
+    width: 300px;
 }
 
 .listingInfo {
     background: #efefef;
-    height: 200px;
+    padding: 20px;
+}
+
+.listingInfo .divSpacerMini {
+    font-size: 20px;
+    display: flex;
+}
+
+.listingInfo .divSpacerMini i {
+    margin-right: 10px;
 }
 
 .desc {
-    background: #0c4dda;
-    height: 500px;
+    background: #efefef;
+    padding: 20px;
 }
 
 .owner {
