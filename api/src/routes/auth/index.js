@@ -15,13 +15,14 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
     // Login
     router.post("/login", async (req, res) => {
         let um = null;
+        let img = null;
         // Locate account via email
         if (req.body.email) {
             try {
                 um = await UserModel
                     .query()
                     .where("email", req.body.email)
-                    .select("id", "password", "fname", "mnames", "lname");
+                    .select("id", "password", "fname", "mnames", "lname", "user_image");
                 if (um.length === 0) {
                     res.status(400).send({
                         feedback: "Email or password incorrect."
@@ -30,6 +31,9 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
                 } else {
                     um = um[0];
                 }
+
+                // Grab user image
+                img = await um.$relatedQuery("userImage").select("num", "integrity", "extension");
             } catch (error) {
                 res.sendStatus(500);
                 return;
@@ -51,7 +55,6 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
                     return;
                 }
             } catch (error) {
-                console.log(error);
                 res.sendStatus(500);
                 return;
             }
@@ -73,7 +76,8 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
                 payload: {
                     user_id: um.id,
                     iat: new Date().valueOf(),
-                    exp: new Date(new Date().getTime() + 1209600000).valueOf()// Current time + 14 days
+                    exp: new Date(new Date().getTime() + 1209600000).valueOf(),// Current time + 14 days
+                    img: `${img.num}.${img.integrity}.${img.extension}`
                 },
                 secret:  config.jwt_secret
             });

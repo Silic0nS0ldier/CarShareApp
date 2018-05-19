@@ -27,10 +27,6 @@ export default class App extends Component {
 	 *	@param {string} event.url	The newly routed URL
 	 */
 	handleRoute = event => {
-		// Used to bypass login lockout during dev
-		this.currentUrl = event.url;
-		return;
-
 		// Handle session
 		if (localStorage.getItem("access_token")) {
 			// Decode token
@@ -40,6 +36,7 @@ export default class App extends Component {
 			if (new Date(token.exp) <= new Date()) {
 				store.setState({
 					user_id: null,
+					userImgURL: null,
 					imgURL: null
 				});
 				localStorage.removeItem("access_token");
@@ -47,6 +44,7 @@ export default class App extends Component {
 				// Regenerate if not in store
 				store.setState({
 					user_id: token.user_id,
+					userImgURL: config.url.img + localStorage.getItem("access_token") + "/" + token.img,
 					imgURL: config.url.img + localStorage.getItem("access_token") + "/"
 				});
 			}

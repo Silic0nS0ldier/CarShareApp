@@ -18,6 +18,7 @@ export default class Login extends Component {
             // Add user data to store
             this.props.store.setState({
                 user_id: token.user_id,
+                userImgURL: this.props.config.url.img + payload.access_token + "/" + token.img,
                 imgURL: this.props.config.url.img + payload.access_token + "/"
             });
             // Add access_token to localStorage to allow for session regeneration

@@ -32,13 +32,15 @@ async function Main() {
     // Initialise express application
     const app = express();
 
-    app.get("/*", (req, res) => {
-        // 1. Extract image name from URL (system immune to directory traversal attacks)
-        let imageName = req.url.substring(1);// Strips the leading slash
+    app.get("/:access_token/:image_reference", (req, res) => {
+        // 1. Check authorisation
+        /** @todo This is dead simple, just need to verify access token */
+
+        // (system immune to directory traversal attacks)
 
         // 2. Map to file in database (if possible) with pattern id.datahash.extension
         // 2.1. Split value into array
-        let imageIds = imageName.split(".");
+        let imageIds = req.params.image_reference.split(".");
         // 2.2. Ensure array length is 3
         if (imageIds.length != 3) {
             res.status(400).send();
@@ -79,7 +81,7 @@ async function Main() {
 
                 // Send file
                 res.status(200)
-                    .attachment(imageName)
+                    .attachment(req.params.image_reference)
                     .append("Content-Transfer-Encoding", "binary")
                     .append("Content-Length", image.size_bytes)
                     .send(image.data);
