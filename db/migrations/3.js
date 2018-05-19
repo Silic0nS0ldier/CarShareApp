@@ -1,7 +1,3 @@
-import Knex from "knex";
-/**
- * @param {Knex.Transaction} trx 
- */
 export default async function Run(trx) {
     let makeVIN = () => {
         var text = "";
