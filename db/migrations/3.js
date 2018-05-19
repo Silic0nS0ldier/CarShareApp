@@ -112,9 +112,9 @@ export default async function Run(trx) {
     // Drop sessions table
     await trx.schema.dropTable("sessions");
 
-    return "Dropped 'license_image' column from table 'users'. \
-    Renamed 'data_hash' to 'integriy', added unique constaint, and increased maximum size of 'data' column in 'images' table.\
-    Added 'credit_approved' field to 'users' table.\
-    Seeded tables for demonstration.\
-    Dropped 'sessions' table as now irrelevent.";
+    return "Dropped 'license_image' column from 'users'. \
+    Renamed 'data_hash' to 'integriy', added unique constaint, increased maximum size of 'data' in 'images'.\
+    Added 'credit_approved' to 'users'.\
+    Seeded tables for demo.\
+    Dropped 'sessions'.";
 }
