@@ -25,6 +25,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 .query()
                 .where("VIN", "like", `%${term}%`)
                 .orWhere("summary", "like", `%${term}%`)
+                .orWhere("brand", "like", `%${term}%`)
                 .orWhere("type", "like", `%${term}%`)
                 .orWhere("year", "like", `%${term}%`);
             res.status(200).send({

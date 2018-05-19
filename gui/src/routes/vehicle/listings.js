@@ -5,6 +5,7 @@ import Icon from 'preact-material-components/Icon';
 import LayoutGrid from 'preact-material-components/LayoutGrid';
 import style from './style';
 import TextField from "../../components/Forms/TextFormField";
+import global from "../globals";
 
 export default class VehicleListings extends Component {
 
@@ -82,7 +83,19 @@ export default class VehicleListings extends Component {
                                 for (let vehicle of vehicles) {
                                     formattedListings.push(
                                         <LayoutGrid.Cell cols="12">
-                                            <a href={config.url.gui + "vehicle/" + vehicle.VIN}>{vehicle.VIN}</a>
+                                            <LayoutGrid.Inner>
+                                                <LayoutGrid.Cell cols="4">
+                                                    <img src={config.url.img + "0.sha512-8wkNOxZFmBUSi4i71sEOziVy/R8i4RzIY8SmA7wNxEnL2pLl+3JQRdi0VeyeE+uaC4ft4+bA4ovkCw2+91Zung==.png"}/>
+                                                </LayoutGrid.Cell>
+                                                <LayoutGrid.Cell cols="8">
+                                                    <div>
+                                                        <a href={config.url.gui + "vehicle/" + vehicle.VIN}><h3>{vehicle.year} {vehicle.brand} {vehicle.model}</h3></a>
+                                                    </div>
+                                                    <div>
+                                                        <p>{vehicle.summary}</p>
+                                                    </div>
+                                                </LayoutGrid.Cell>
+                                            </LayoutGrid.Inner>
                                         </LayoutGrid.Cell>
                                     );
                                 }
