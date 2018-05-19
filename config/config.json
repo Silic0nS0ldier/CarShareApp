@@ -1,8 +1,26 @@
 {
-    "__comment": "Each key (besides this) represents an environment.",
+    "__comment": "Each key (besides this) represents an environment. To anyone reading this in the future, DO NOT STORE SENSITIVE INFO IN SOMETHING (A) TRACKED IN GIT AND (B) SO EASILY ACCESSED!!!!",
     "production": {},
     "staging": {
-        "__comment": "Inherits properties of production."
+        "__comment": "Inherits properties of production.",
+        "db" :{
+            "self": {
+                "host": "csit314-group8-a2018.mysql.database.azure.com",
+                "user": "csit314",
+                "password": "ITEMS-1n-calendar-may-be-clos3r-than-they-appear",
+                "database": "carshareapp"
+            }
+        },
+        "mail": {
+            "connectionString": "smtps://a8c46c4e6fb1a18589a8ba07068df328:b24e08becc8129c38bfd0363b4c495c8@in-v3.mailjet.com:587/?pool=true",
+            "sender": "djm762@uowmail.edu.au"
+        },
+        "jwt_secret": "the-incredibly-long-super-insecure-jtw-token-secret-that-nobody-wants-to-bother-to-try-and-crack",
+        "url": {
+            "api": "https://api-csit314-group8-a2018.azurewebsites.net",
+            "img": "https://img-csit314-group8-a2018.azurewebsites.net",
+            "gui": "https://gui-static-csit314-group8-a2018.azurewebsites.net"
+        }
     },
     "development": {
         "__comment": "Inherits properties of staging.",
@@ -21,7 +39,8 @@
             }
         },
         "mail": {
-            "connectionString": "smtp://mail:1025/?pool=true"
+            "connectionString": "smtp://mail:1025/?pool=true",
+            "sender": "noreply@example.com"
         },
         "jwt_secret": "development_secret",
         "url": {
