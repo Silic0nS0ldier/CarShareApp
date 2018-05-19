@@ -108,14 +108,6 @@ export default async function DB(config) {
                         },
                         to: "roles.id"
                     }
-                },
-                sessions: {
-                    relation: Model.HasManyRelation,
-                    modelClass: SessionModel,
-                    join: {
-                        from: "users.id",
-                        to: "sessions.user_id"
-                    }
                 }
             }
         }
@@ -250,25 +242,6 @@ export default async function DB(config) {
         }
     }
 
-    class SessionModel extends Model {
-        static get tableName() {
-            return "sessions";
-        }
-
-        static get relationMappings() {
-            return {
-                user: {
-                    relation: Model.HasOneRelation,
-                    modelClass: UserModel,
-                    join: {
-                        from: "sessions.user_id",
-                        to: "users.id"
-                    }
-                }
-            }
-        }
-    }
-
     class EmailVerificationModel extends Model {
         static get tableName() {
             return "email_verifications";
@@ -317,7 +290,6 @@ export default async function DB(config) {
         RoleModel,
         ListingModel,
         ListingChangeModel,
-        SessionModel,
         EmailVerificationModel
     };
 }

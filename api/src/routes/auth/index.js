@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import dataUriToBuffer from "data-uri-to-buffer";
 import express from "express";
+import jws from "jws";
 import randomString from "crypto-random-string";
 import sharp from "sharp";
 import ssri from "ssri";
@@ -10,19 +11,82 @@ import ssri from "ssri";
  */
 export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
     const router = express.Router();
-    // Session restore
-    router.get("/session", (req, res) => {
-
-    });
-
-    // Session status check
-    router.head("/session", (req, res) => {
-
-    });
 
     // Login
-    router.post("/login", (req, res) => {
+    router.post("/login", async (req, res) => {
+        let um = null;
+        // Locate account via email
+        if (req.body.email) {
+            try {
+                um = await UserModel
+                    .query()
+                    .where("email", req.body.email)
+                    .select("id", "password", "fname", "mnames", "lname");
+                if (um.length === 0) {
+                    res.status(400).send({
+                        feedback: "Email or password incorrect."
+                    });
+                    return;
+                } else {
+                    um = um[0];
+                }
+            } catch (error) {
+                res.sendStatus(500);
+                return;
+            }
+        } else {
+            res.status(400).send({
+                feedback: "Email is required."
+            });
+            return;
+        }
 
+        // Verify password
+        if (req.body.pwd) {
+            try {
+                if (!await argon2.verify(um.password, req.body.pwd)) {
+                    res.status(400).send({
+                        feedback: "Email or password incorrect."
+                    });
+                    return;
+                }
+            } catch (error) {
+                console.log(error);
+                res.sendStatus(500);
+                return;
+            }
+        } else {
+            res.status(400).send({
+                feedback: "Password is required."
+            });
+            return;
+        }
+
+        // Create session (and generate JWT)
+        let token = null;
+        try {
+            token = jws.sign({
+                header: {
+                    alg: "HS256",// There are better algorithms, but they are a pita to set up
+                    typ: "JWT"
+                },
+                payload: {
+                    user_id: um.id,
+                    iat: new Date().valueOf(),
+                    exp: new Date(new Date().getTime() + 1209600000).valueOf()// Current time + 14 days
+                },
+                secret:  config.jwt_secret
+            });
+        } catch (error) {
+            res.sendStatus(500);
+            return;
+        }
+
+        // Send access token
+        res.status(200).send({
+            access_token: token
+        });
+        return;
     });
 
     // Register
@@ -198,13 +262,13 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             return;
         }
 
-        /** @todo Verification/2nd stage registration email */
+        // Send verificaion/2nd registration email
         try {
             let evm = await EmailVerificationModel
                 .query()
                 .insert({
                     code: randomString(25),
-                    expires: (new Date(new Date().getTime() + 30 * 60000)).toISOString().slice(0, 19).replace('T', ' '),
+                    expires: (new Date(new Date().getTime() + 1800000)).toISOString().slice(0, 19).replace('T', ' '),// Current time + 30 min to mysql format
                     user_id: um.id
                 })
                 .select("code");
@@ -230,7 +294,6 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
     });
 
     // Verify
-    // need to rail road this into a credit checker system
     router.post("/verify", async (req, res) => {
         // Verify code
         let evm = null;

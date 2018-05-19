@@ -86,7 +86,7 @@ export default class Form extends Component {
                 });
             }
         })().then(this.submitSuccess, this.submitFailure);
-    }
+    };
 
     submitSuccess = (response) => {
         // Unlock
@@ -170,7 +170,7 @@ export default class Form extends Component {
                 });
             }
         }
-    }
+    };
 
     submitFailure = (error) => {
         // Unlock
@@ -181,7 +181,7 @@ export default class Form extends Component {
             messageClass: style.formWarning,
             messageContent: "An error occured while submitting the form."
         });
-    }
+    };
 
     getValues = () => {
         let values = {};
@@ -189,20 +189,25 @@ export default class Form extends Component {
             values[field.getName()] = field.getValue();
         }
         return values;
-    }
+    };
 
     modeSubmit = () => {
         this.state.fieldset.setAttribute("disabled", "disabled");
         this.setState({
             hideProgress: false
         });
-    }
+    };
 
     modeInput = () => {
         this.state.fieldset.removeAttribute("disabled");
         this.setState({
             hideProgress: true
         });
+    };
+
+    componentWillUnmount = () => {
+        // Clear form to stop values from floating around.
+        this.state.form.reset();
     }
 
     render({ children }, { messageClass, messageContent, hideProgress }) {
