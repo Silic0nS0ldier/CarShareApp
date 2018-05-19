@@ -1,22 +1,23 @@
-import {h, Component} from 'preact';
-import LayoutGrid from 'preact-material-components/LayoutGrid';
 import 'preact-material-components/LayoutGrid/style.css';
+import { h, Component } from 'preact';
+import authorizedFetch from "../../lib/authorizedFetch";
+import LayoutGrid from 'preact-material-components/LayoutGrid';
 
 import style from './style';
 
 export default class VehicleListing extends Component {
 
     componentDidMount = () => {
-        return fetch(this.props.config.url.api + "vehicle/" + this.props.vin, {
-            cache: "no-cache",
+        return authorizedFetch(this.props.config.url.api + "vehicle/" + this.props.vin, {
+            cache: "no-store",
             headers: {
                 "Accept": "application/json"
             }
-        }).then(
+        }, true).then(
             (response) => {
                 response.json()
                     .then((data) => {
-                        if(response.ok) {
+                        if (response.ok) {
                             data = JSON.parse(JSON.stringify(data));
                             data.odometer_last_update = (new Date(data.odometer_last_update)).toLocaleDateString();
                             this.setState({
@@ -30,7 +31,7 @@ export default class VehicleListing extends Component {
                         console.log("Something terrible has happened. Please try again.");
                         console.log(error);
                     });
-            }, 
+            },
             () => {
                 alert("Server is holidays. Come back later");
             }
@@ -40,7 +41,7 @@ export default class VehicleListing extends Component {
 
 
 
-    render({config}, {vehicle}) {
+    render({ config }, { vehicle }) {
         if (!vehicle) {
             return (
                 <div>

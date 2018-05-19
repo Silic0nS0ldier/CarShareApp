@@ -2,6 +2,7 @@ import "preact-material-components/LinearProgress/style.css";
 import "preact-material-components/Typography/style.css";
 import { h, Component, cloneElement } from "preact";
 import { route } from "preact-router";
+import authorizedFetch from "../../../lib/authorizedFetch";
 import LinearProgress from "preact-material-components/LinearProgress";
 import style from "./style.css";
 import Typography from "preact-material-components/Typography";
@@ -60,11 +61,17 @@ export default class Form extends Component {
         // Switch for submission mode
         this.modeSubmit();
 
+        // Obtain required fetcher
+        let fetcher = fetch;
+        if (this.props.loginRequired) {
+            fetcher = authorizedFetch;
+        }
+
         // Submit form
         (() => {
             if (!this.props.method || this.props.method === "GET" || this.props.method === "HEAD") {
                 // GET and HEAD requests require different handling.
-                return fetch(((url) => {
+                return fetcher(((url) => {
                     let values = this.getValues();
                     return url + "?" + Object.keys(values)
                         .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(values[k]))
@@ -75,7 +82,7 @@ export default class Form extends Component {
                     });
             } else {
                 // Everything else
-                return fetch(this.props.action, {
+                return fetcher(this.props.action, {
                     method: this.props.method,
                     cache: "no-store",
                     body: JSON.stringify(this.getValues()),
@@ -217,7 +224,7 @@ export default class Form extends Component {
                     if (messageContent) {
                         return (
                             <div class={style.formMessage + " " + messageClass}>
-                                <Typography subtitle1 dangerouslySetInnerHTML={{__html: messageContent}}></Typography>
+                                <Typography subtitle1 dangerouslySetInnerHTML={{ __html: messageContent }}></Typography>
                             </div>
                         );
                     }

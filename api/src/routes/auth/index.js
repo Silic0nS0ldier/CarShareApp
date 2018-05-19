@@ -9,7 +9,7 @@ import ssri from "ssri";
 /**
  * Registers all auth related routes.
  */
-export default function register({ ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
+export default function register(authGuard, { ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
     const router = express.Router();
 
     // Login
@@ -218,7 +218,6 @@ export default function register({ ImageModel, LogModel, UserModel, EmailVerific
             }
         } catch (error) {
             /** @todo Log error *///ImageModel.ValidationError
-            console.log(error)
             res.status(400).send({
                 feedback: "<ul><li>We hit a snag processing the provided photo. Try again or use another photo.</li></ul>"
             });

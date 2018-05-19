@@ -39,7 +39,7 @@ export default class VehicleListings extends Component {
                     <LayoutGrid.Inner>
                         <LayoutGrid.Cell cols="12">
                             <div class={style.searchBar}>
-                                <Form action={config.url.api + "vehicle/search"} onSuccess={this.populatePage}>
+                                <Form action={config.url.api + "vehicle/search"} onSuccess={this.populatePage} loginRequired={true}>
                                     <TextField type="text" label={<Icon>search</Icon>} name="term" style="width: calc(100vw - 78px);" />
                                 </Form>
                             </div>
@@ -76,7 +76,7 @@ export default class VehicleListings extends Component {
                                         </div>
                                     </LayoutGrid.Cell>
                                 );
-                            } else {console.log(vehicles[0]);
+                            } else {
                                 let formattedListings = [];
                                 
                                 for (let vehicle of vehicles) {
