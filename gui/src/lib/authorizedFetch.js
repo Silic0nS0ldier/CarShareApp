@@ -7,7 +7,7 @@ import { route, getCurrentUrl } from "preact-router";
  * @param {RequestInit} init
  * @param {boolean} [redirect]
  */
-export default async function authorizedFetch(input, init, redirect) {
+export default function authorizedFetch(input, init, redirect) {
     const token = localStorage.getItem("access_token");
     if (!token) throw new Error("access_token does not exist in local storage, user likely logged out.");
     if (!init.headers) {

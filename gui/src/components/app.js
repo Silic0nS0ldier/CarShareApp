@@ -16,8 +16,6 @@ import VehicleListing from '../routes/vehicle/listing';
 import VehicleModify from '../routes/vehicle/modify';
 import BookingNew from '../routes/booking/new';
 import BookingModify from '../routes/booking/modify';
-// import Home from 'async!../routes/home';
-// import Profile from 'async!../routes/profile';
 
 const store = createStore();
 

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "node -r esm configbuild.js && preact build",
+    "build": "node -r esm configbuild.js && preact build --no-prerender",
     "serve": "preact serve",
     "dev": "node -r esm configbuild.js && preact -p 80 watch",
     "dockerDev": "npm i && node -r esm configbuild.js && preact -p 3000 watch"
