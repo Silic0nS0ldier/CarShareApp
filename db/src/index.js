@@ -282,14 +282,50 @@ export default async function DB(config) {
         }
     }
 
+    class BookingModel extends Model {
+        static get tableName() {
+            return "bookings";
+        }
+
+        static get relationMappings() {
+            return {
+                customer: {
+                    relation: Model.HasOneRelation,
+                    modelClass: UserModel,
+                    join: {
+                        from: "bookings.customer_id",
+                        to: "users.id"
+                    }
+                },
+                provider: {
+                    relation: Model.HasOneRelation,
+                    modelClass: UserModel,
+                    join: {
+                        from: "bookings.provider_id",
+                        to: "users.id"
+                    }
+                },
+                listing: {
+                    relation: Model.HasOneRelation,
+                    modelClass: ListingModel,
+                    join: {
+                        from: "bookings.VIN",
+                        to: "listings.VIN"
+                    }
+                }
+            }
+        }
+    }
+
     return {
         Knex: KnexInstance,
+        BookingModel,
+        EmailVerificationModel,
         ImageModel,
-        LogModel,
-        UserModel,
-        RoleModel,
-        ListingModel,
         ListingChangeModel,
-        EmailVerificationModel
+        ListingModel,
+        LogModel,
+        RoleModel,
+        UserModel
     };
 }
