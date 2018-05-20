@@ -42,7 +42,7 @@ export default class VehicleListing extends Component {
 
 
 
-    render({ config }, { vehicle }) {
+    render({ config, store }, { vehicle }) {
         if (!vehicle) {
             return (
                 <div>
@@ -59,6 +59,9 @@ export default class VehicleListing extends Component {
                                 <h1>
                                     Car: {vehicle.year} {vehicle.brand} {vehicle.model}
                                 </h1>
+                                <a href={"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Facebook</a>
+                                <br />
+                                <a href={"https://twitter.com/home?status=" + encodeURIComponent("Check out this listing on Car Share! " + config.url.gui + vehicle.VIN)}>Share on Twitter</a>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
                     </LayoutGrid>
@@ -68,16 +71,16 @@ export default class VehicleListing extends Component {
                                 <div class={style.divSpacer + " " + style.gallery}>
                                     <div class={style.innerGall}>
                                         <div>
-                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png"/>
+                                            <img src={store.getState().imgURL + vehicle.imageFront[0].num + "." + vehicle.imageFront[0].integrity + "." + vehicle.imageFront[0].extension} />
                                         </div>
                                         <div>
-                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                            <img src={store.getState().imgURL + vehicle.imageLeft[0].num + "." + vehicle.imageLeft[0].integrity + "." + vehicle.imageLeft[0].extension} />
                                         </div>
                                         <div>
-                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                            <img src={store.getState().imgURL + vehicle.imageBack[0].num + "." + vehicle.imageBack[0].integrity + "." + vehicle.imageBack[0].extension} />
                                         </div>
-                                        <div>    
-                                            <img src="http://localhost:8888/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE1MjY3MzUxNjQxMzAsImV4cCI6MTUyNzk0NDc2NDEzMCwiaW1nIjoiMC5zaGE1MTItUzgzVFhNM2VkN3BicUNQY2ltNkU5QW9XS0NSSGZmbjQ1OUJuTkhnekpDZWFpOVFzbGNqZXpLN1phd3ExRmhWYkxNSXdyRkprQnVGMWNEYXZzbmR5NkE9PS5wbmcifQ.5qGvGst-P52jj_nu3Q84knuELMh2oMmuPQSsGgqmTGc/0.sha512-S83TXM3ed7pbqCPcim6E9AoWKCRHffn459BnNHgzJCeai9QslcjezK7Zawq1FhVbLMIwrFJkBuF1cDavsndy6A==.png" />
+                                        <div>
+                                            <img src={store.getState().imgURL + vehicle.imageRight[0].num + "." + vehicle.imageRight[0].integrity + "." + vehicle.imageRight[0].extension} />
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +103,7 @@ export default class VehicleListing extends Component {
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">
                                                 <div class={style.divSpacerMini}>
-                                                <Icon>drive_eta</Icon> Model: {vehicle.model}
+                                                    <Icon>drive_eta</Icon> Model: {vehicle.model}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="4">

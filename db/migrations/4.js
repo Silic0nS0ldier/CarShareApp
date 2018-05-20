@@ -7,7 +7,7 @@ export default async function Run(trx) {
     // Bookings table
     await trx.schema.createTable("bookings", table => {
         table.increments();//id
-        table.integer("VIN")
+        table.string("VIN")
             .notNullable()
             .references("listings.VIN");
         table.timestamp("booked_at")

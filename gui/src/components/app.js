@@ -78,8 +78,8 @@ export default class App extends Component {
 					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:code" config={config} store={store} />
-					<VehicleListings path="/vehicles" config={config} />
-					<VehicleListing path="/vehicle/:vin" config={config} />
+					<VehicleListings path="/vehicles" config={config} store={store} />
+					<VehicleListing path="/vehicle/:vin" config={config} store={store} />
 					<VehicleModify path="/vehicle/modify" config={config} />
 					<BookingNew path="/booking/new" config={config} />
 					<BookingModify path="/booking/modify" config={config} />

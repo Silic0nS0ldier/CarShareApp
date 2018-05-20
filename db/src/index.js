@@ -179,7 +179,7 @@ export default async function DB(config) {
                         to: "users.id"
                     }
                 },
-                image_front: {
+                imageFront: {
                     relation: Model.HasManyRelation,
                     modelClass: ImageModel,
                     join: {
@@ -187,7 +187,7 @@ export default async function DB(config) {
                         to: "images.id"
                     }
                 },
-                image_back: {
+                imageBack: {
                     relation: Model.HasManyRelation,
                     modelClass: ImageModel,
                     join: {
@@ -195,7 +195,7 @@ export default async function DB(config) {
                         to: "images.id"
                     }
                 },
-                image_left: {
+                imageLeft: {
                     relation: Model.HasManyRelation,
                     modelClass: ImageModel,
                     join: {
@@ -203,7 +203,7 @@ export default async function DB(config) {
                         to: "images.id"
                     }
                 },
-                image_right: {
+                imageRight: {
                     relation: Model.HasManyRelation,
                     modelClass: ImageModel,
                     join: {

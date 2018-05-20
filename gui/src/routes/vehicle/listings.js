@@ -24,7 +24,7 @@ export default class VehicleListings extends Component {
             });
     };
 
-    render({ config }, { vehicles, errorLoading }) {
+    render({ config, store }, { vehicles, errorLoading }) {
         return (
             <div>
                 <LayoutGrid>
@@ -85,7 +85,7 @@ export default class VehicleListings extends Component {
                                         <LayoutGrid.Cell cols="12">
                                             <LayoutGrid.Inner>
                                                 <LayoutGrid.Cell cols="4">
-                                                    <img src={config.url.img + "0.sha512-8wkNOxZFmBUSi4i71sEOziVy/R8i4RzIY8SmA7wNxEnL2pLl+3JQRdi0VeyeE+uaC4ft4+bA4ovkCw2+91Zung==.png"}/>
+                                                    <img src={store.getState().imgURL + vehicle.imageFront[0].num + "." + vehicle.imageFront[0].integrity + "." + vehicle.imageFront[0].extension}/>
                                                 </LayoutGrid.Cell>
                                                 <LayoutGrid.Cell cols="8">
                                                     <div>

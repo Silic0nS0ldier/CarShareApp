@@ -27,7 +27,9 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 .orWhere("summary", "like", `%${term}%`)
                 .orWhere("brand", "like", `%${term}%`)
                 .orWhere("type", "like", `%${term}%`)
-                .orWhere("year", "like", `%${term}%`);
+                .orWhere("year", "like", `%${term}%`)
+                .eager("imageFront")
+                .pick(ImageModel, ["num", "integrity", "extension"]);
             res.status(200).send({
                 data: results
             });
@@ -43,7 +45,10 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
         try {
             content = await ListingModel
                 .query()
-                .where("vin", req.params.vin);
+                .where("vin", req.params.vin)
+                .eager("[owner, imageFront, imageBack, imageLeft, imageRight]")
+                .pick(ImageModel, ["num", "integrity", "extension"])
+                .pick(UserModel, ["fname", "mnames", "lname"]);
             if (content.length > 1) {
                 res.status(400).send({ message: "Duplicate result error." });
                 return;
@@ -54,7 +59,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 res.status(200).send(content[0]);
                 return;
             }
-        } catch (error) {
+        } catch (error) {console.log(error);
             res.status(400).send({ message: "System failure" });
             return;
         }
