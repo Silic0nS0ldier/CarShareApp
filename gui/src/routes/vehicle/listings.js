@@ -91,6 +91,18 @@ export default class VehicleListings extends Component {
                                                     <div>
                                                         <a href={config.url.gui + "vehicle/" + vehicle.VIN}><h3>{vehicle.year} {vehicle.brand} {vehicle.model}</h3></a>
                                                     </div>
+                                                    <div class={style.listingsSpecs}>
+                                                        <div>
+                                                            <span>
+                                                                <Icon>calendar_today</Icon> {vehicle.year}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span>
+                                                                <Icon>drive_eta</Icon> {vehicle.type}
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                     <div>
                                                         <p>{vehicle.summary}</p>
                                                     </div>
