@@ -17,6 +17,6 @@ export default class DateFormField extends AbstractField {
     }
 
     render(props) {
-        return <TextField {...props} type="date" id={props.name} onChange={linkState(this, "value")} />;
+        return <TextField {...props} type="date" id={props.name} onChange={linkState(this, "value")} style="padding-top: 0;" />;
     }
 }

@@ -17,6 +17,6 @@ export default class TimeFormField extends AbstractField {
     }
 
     render(props) {
-        return <TextField {...props} type="time" id={props.name} onChange={linkState(this, "value")} />;
+        return <TextField {...props} type="time" id={props.name} onChange={linkState(this, "value")} style="padding-top: 0;" />;
     }
 }
