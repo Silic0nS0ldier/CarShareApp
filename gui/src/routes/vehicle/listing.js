@@ -19,7 +19,6 @@ export default class VehicleListing extends Component {
                 response.json()
                     .then((data) => {
                         if (response.ok) {
-                            data = JSON.parse(JSON.stringify(data));
                             data.odometer_last_update = (new Date(data.odometer_last_update)).toLocaleDateString();
                             this.setState({
                                 vehicle: data
@@ -39,9 +38,6 @@ export default class VehicleListing extends Component {
         );
     }
 
-
-
-
     render({ config, store }, { vehicle }) {
         if (!vehicle) {
             return (
@@ -59,9 +55,9 @@ export default class VehicleListing extends Component {
                                 <h1>
                                     Car: {vehicle.year} {vehicle.brand} {vehicle.model}
                                 </h1>
-                                <a href={"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Facebook</a>
+                                <a target="_blank" href={"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Facebook</a>
                                 <br />
-                                <a href={"https://twitter.com/home?status=" + encodeURIComponent("Check out this listing on Car Share! " + config.url.gui + vehicle.VIN)}>Share on Twitter</a>
+                                <a target="_blank" href={"https://twitter.com/home?status=" + encodeURIComponent("Check out this listing on Car Share! " + config.url.gui + vehicle.VIN)}>Share on Twitter</a>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
                     </LayoutGrid>
@@ -96,60 +92,49 @@ export default class VehicleListing extends Component {
                                     </div>
                                     <div>
                                         <LayoutGrid.Inner>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>drive_eta</Icon> Brand: {vehicle.brand}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>drive_eta</Icon> Model: {vehicle.model}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>calendar_today</Icon> Year: {vehicle.year}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                        </LayoutGrid.Inner>
-                                        <LayoutGrid.Inner>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>directions_car</Icon> Type: {vehicle.type}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    <Icon>ac_unit</Icon> AC: {ac ? 'yes' : 'no'}
+                                                    <Icon>ac_unit</Icon> AC: {ac ? 'Yes' : 'No'}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>person</Icon> Minimum Seating: {vehicle.seat_min}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                        </LayoutGrid.Inner>
-                                        <LayoutGrid.Inner>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>group</Icon> Maximum Seating: {vehicle.seat_max}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>call_to_action</Icon> VIN: {vehicle.VIN}
                                                 </div>
                                             </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell cols="4">
+                                            <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    <Icon>map</Icon> KMS: {vehicle.odometer}
-                                                </div>
-                                            </LayoutGrid.Cell>
-                                        </LayoutGrid.Inner>
-                                        <LayoutGrid.Inner>
-                                            <LayoutGrid.Cell cols="4">
-                                                <div class={style.divSpacerMini}>
-                                                    <Icon>calendar_today</Icon> Odometer last updated: {vehicle.odometer_last_update}
+                                                    <Icon>map</Icon> KMS: {vehicle.odometer}km ({vehicle.odometer_last_update})
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
