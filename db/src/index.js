@@ -76,7 +76,11 @@ export default async function DB(config) {
         }
 
         fullName() {
-            return this.fname + " " + this.lname;
+            if (this.mnames) {
+                return this.fname + " " + this.mnames + " " + this.lname;
+            } else {
+                return this.fname + " " + this.lname;
+            }
         }
 
         static get relationMappings() {

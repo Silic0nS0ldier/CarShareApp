@@ -12,7 +12,7 @@ import ssri from "ssri";
 export default function register(authGuard, { ImageModel, LogModel, UserModel, EmailVerificationModel }, mailer, config) {
     const router = express.Router();
 
-    // Login
+    // POST: Login
     router.post("/login", async (req, res) => {
         let um = null;
         let img = null;
@@ -93,7 +93,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
         return;
     });
 
-    // Register
+    // POST: Register
     router.post("/register", async (req, res) => {
         // Sanitize user input (objection validation does the leg work)
         /** @type {string[]} */
@@ -296,7 +296,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
         res.status(200).send();
     });
 
-    // Verify
+    // POST: Verify
     router.post("/verify", async (req, res) => {
         // Verify code
         let evm = null;
@@ -376,6 +376,64 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
         // Note success (and end request)
         res.sendStatus(200);
         return;
+    });
+
+    // GET: Get current users details
+    /** @todo Testing */
+    router.get("/user", authGuard, async (res, req) => {
+        try {
+            // Fetch data
+            const user = await UserModel.query()
+                .where("id", req.locals.user_id)
+                .select("fname", "mnames", "lname", "email", "user_image")
+                .eager("userImage")
+                .pick(ImageModel, ["num", "integrity", "extension"]);
+            // Make sure something was found
+            if (user.length > 1) {
+                res.sendStatus(500);
+                return;
+            } else if (user.length === 0) {
+                res.sendStatus(404);
+                return;
+            }
+            // And send it back
+            res.status(200).send({
+                data: user[0]
+            })
+            return;
+        } catch (error) {
+            res.sendStatus(500);
+            return;
+        }
+    });
+
+    // GET: Get a users details
+    /** @todo Testing */
+    router.get("/user/:id", authGuard, async (res, req) => {
+        try {
+            // Fetch data
+            const user = await UserModel.query()
+                .where("id", req.params.id)
+                .select("fname", "mnames", "lname", "user_image")
+                .eager("userImage")
+                .pick(ImageModel, ["num", "integrity", "extension"]);
+            // Make sure something was found
+            if (user.length > 1) {
+                res.sendStatus(500);
+                return;
+            } else if (user.length === 0) {
+                res.sendStatus(404);
+                return;
+            }
+            // And send it back
+            res.status(200).send({
+                data: user[0]
+            })
+            return;
+        } catch (error) {
+            res.sendStatus(500);
+            return;
+        }
     });
 
     return router;
