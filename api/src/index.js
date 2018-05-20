@@ -60,13 +60,13 @@ async function Main() {
                 // Get contents
                 const data = jws.decode(req.header("authorization"));
                 // Check expiry
-                if (new Date(data.exp) <= new Date()) {
+                if (new Date(data.payload.exp) <= new Date()) {
                     res.sendStatus(401);
                     return;
                 }
                 // Add user_id to locals (validate existance and type)
-                if (typeof data.user_id === "number") {
-                    req.locals.user_id = data.user_id;
+                if (typeof data.payload.user_id === "number") {
+                    res.locals.user_id = data.payload.user_id;
                 } else {
                     res.sendStatus(401);
                     return;
