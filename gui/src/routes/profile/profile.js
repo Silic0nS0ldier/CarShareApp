@@ -82,14 +82,6 @@ export default class Profile extends Component {
 
 									</span>
 								</div>
-								<div>
-									<h4>
-										license #
-									</h4>
-									<span>
-
-									</span>
-								</div>
 							</div>
 						</div>
 						<Card.Actions>
