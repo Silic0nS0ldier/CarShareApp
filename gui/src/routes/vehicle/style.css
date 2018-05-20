@@ -52,19 +52,10 @@
     padding: 20px;
 }
 
-.owner {
-    background: midnightblue;
+.owner, .dates, .reviews {
+    background: #efefef;
     height: 150px;
-}
-
-.dates {
-    background: orange;
-    height: 150px;
-}
-
-.reviews {
-    background: #00e1ff;
-    height: 150px;
+    padding: 20px;
 }
 
 /*
@@ -110,6 +101,17 @@
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+
+
+.listingsSpecs > div {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.listingsSpecs span, .listingsSpecs span i {
+    display: flex;
 }
 
 /*

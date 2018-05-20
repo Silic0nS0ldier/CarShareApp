@@ -7,7 +7,8 @@ import jwtDecode from "jwt-decode";
 
 import Verify from "../routes/verify";
 import Register from "../routes/register";
-import Profile from "../routes/profile";
+import Profile from "../routes/profile/profile";
+import OtherProfile from "../routes/profile/otherprofile";
 import Login from "../routes/login";
 import Home from "../routes/home";
 import Header from "./header";
@@ -75,6 +76,7 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
 					<Profile path="/profile" />{/*Actual profile page... or something*/}
+					<OtherProfile path="/profile/:userid" config={config} />
 					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:code" config={config} store={store} />

@@ -104,17 +104,12 @@ export default class VehicleListing extends Component {
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    <Icon>calendar_today</Icon> Year: {vehicle.year}
-                                                </div>
-                                            </LayoutGrid.Cell>
-                                            <LayoutGrid.Cell desktopCols="4">
-                                                <div class={style.divSpacerMini}>
                                                     <Icon>directions_car</Icon> Type: {vehicle.type}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
-                                                    <Icon>ac_unit</Icon> AC: {ac ? 'Yes' : 'No'}
+                                                    <Icon>calendar_today</Icon> Year: {vehicle.year}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell desktopCols="4">
@@ -125,6 +120,11 @@ export default class VehicleListing extends Component {
                                             <LayoutGrid.Cell desktopCols="4">
                                                 <div class={style.divSpacerMini}>
                                                     <Icon>group</Icon> Maximum Seating: {vehicle.seat_max}
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                            <LayoutGrid.Cell desktopCols="4">
+                                                <div class={style.divSpacerMini}>
+                                                    <Icon>ac_unit</Icon> AC: {ac ? 'Yes' : 'No'}
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell desktopCols="4">
