@@ -57,8 +57,17 @@ async function Main() {
                     res.sendStatus(401);
                     return;
                 }
+                // Get contents
+                const data = jws.decode(req.header("authorization"));
                 // Check expiry
-                if (new Date(jws.decode(req.header("authorization")).exp) <= new Date()) {
+                if (new Date(data.exp) <= new Date()) {
+                    res.sendStatus(401);
+                    return;
+                }
+                // Add user_id to locals (validate existance and type)
+                if (typeof req.locals.user_id === "number") {
+                    req.locals.user_id = data.user_id;
+                } else {
                     res.sendStatus(401);
                     return;
                 }
