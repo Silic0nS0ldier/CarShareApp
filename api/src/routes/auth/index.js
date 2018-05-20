@@ -319,7 +319,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
             evm = evm[0];
         } catch (error) {
             res.status(400).send({
-                feedback: "We shit a snag processing your request. Try again or contact support."
+                feedback: "We hit a snag processing your request. Try again or contact support."
             });
             return;
         }
