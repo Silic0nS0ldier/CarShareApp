@@ -65,7 +65,7 @@ async function Main() {
                     return;
                 }
                 // Add user_id to locals (validate existance and type)
-                if (typeof req.locals.user_id === "number") {
+                if (typeof data.user_id === "number") {
                     req.locals.user_id = data.user_id;
                 } else {
                     res.sendStatus(401);
