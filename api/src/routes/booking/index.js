@@ -47,7 +47,9 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             }
 
             // Send data
-            res.status(200).send(booking[0]);
+            res.status(200).send({
+                data: booking[0]
+            });
             return;
         } catch (error) {
             res.sendStatus(500);
@@ -56,8 +58,23 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
     });
 
     // GET: Get users bookings
-    router.get("/bookings", (req, res) => {
-
+    /** @todo Testing */
+    router.get("/bookings", async (req, res) => {
+        try {
+            // Grab data
+            const data = {
+                asCustomer: await BookingModel.query().where("customer_id"),
+                asProvider: await BookingModel.query().where("provider_id")
+            };
+            
+            // Send payload
+            res.status(200).send({
+                data
+            });
+        } catch (error) {
+            res.sendStatus(500);
+            return;
+        }
     });
     
     return router;
