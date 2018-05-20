@@ -85,7 +85,7 @@ export default class VehicleListings extends Component {
                                         <LayoutGrid.Cell cols="12">
                                             <LayoutGrid.Inner>
                                                 <LayoutGrid.Cell cols="4">
-                                                    <img src={store.getState().imgURL + vehicle.imageFront[0].num + "." + vehicle.imageFront[0].integrity + "." + vehicle.imageFront[0].extension}/>
+                                                    <img width="250" src={store.getState().imgURL + vehicle.imageFront[0].num + "." + vehicle.imageFront[0].integrity + "." + vehicle.imageFront[0].extension}/>
                                                 </LayoutGrid.Cell>
                                                 <LayoutGrid.Cell cols="8">
                                                     <div>
