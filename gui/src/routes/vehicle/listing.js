@@ -55,9 +55,9 @@ export default class VehicleListing extends Component {
                                 <h1>
                                     Car: {vehicle.year} {vehicle.brand} {vehicle.model}
                                 </h1>
-                                <a target="_blank" href={"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Facebook</a>
-                                <br />
-                                <a target="_blank" href={"https://twitter.com/home?status=" + encodeURIComponent("Check out this listing on Car Share! " + config.url.gui + vehicle.VIN)}>Share on Twitter</a>
+                                {/*Looks like Facebook looks for specific page details before showing UI. This won't work.<a target="_blank" href={"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Facebook</a>
+                                <br />*/}
+                                <a target="_blank" href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent("Check out this listing on Car Share!") + "&url=" + encodeURIComponent(config.url.gui + vehicle.VIN)}>Share on Twitter</a>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
                     </LayoutGrid>
