@@ -155,10 +155,45 @@ export default class Profile extends Component {
 								<div>
 									<Form method="POST" action={config.url.api + "profile/password"} messageOnSuccess="Success! Your password has been changed." resetOnSuccess={true}>
 										<TextField type="password" label="Password" name="pwd" required onInput={this.validatePassword} />
+										<br/>
 										<TextField type="password" label="Verify password" name="pwd_verify" required onInput={this.validatePassword} />
 										<span hidden="true"><TextField name="user_id" type="text" value={store.getState().user_id}/></span>
 										<SubmitButton value="Change Password" />
 									</Form>
+								</div>
+							</div>
+						</Card>
+					</div>
+					<div class={style.cardWrapper}>
+						<Card>
+							<div class={style.cardHeader}>
+								<h2 class=" mdc-typography--title">Your Bookings</h2>
+								<div class=" mdc-typography--caption"></div>
+							</div>
+							<div class={style.cardBody}>
+								<div>
+									{(() => {
+										let formattedRes = [];
+										for(let book of profile.bookings) {
+											let date1 = book.commences_at.substr(0, 10);
+											let date2 = book.ends_at.substr(0, 10);
+											formattedRes.push(
+												<div>
+													<span>=> {date1} ~ {date2}</span> <a href={config.url.gui + "booking/modify/" + book.id}>Edit Booking</a>
+												</div>
+											);
+										}
+
+										if(formattedRes.length === 0) {
+											formattedRes.push(
+												<div>
+													<span>You haven't made any bookings yet</span>
+												</div>
+											);
+										}
+
+										return formattedRes;
+									})()}
 								</div>
 							</div>
 						</Card>

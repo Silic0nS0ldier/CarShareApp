@@ -112,6 +112,14 @@ export default async function DB(config) {
                         },
                         to: "roles.id"
                     }
+                },
+                bookings: {
+                    relation: Model.HasManyRelation,
+                    modelClass: BookingModel,
+                    join: {
+                        from: "users.id",
+                        to: "bookings.customer_id"
+                    }
                 }
             }
         }
