@@ -474,8 +474,6 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
                     password: data.password
                 })
                 .where("id", req.body.user_id);
-            console.log("UM is...");
-            console.log(um);
         } catch (error) {
             /** @todo Log error */
             res.status(400).send({
