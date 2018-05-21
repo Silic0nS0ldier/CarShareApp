@@ -52,7 +52,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 .query()
                 .where("vin", req.params.vin)
                 .where("unlisted", false)
-                .eager("[owner, imageFront, imageBack, imageLeft, imageRight]")
+                .eager("[owner, imageFront, imageBack, imageLeft, imageRight, bookings]")
                 .pick(ImageModel, ["num", "integrity", "extension"])
                 .pick(UserModel, ["id", "fname", "mnames", "lname", "email"]);
             if (content.length > 1) {

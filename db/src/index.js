@@ -215,6 +215,14 @@ export default async function DB(config) {
                         to: "images.id"
                     }
                 },
+                bookings: {
+                    relation: Model.HasManyRelation,
+                    modelClass: BookingModel,
+                    join: {
+                        from: "listings.VIN",
+                        to: "bookings.VIN"
+                    }
+                },
                 changes: {
                     relation: Model.HasManyRelation,
                     modelClass: ListingChangeModel,

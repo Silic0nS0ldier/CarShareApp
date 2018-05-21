@@ -217,5 +217,25 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
         }
     });
 
+    // GET: All dates car is booked out
+    router.get("/bookings/:vin", async (req, res) => {
+        try {
+            let bookings = await BookingModel
+                .query()
+                .where("VIN", req.params.vin)
+                .andWhere("commenced_at", ">", Date.now());
+            
+            res.status(200).send({
+                bookings
+            });
+
+            return;
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+            return;
+        }
+    });
+
     return router;
 };

@@ -5,6 +5,7 @@ import LayoutGrid from 'preact-material-components/LayoutGrid';
 import Icon from 'preact-material-components/Icon';
 
 import style from './style';
+import { format } from 'url';
 
 export default class VehicleListing extends Component {
 
@@ -178,7 +179,27 @@ export default class VehicleListing extends Component {
                                             Bookings:
                                         </h2>
                                         <div>
+                                            <span>The follow dates are already booked.</span>
+                                            {(() => {
+                                                let formattedRes = [];
+                                                vehicle.books = [];
+                                                for(let book of vehicle.bookings) {
+                                                    let date1 = null;
+                                                    let date2 = null;
+                                                    date1 = book.commences_at.substr(0, 10);
+                                                    date2 = book.ends_at.substr(0, 10);
+                                                    vehicle.books.push({sdate: date1, edate: date2});
+                                                }
 
+                                                for(let book of vehicle.books) {
+                                                    formattedRes.push(
+                                                        <div>{book.sdate} - {book.edate}</div>
+                                                    );
+                                                }
+
+                                                return formattedRes;
+                                            })()}
+                                                <a href={config.url.gui + "booking/new/" + vehicle.VIN}>Book Now</a>
                                         </div>
                                     </div>
                                 </div>
