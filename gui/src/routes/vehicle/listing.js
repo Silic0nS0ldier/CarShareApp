@@ -19,6 +19,7 @@ export default class VehicleListing extends Component {
                 response.json()
                     .then((data) => {
                         if (response.ok) {
+                            console.log(data);
                             data.odometer_last_update = (new Date(data.odometer_last_update)).toLocaleDateString();
                             this.setState({
                                 vehicle: data
@@ -159,13 +160,37 @@ export default class VehicleListing extends Component {
                             </LayoutGrid.Cell>
                             <LayoutGrid.Cell cols="4">
                                 <div class={style.divSpacer + " " + style.owner}>
-                                    Thing 1
+                                    <div>
+                                        <h2>
+                                            Owner: {vehicle.owner.fname} {vehicle.owner.lname}
+                                        </h2>
+                                        <div>
+                                            {vehicle.owner.email}
+                                        </div>
+                                        <div>
+                                            <a href={this.props.config.url.gui + "profile/" + vehicle.owner.id}>View Profile</a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class={style.divSpacer + " " + style.dates}>
-                                    Thing 2
+                                    <div>
+                                        <h2>
+                                            Bookings:
+                                        </h2>
+                                        <div>
+
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class={style.divSpacer + " " + style.reviews}>
-                                    Thing 4
+                                    <div>
+                                        <h2>
+                                            Reviews:
+                                        </h2>
+                                        <div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
