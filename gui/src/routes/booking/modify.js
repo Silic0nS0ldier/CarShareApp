@@ -24,7 +24,7 @@ export default class BookingModify extends Component {
                     .then((data) => {
                         if (response.ok) {
                             this.setState({
-                                booking: data
+                                booking: data.data
                             });
                         } else {
                             console.log("Well Shit");
@@ -44,7 +44,6 @@ export default class BookingModify extends Component {
     }
 
     render({config}, {booking}) {
-        console.log(booking);
         if(!booking) {
             return (
                 <div>
@@ -52,16 +51,20 @@ export default class BookingModify extends Component {
                 </div>
             );
         } else {
+            booking.sdate = booking.commences_at.substr(0,10);
+            booking.edate = booking.ends_at.substr(0, 10);
+            booking.stime = booking.commences_at.substr(11, 8);
+            booking.etime = booking.ends_at.substr(11, 8);
             return (
                 <div class={global.wrapper}>
                     <LayoutGrid>
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="12">
                                 <h1>
-                                    Modify Booking for: {booking.brand} {booking.model} - {booking.type}
+                                    Modify Booking for: {booking.listing.brand} {booking.listing.model} - {booking.listing.type}
                                 </h1>
                                 <div>
-                                    <span>Owner: {booking.owner.fname} {booking.owner.lname}</span>
+                                    <span>Owner: {booking.provider.fname} {booking.provider.lname}</span>
                                 </div>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
@@ -74,24 +77,24 @@ export default class BookingModify extends Component {
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <DateFormField label="Start Date" name="sdate" required />
+                                                <DateFormField label="Start Date" name="sdate" value={booking.sdate} required />
                                             </div>
                                         </LayoutGrid.Cell>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <DateFormField label="End Date" name="edate" required />
+                                                <DateFormField label="End Date" name="edate" value={booking.edate} required />
                                             </div>
                                         </LayoutGrid.Cell>
                                     </LayoutGrid.Inner>
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <TimeFormField label="Start Time" name="stime" required />
+                                                <TimeFormField label="Start Time" name="stime" value={booking.stime} required />
                                             </div>
                                         </LayoutGrid.Cell>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <TimeFormField label="End Time" name="etime" required />
+                                                <TimeFormField label="End Time" name="etime" value={booking.etime} required />
                                             </div>
                                         </LayoutGrid.Cell>
                                     </LayoutGrid.Inner>
