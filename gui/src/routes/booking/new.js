@@ -95,7 +95,7 @@ export default class BookingNew extends Component {
                                     </LayoutGrid.Inner>
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="12">
-                                            <span hidden="true"><TextField name="vin" value={vehicle.VIN}/></span>
+                                            <span hidden="true"><TextField name="vin" type="text" value={vehicle.VIN}/></span>
                                             <center>
                                                 <br/>
                                                 <br/>

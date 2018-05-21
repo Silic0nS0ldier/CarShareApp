@@ -15,7 +15,6 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
     router.use(authGuard);
 
     // POST: Create booking
-    /** @todo testing */
     router.post("/booking/new", async (req, res) => {
         // Sanitize user input
         /** @type {string[]} */
@@ -23,23 +22,30 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
         let data = {};
 
         // Ensure dates are valid
-        let sdate = Date.parse(req.body.sdate);
-        console.log(req.body);
-        let sTime = todParser.parse(req.body.stime);
-        if (isNaN(sdate)) {
-            feedback.push("Start date is invalid.");
-        }
-        if (!sTime) {
-            feedback.push("Preferred pickup time is invalid.");
-        }
+        let sDate = null;
+        let sTime = null;
+        let eDate = null;
+        let eTime = null;
+        try {
+            sDate = Date.parse(req.body.sdate);
+            sTime = todParser.parse(req.body.stime);
+            if (isNaN(sDate)) {
+                feedback.push("Start date is invalid.");
+            }
+            if (!sTime) {
+                feedback.push("Preferred pickup time is invalid.");
+            }
 
-        let edate = Date.parse(req.body.edate);
-        let eTime = todParser.parse(req.body.etime);
-        if (isNaN(edate)) {
-            feedback.push("Start date is invalid.");
-        }
-        if (!eTime) {
-            feedback.push("Preferred pickup time is invalid.");
+            eDate = Date.parse(req.body.edate);
+            eTime = todParser.parse(req.body.etime);
+            if (isNaN(eDate)) {
+                feedback.push("Start date is invalid.");
+            }
+            if (!eTime) {
+                feedback.push("Preferred pickup time is invalid.");
+            }
+        } catch (error) {
+            feedback.push("We hit snag while processing the provided times. Try again or contact support.")
         }
 
         // Abort if feedback generated
@@ -51,14 +57,14 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
         }
 
         // Build date objects and add start and end times
-        let startDate = new Date(sdate);
-        startDate.setHours(stime.h);
-        startDate.setMinutes(stime.m);
+        let startDate = new Date(sDate);
+        startDate.setHours(sTime.h);
+        startDate.setMinutes(sTime.m);
 
         let endDate = new Date(eDate);
         endDate.setHours(eTime.h);
         endDate.setMinutes(eTime.m);
-        
+
         // Sanity check date range (bookings must go for at least a day)
         if (startDate >= endDate) {
             feedback.push("Start date cannot be after end date!");
@@ -73,7 +79,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
                 listing = await ListingModel.query()
                     .where("VIN", req.body.vin)
                     .where("unlisted", false)
-                    .select("VIN");
+                    .select("VIN", "owner_user_id");
                 if (listing.length > 1) {
                     feedback.push("Something strange happened. Try again and contact support if issues persist.");
                 } else if (listing.length === 0) {
@@ -94,7 +100,6 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
         // Ensure booking is possible
         try {
-            console.log("First");
             let bookings = await BookingModel.query()
                 // Bookings that end after the start date of proposed (we can't cap the results as it'll introduce an edge case for long bookings)
                 .where("ends_at", ">=", startDate.toISOString().slice(0, 19).replace('T', ' '))
@@ -128,15 +133,16 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
         // Create booking
         try {
-            console.log("second");
             await BookingModel.query()
                 .insert({
+                    VIN: req.body.vin,
                     customer_id: res.locals.user_id,
                     provider_id: listing[0].owner_user_id,
                     commences_at: startDate.toISOString().slice(0, 19).replace('T', ' '),
-                    ends_at: endDate.toISOString().slice(0, 19).replace('T', ' ')
+                    ends_at: endDate.toISOString().slice(0, 19).replace('T', ' '),
+                    fee: 400/**@todo this is a default placeholder value*/
                 });
-            console.log("third");
+            
             res.sendStatus(200);
             return;
         } catch (error) {
@@ -173,7 +179,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
             // Ensure user allowed (admin is always allowed)
             if (req.locals.user_id !== 0 ||
-            (booking[0].customer_id !== req.locals.user_id && booking[0].provider_id !== req.locals.user_id)) {
+                (booking[0].customer_id !== req.locals.user_id && booking[0].provider_id !== req.locals.user_id)) {
                 res.sendStatus(401);
                 return;
             }
@@ -198,7 +204,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
                 asCustomer: await BookingModel.query().where("customer_id"),
                 asProvider: await BookingModel.query().where("provider_id")
             };
-            
+
             // Send payload
             res.status(200).send({
                 data
@@ -208,6 +214,6 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             return;
         }
     });
-    
+
     return router;
 };
