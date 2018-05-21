@@ -2,6 +2,10 @@ import Card from "preact-material-components/Card";
 import Button from "preact-material-components/Button";
 import authorizedFetch from "../../lib/authorizedFetch";
 import { h, Component } from "preact";
+import Form from "../../components/Forms/Form";
+import TextField from "../../components/Forms/TextFormField";
+
+import SubmitButton from "../../components/Forms/SubmitButton";
 import "preact-material-components/Button/style.css";
 import "preact-material-components/Card/style.css";
 
@@ -53,6 +57,19 @@ export default class Profile extends Component {
 		);
 	} */
 
+	validatePassword = e => {
+        let pwd = e.target.form.pwd;
+        let pwd_verify = e.target.form.pwd_verify;
+
+        // Validate complexity - more than a little basic
+        if (pwd.value.length < 10) pwd.setCustomValidity("Must be at least 10 characters long");
+        else pwd.setCustomValidity("");
+
+        //Validate same
+        if (pwd.value !== pwd_verify.value) pwd_verify.setCustomValidity("Passwords must match");
+        else pwd_verify.setCustomValidity("");
+    };
+
 	componentDidMount = () => {
         return authorizedFetch(this.props.config.url.api + "user", {
             cache: "no-store",
@@ -86,7 +103,7 @@ export default class Profile extends Component {
 		);
     }
 
-	render({ profile }) {
+	render({config, store}, { profile }) {
 		profile = this.state.profile;
 		if(!profile) {
 			return (
@@ -136,27 +153,14 @@ export default class Profile extends Component {
 							</div>
 							<div class={style.cardBody}>
 								<div>
-									<div>
-										<h4>
-											New Password
-										</h4>
-										<span>
-											
-										</span>
-									</div>
-									<div>
-										<h4>
-											New Password Confirmed
-										</h4>
-										<span>
-
-										</span>
-									</div>
+									<Form method="POST" action={config.url.api + "profile/password"} messageOnSuccess="Success! Your password has been changed." resetOnSuccess={true}>
+										<TextField type="password" label="Password" name="pwd" required onInput={this.validatePassword} />
+										<TextField type="password" label="Verify password" name="pwd_verify" required onInput={this.validatePassword} />
+										<span hidden="true"><TextField name="user_id" type="text" value={store.getState().user_id}/></span>
+										<SubmitButton value="Change Password" />
+									</Form>
 								</div>
 							</div>
-							<Card.Actions>
-								<Card.ActionButton>Submit</Card.ActionButton>
-							</Card.Actions>
 						</Card>
 					</div>
 				</div>

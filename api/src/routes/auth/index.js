@@ -436,5 +436,57 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
         }
     });
 
+    // POST: Change Password of user signed in.
+    router.post("/profile/password", async (req, res) => {
+        // Sanitize user input (objection validation does the leg work)
+        /** @type {string[]} */
+        let feedback = [];
+        let data = {};
+
+        
+        // Verify passwords match and are long enough length, then hash and add
+        if (req.body.pwd !== req.body.pwd_verify) {
+            // Passwords don't match
+            feedback.push("Passwords must match!");
+        } else if (req.body.pwd < 10) {
+            // Password isn't long enough
+            feedback.push("Password must be at least 10 characters long.");
+        } else {
+            // Hash it!
+            data.password = await argon2.hash(req.body.pwd).catch(reason => {
+                /** @todo Log error */
+                feedback.push("We hit a snag while processing your password. Try again or use another password.");
+            });
+        }
+
+        // Abort if feedback already generated
+        if (feedback.length !== 0) {
+            res.status(400).send({
+                feedback: "<ul><li>" + feedback.join("</li><li>") + "</li></ul>"
+            });
+            return;
+        }
+
+        // Save user details
+        try {
+            let um = await UserModel.query()
+                .patch({
+                    password: data.password
+                })
+                .where("id", req.body.user_id);
+            console.log("UM is...");
+            console.log(um);
+        } catch (error) {
+            /** @todo Log error */
+            res.status(400).send({
+                feedback: "<ul><li>We encountered an error while saving your details. Please contact support.</li></ul>"
+            });
+            return;
+        }
+
+        res.sendStatus(200);
+        return;
+    });
+
     return router;
 };
