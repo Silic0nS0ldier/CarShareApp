@@ -112,6 +112,10 @@
     display: flex;
 }
 
+.searchBar :global(.mdc-text-field--upgraded) {
+    width: 100%;
+}
+
 /*
  * General
  **********/
