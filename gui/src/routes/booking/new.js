@@ -72,30 +72,30 @@ export default class BookingNew extends Component {
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <DateFormField name="sdate" required />
+                                                <DateFormField label="Start Date" name="sdate" required />
                                             </div>
                                         </LayoutGrid.Cell>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <DateFormField name="edate" required />
+                                                <DateFormField label="End Date" name="edate" required />
                                             </div>
                                         </LayoutGrid.Cell>
                                     </LayoutGrid.Inner>
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <TimeFormField name="stime" required />
+                                                <TimeFormField label="Start Time" name="stime" required />
                                             </div>
                                         </LayoutGrid.Cell>
                                         <LayoutGrid.Cell cols="6">
                                             <div>
-                                                <TimeFormField name="etime" required />
+                                                <TimeFormField label="End Time" name="etime" required />
                                             </div>
                                         </LayoutGrid.Cell>
                                     </LayoutGrid.Inner>
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="12">
-                                            <input type="hidden" name="vin" value={vehicle.VIN} />
+                                            <span hidden="true"><TextField name="vin" value={vehicle.VIN}/></span>
                                             <center>
                                                 <br/>
                                                 <br/>

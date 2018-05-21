@@ -36,7 +36,7 @@ export default class Form extends Component {
                     refChildren(children[i].children);
                 else {
                     if (typeof children[i].nodeName !== "string") {
-                        if (["TextFormField", "FileFormField"].indexOf(children[i].nodeName.name) !== -1) {
+                        if (["TextFormField", "FileFormField", "DateFormField", "TimeFormField"].indexOf(children[i].nodeName.name) !== -1) {
                             // Handle field component
                             children[i] = cloneElement(children[i], {
                                 ref: (ref) => this.state.fields.push(ref)
