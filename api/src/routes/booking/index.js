@@ -167,8 +167,9 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             // Fetch booking
             const booking = await BookingModel.query()
                 .where("id", req.params.id)
-                .eager("[provider, listing]");
-            
+                .eager("[provider,listing]")
+                .pick(UserModel, ["fname", "lname"]);
+
             // Make sure exactly 1 record returned
             if (booking.length > 1) {
                 res.sendStatus(500);
@@ -179,9 +180,8 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             }
 
             // Ensure user allowed (admin is always allowed)
-            if (res.locals.user_id !== 1 &&
-                (booking[0].customer_id !== res.locals.user_id && booking[0].provider_id !== res.locals.user_id)) {
-                res.sendStatus(400);
+            if (res.locals.user_id !== 1 && booking[0].customer_id !== res.locals.user_id && booking[0].provider_id !== res.locals.user_id) {
+                res.sendStatus(401);
                 return;
             }
 
@@ -191,7 +191,6 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             });
             return;
         } catch (error) {
-            console.log(error);
             res.sendStatus(500);
             return;
         }
@@ -224,7 +223,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
                 .query()
                 .where("VIN", req.params.vin)
                 .andWhere("commenced_at", ">", Date.now());
-            
+
             res.status(200).send({
                 bookings
             });

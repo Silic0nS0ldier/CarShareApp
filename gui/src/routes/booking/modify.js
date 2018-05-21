@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import { h, Component } from 'preact';
 import authorizedFetch from "../../lib/authorizedFetch";
 import LayoutGrid from 'preact-material-components/LayoutGrid';
 import Icon from 'preact-material-components/Icon';
@@ -43,8 +43,13 @@ export default class BookingModify extends Component {
         );
     }
 
+<<<<<<< HEAD
     render({config}, {booking}) {
         if(!booking) {
+=======
+    render({ config }, { booking }) {
+        if (!booking) {
+>>>>>>> bbdfc4b4d7e10c37a03830f3843479d7fcb05147
             return (
                 <div>
                     Loading booking now
@@ -64,7 +69,11 @@ export default class BookingModify extends Component {
                                     Modify Booking for: {booking.listing.brand} {booking.listing.model} - {booking.listing.type}
                                 </h1>
                                 <div>
+<<<<<<< HEAD
                                     <span>Owner: {booking.provider.fname} {booking.provider.lname}</span>
+=======
+                                    Owner: {booking.provider.fname} {booking.provider.lname}
+>>>>>>> bbdfc4b4d7e10c37a03830f3843479d7fcb05147
                                 </div>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
@@ -73,6 +82,7 @@ export default class BookingModify extends Component {
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="12">
                                 <div>
+<<<<<<< HEAD
                                 <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true}>
                                     <LayoutGrid.Inner>
                                         <LayoutGrid.Cell cols="6">
@@ -109,6 +119,44 @@ export default class BookingModify extends Component {
                                         </LayoutGrid.Cell>
                                     </LayoutGrid.Inner>
                                 </Form>
+=======
+                                    <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true}>
+                                        <LayoutGrid.Inner>
+                                            <LayoutGrid.Cell cols="6">
+                                                <div>
+                                                    <DateFormField label="Start Date" name="sdate" required />
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                            <LayoutGrid.Cell cols="6">
+                                                <div>
+                                                    <DateFormField label="End Date" name="edate" required />
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                        </LayoutGrid.Inner>
+                                        <LayoutGrid.Inner>
+                                            <LayoutGrid.Cell cols="6">
+                                                <div>
+                                                    <TimeFormField label="Start Time" name="stime" required />
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                            <LayoutGrid.Cell cols="6">
+                                                <div>
+                                                    <TimeFormField label="End Time" name="etime" required />
+                                                </div>
+                                            </LayoutGrid.Cell>
+                                        </LayoutGrid.Inner>
+                                        <LayoutGrid.Inner>
+                                            <LayoutGrid.Cell cols="12">
+                                                <span hidden="true"><TextField name="vin" type="text" value={booking.VIN} /></span>
+                                                <center>
+                                                    <br />
+                                                    <br />
+                                                    <SubmitButton value="Book Now" />
+                                                </center>
+                                            </LayoutGrid.Cell>
+                                        </LayoutGrid.Inner>
+                                    </Form>
+>>>>>>> bbdfc4b4d7e10c37a03830f3843479d7fcb05147
                                 </div>
                             </LayoutGrid.Cell>
                         </LayoutGrid.Inner>
