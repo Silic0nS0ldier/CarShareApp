@@ -26,7 +26,7 @@ export default class VehicleListings extends Component {
 
     render({ config, store }, { vehicles, errorLoading }) {
         return (
-            <div>
+            <div class={global.wrapper}>
                 <LayoutGrid>
                     <LayoutGrid.Inner>
                         <LayoutGrid.Cell cols="12">
@@ -41,7 +41,7 @@ export default class VehicleListings extends Component {
                         <LayoutGrid.Cell cols="12">
                             <div class={style.searchBar}>
                                 <Form action={config.url.api + "vehicle/search"} onSuccess={this.populatePage} loginRequired={true}>
-                                    <TextField type="text" label={<Icon>search</Icon>} name="term" style="width: calc(100vw - 78px);" />
+                                    <TextField type="text" label={<Icon>search</Icon>} name="term" style="width: 100%;" />
                                 </Form>
                             </div>
                         </LayoutGrid.Cell>

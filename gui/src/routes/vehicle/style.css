@@ -11,7 +11,6 @@
 }
 
 .gallery {
-    height: 300px;
     max-height: 300px;
 }
 
@@ -104,7 +103,6 @@
 }
 
 
-
 .listingsSpecs > div {
     display: inline-block;
     margin-right: 10px;
@@ -112,6 +110,10 @@
 
 .listingsSpecs span, .listingsSpecs span i {
     display: flex;
+}
+
+.searchBar :global(.mdc-text-field--upgraded) {
+    width: 100%;
 }
 
 /*

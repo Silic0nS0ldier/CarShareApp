@@ -54,7 +54,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 .where("unlisted", false)
                 .eager("[owner, imageFront, imageBack, imageLeft, imageRight]")
                 .pick(ImageModel, ["num", "integrity", "extension"])
-                .pick(UserModel, ["fname", "mnames", "lname"]);
+                .pick(UserModel, ["id", "fname", "mnames", "lname", "email"]);
             if (content.length > 1) {
                 res.status(400).send({ message: "Duplicate result error." });
                 return;
