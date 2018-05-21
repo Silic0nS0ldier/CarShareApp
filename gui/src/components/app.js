@@ -75,7 +75,7 @@ export default class App extends Component {
 				<Header config={config} store={store}/>
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
-					<Profile path="/profile" />{/*Actual profile page... or something*/}
+					<Profile path="/profile" config={config} />{/*Actual profile page... or something*/}
 					<OtherProfile path="/profile/:userid" config={config} />
 					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
