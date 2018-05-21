@@ -27,6 +27,9 @@ export default async function Run(trx) {
             .notNullable();
         table.integer("fee")
             .notNullable();
+        table.boolean("cancelled")
+            .defaultTo(false)
+            .notNullable();
         table.json("history");
     });
 
@@ -61,6 +64,13 @@ export default async function Run(trx) {
             .notNullable();
         table.boolean("recommend");//true=yes,null=neither,false=no
         table.text("comment");
+    });
+
+    // Add 'unlisted' boolean to listings
+    await trx.schema.alterTable("listings", table => {
+        table.boolean("unlisted")
+            .defaultTo(false)
+            .notNullable();
     });
     
     return "'bookings', 'messages', and 'ratings' tables.";

@@ -24,10 +24,15 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
             let results = await ListingModel
                 .query()
                 .where("VIN", "like", `%${term}%`)
+                .andWhere("unlisted", false)
                 .orWhere("summary", "like", `%${term}%`)
+                .andWhere("unlisted", false)
                 .orWhere("brand", "like", `%${term}%`)
+                .andWhere("unlisted", false)
                 .orWhere("type", "like", `%${term}%`)
+                .andWhere("unlisted", false)
                 .orWhere("year", "like", `%${term}%`)
+                .andWhere("unlisted", false)
                 .eager("imageFront")
                 .pick(ImageModel, ["num", "integrity", "extension"]);
             res.status(200).send({
@@ -46,6 +51,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
             content = await ListingModel
                 .query()
                 .where("vin", req.params.vin)
+                .where("unlisted", false)
                 .eager("[owner, imageFront, imageBack, imageLeft, imageRight]")
                 .pick(ImageModel, ["num", "integrity", "extension"])
                 .pick(UserModel, ["fname", "mnames", "lname"]);
@@ -59,7 +65,7 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, L
                 res.status(200).send(content[0]);
                 return;
             }
-        } catch (error) {console.log(error);
+        } catch (error) {
             res.status(400).send({ message: "System failure" });
             return;
         }
