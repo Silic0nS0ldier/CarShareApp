@@ -1,5 +1,6 @@
 import Card from "preact-material-components/Card";
 import Button from "preact-material-components/Button";
+import authorizedFetch from "../../lib/authorizedFetch";
 import { h, Component } from "preact";
 import "preact-material-components/Button/style.css";
 import "preact-material-components/Card/style.css";
@@ -52,75 +53,114 @@ export default class Profile extends Component {
 		);
 	} */
 
-	render({user}) {
-		return (
-			<div class={style.profile}>
-				<h1>
-					Profile: {user}
-				</h1>
-				<div class={style.cardWrapper}>
-					<Card>
-						<div class={style.cardHeader}>
-							<h2 class=" mdc-typography--title">Details</h2>
-							<div class=" mdc-typography--caption"></div>
-						</div>
-						<div class={style.cardBody}>
-							<div>
-								<div>
-									<h4>
-										Name
-									</h4>
-									<span>
-										{user}
-									</span>
-								</div>
-								<div>
-									<h4>
-										Email
-									</h4>
-									<span>
-
-									</span>
-								</div>
-							</div>
-						</div>
-						<Card.Actions>
-							<Card.ActionButton>OKAY</Card.ActionButton>
-						</Card.Actions>
-					</Card>
-				</div>
-				<div class={style.cardWrapper}>
-					<Card>
-						<div class={style.cardHeader}>
-							<h2 class=" mdc-typography--title">Change Password</h2>
-							<div class=" mdc-typography--caption"></div>
-						</div>
-						<div class={style.cardBody}>
-							<div>
-								<div>
-									<h4>
-										New Password
-									</h4>
-									<span>
-										{user}
-									</span>
-								</div>
-								<div>
-									<h4>
-										New Password Confirmed
-									</h4>
-									<span>
-
-									</span>
-								</div>
-							</div>
-						</div>
-						<Card.Actions>
-							<Card.ActionButton>Submit</Card.ActionButton>
-						</Card.Actions>
-					</Card>
-				</div>
-			</div>
+	componentDidMount = () => {
+        return authorizedFetch(this.props.config.url.api + "user", {
+            cache: "no-store",
+            headers: {
+                "Accept": "application/json"
+            }
+        }, true).then(
+            (response) => {
+				response.json()
+                    .then((data) => {
+                        if (response.ok) {
+                            this.setState({
+                                profile: data.data
+							});
+                        } else {
+                            console.log("Well Shit");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Something terrible has happened. Please try again.");
+                        console.log(error);
+                    });
+            },
+            () => {
+                alert("Server is on holidays. Come back later");
+            }
+		).catch(
+			(error) => {
+				console.log(error);
+			}
 		);
+    }
+
+	render({ profile }) {
+		profile = this.state.profile;
+		if(!profile) {
+			return (
+				<div>
+					Loading profile now...
+				</div>
+			);
+		} else {
+			return (
+				<div class={style.profile}>
+					<h1>
+						Profile: {profile}
+					</h1>
+					<div class={style.cardWrapper}>
+						<Card>
+							<div class={style.cardHeader}>
+								<h2 class=" mdc-typography--title">Details</h2>
+								<div class=" mdc-typography--caption"></div>
+							</div>
+							<div class={style.cardBody}>
+								<div>
+									<div>
+										<h4>
+											Name
+										</h4>
+										<span>
+											{profile.fname} {profile.mnames} {profile.lname}
+										</span>
+									</div>
+									<div>
+										<h4>
+											Email
+										</h4>
+										<span>
+											{profile.email}
+										</span>
+									</div>
+								</div>
+							</div>
+						</Card>
+					</div>
+					<div class={style.cardWrapper}>
+						<Card>
+							<div class={style.cardHeader}>
+								<h2 class=" mdc-typography--title">Change Password</h2>
+								<div class=" mdc-typography--caption"></div>
+							</div>
+							<div class={style.cardBody}>
+								<div>
+									<div>
+										<h4>
+											New Password
+										</h4>
+										<span>
+											
+										</span>
+									</div>
+									<div>
+										<h4>
+											New Password Confirmed
+										</h4>
+										<span>
+
+										</span>
+									</div>
+								</div>
+							</div>
+							<Card.Actions>
+								<Card.ActionButton>Submit</Card.ActionButton>
+							</Card.Actions>
+						</Card>
+					</div>
+				</div>
+			);
+		}
 	}
 }

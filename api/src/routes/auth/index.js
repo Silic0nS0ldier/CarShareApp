@@ -380,11 +380,11 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
 
     // GET: Get current users details
     /** @todo Testing */
-    router.get("/user", authGuard, async (res, req) => {
+    router.get("/user", authGuard, async (req, res) => {
         try {
             // Fetch data
             const user = await UserModel.query()
-                .where("id", req.locals.user_id)
+                .where("id", res.locals.user_id)
                 .select("fname", "mnames", "lname", "email", "user_image")
                 .eager("userImage")
                 .pick(ImageModel, ["num", "integrity", "extension"]);
@@ -409,12 +409,12 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
 
     // GET: Get a users details
     /** @todo Testing */
-    router.get("/user/:id", authGuard, async (res, req) => {
+    router.get("/user/:id", authGuard, async (req, res) => {
         try {
             // Fetch data
             const user = await UserModel.query()
                 .where("id", req.params.id)
-                .select("fname", "mnames", "lname", "user_image")
+                .select("fname", "mnames", "lname", "user_image", "email")
                 .eager("userImage")
                 .pick(ImageModel, ["num", "integrity", "extension"]);
             // Make sure something was found
