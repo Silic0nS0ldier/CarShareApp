@@ -174,7 +174,7 @@ export default class Profile extends Component {
 								<div>
 									{(() => {
 										let formattedRes = [];
-										for(let book of profile.bookings) {
+										for(let book of profile.bookingsCustomer) {
 											let date1 = book.commences_at.substr(0, 10);
 											let date2 = book.ends_at.substr(0, 10);
 											formattedRes.push(
@@ -188,6 +188,40 @@ export default class Profile extends Component {
 											formattedRes.push(
 												<div>
 													<span>You haven't made any bookings yet</span>
+												</div>
+											);
+										}
+
+										return formattedRes;
+									})()}
+								</div>
+							</div>
+						</Card>
+					</div>
+					<div class={style.cardWrapper}>
+						<Card>
+							<div class={style.cardHeader}>
+								<h2 class=" mdc-typography--title">Your Cars Booked</h2>
+								<div class=" mdc-typography--caption"></div>
+							</div>
+							<div class={style.cardBody}>
+								<div>
+									{(() => {
+										let formattedRes = [];
+										for(let book of profile.bookingsProvider) {
+											let date1 = book.commences_at.substr(0, 10);
+											let date2 = book.ends_at.substr(0, 10);
+											formattedRes.push(
+												<div>
+													<span>=> {date1} ~ {date2}</span> <a href={config.url.gui + "booking/modify/" + book.id}>Edit Booking</a>
+												</div>
+											);
+										}
+
+										if(formattedRes.length === 0) {
+											formattedRes.push(
+												<div>
+													<span>You haven't had any bookings yet.. Why not try <a href={config.url.gui + "/vehicle/create"}>making a listing</a>?</span>
 												</div>
 											);
 										}
