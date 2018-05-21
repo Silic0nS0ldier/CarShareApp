@@ -159,6 +159,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
     // GET: Get booking info
     /** @todo Testing */
     router.get("/booking/:id", async (req, res) => {
+        console.log("He is in");
         if (!req.params.id) {
             res.sendStatus(400);
             return;
@@ -166,7 +167,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
         try {
             // Fetch booking
             const booking = await BookingModel.query()
-                .where("id", req.param.id);
+                .where("id", req.params.id);
 
             // Make sure exactly 1 record returned
             if (booking.length > 1) {
@@ -178,8 +179,8 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             }
 
             // Ensure user allowed (admin is always allowed)
-            if (req.locals.user_id !== 0 ||
-                (booking[0].customer_id !== req.locals.user_id && booking[0].provider_id !== req.locals.user_id)) {
+            if (res.locals.user_id !== 0 ||
+                (booking[0].customer_id !== res.locals.user_id && booking[0].provider_id !== res.locals.user_id)) {
                 res.sendStatus(401);
                 return;
             }
@@ -190,6 +191,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             });
             return;
         } catch (error) {
+            console.log(error);
             res.sendStatus(500);
             return;
         }

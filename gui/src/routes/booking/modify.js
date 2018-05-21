@@ -1,63 +1,117 @@
-import { h, Component } from "preact";
-import { route } from "preact-router";
-import style from "./style";
+import {h, Component} from 'preact';
+import authorizedFetch from "../../lib/authorizedFetch";
+import LayoutGrid from 'preact-material-components/LayoutGrid';
+import Icon from 'preact-material-components/Icon';
+import Form from "../../components/Forms/Form";
 import SubmitButton from "../../components/Forms/SubmitButton";
 import TextField from "../../components/Forms/TextFormField";
-import Typography from "preact-material-components/Typography";
-import Form from "../../components/Forms/Form";
-import LayoutGrid from 'preact-material-components/LayoutGrid';
-import "preact-material-components/Typography/style";
+import DateFormField from "../../components/Forms/DateFormField";
+import TimeFormField from "../../components/Forms/TimeFormField";
 import 'preact-material-components/LayoutGrid/style.css';
+import global from '../globals';
+import style from './style';
 
-
-export default class VehicleModify extends Component {
-    render({ config }) {
-        return (
-            <div>
-                <LayoutGrid>
-                    <LayoutGrid.Inner>
-                        <LayoutGrid.Cell cols="12">
-                            <h1>
-                                Car Listing Title Editing
-                            </h1>
-                        </LayoutGrid.Cell>
-                    </LayoutGrid.Inner>
-                </LayoutGrid>
-                <LayoutGrid>
-                    <LayoutGrid.Cell cols="12">
-                        <div>
-                            <Form method="POST" action={config.url.api + "vehicle/modify"} loginRequired={true}>
-                                <div class={style.formSection}>
-                                    <TextField type="email" label="Email" name="email" required />
-                                    <br/>
-                                    <TextField type="password" label="Password" name="pwd" required />
-                                </div>
-                                <div class={style.formSection}>
-                                    <TextField type="email" label="Email" name="email" required />
-                                    <br/>
-                                    <TextField type="password" label="Password" name="pwd" required />
-                                </div>
-                                <div class={style.formSection}>
-                                    <TextField type="email" label="Email" name="email" required />
-                                    <br/>
-                                    <TextField type="password" label="Password" name="pwd" required />
-                                </div>
-                                <div class={style.formSection}>
-                                    <TextField type="email" label="Email" name="email" required />
-                                    <br/>
-                                    <TextField type="password" label="Password" name="pwd" required />
-                                </div>
-                                <div class={style.formSection}>
-                                    <TextField type="email" label="Email" name="email" required />
-                                    <br/>
-                                    <TextField type="password" label="Password" name="pwd" required />
-                                </div>
-                                <SubmitButton value="Save" />
-                            </Form>
-                        </div>
-                    </LayoutGrid.Cell>
-                </LayoutGrid>
-            </div>
+export default class BookingModify extends Component {
+    componentDidMount = () => {
+        return authorizedFetch(this.props.config.url.api + "booking/" + this.props.bookingid, {
+            cache: "no-store",
+            headers: {
+                "Accept": "application/json"
+            }
+        }, true).then(
+            (response) => {
+                response.json()
+                    .then((data) => {
+                        if (response.ok) {
+                            this.setState({
+                                booking: data
+                            });
+                        } else {
+                            console.log("Well Shit");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Something terrible has happened. Please try again.");
+                        console.log(error);
+                        console.log("Logging session deets");
+                        console.log(localStorage.getItem("access_token"));
+                    });
+            },
+            () => {
+                alert("Server is on holidays. Come back later");
+            }
         );
+    }
+
+    render({config}, {booking}) {
+        console.log(booking);
+        if(!booking) {
+            return (
+                <div>
+                    Loading booking now
+                </div>
+            );
+        } else {
+            return (
+                <div class={global.wrapper}>
+                    <LayoutGrid>
+                        <LayoutGrid.Inner>
+                            <LayoutGrid.Cell cols="12">
+                                <h1>
+                                    Modify Booking for: {booking.brand} {booking.model} - {booking.type}
+                                </h1>
+                                <div>
+                                    <span>Owner: {booking.owner.fname} {booking.owner.lname}</span>
+                                </div>
+                            </LayoutGrid.Cell>
+                        </LayoutGrid.Inner>
+                    </LayoutGrid>
+                    <LayoutGrid>
+                        <LayoutGrid.Inner>
+                            <LayoutGrid.Cell cols="12">
+                                <div>
+                                <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true}>
+                                    <LayoutGrid.Inner>
+                                        <LayoutGrid.Cell cols="6">
+                                            <div>
+                                                <DateFormField label="Start Date" name="sdate" required />
+                                            </div>
+                                        </LayoutGrid.Cell>
+                                        <LayoutGrid.Cell cols="6">
+                                            <div>
+                                                <DateFormField label="End Date" name="edate" required />
+                                            </div>
+                                        </LayoutGrid.Cell>
+                                    </LayoutGrid.Inner>
+                                    <LayoutGrid.Inner>
+                                        <LayoutGrid.Cell cols="6">
+                                            <div>
+                                                <TimeFormField label="Start Time" name="stime" required />
+                                            </div>
+                                        </LayoutGrid.Cell>
+                                        <LayoutGrid.Cell cols="6">
+                                            <div>
+                                                <TimeFormField label="End Time" name="etime" required />
+                                            </div>
+                                        </LayoutGrid.Cell>
+                                    </LayoutGrid.Inner>
+                                    <LayoutGrid.Inner>
+                                        <LayoutGrid.Cell cols="12">
+                                            <span hidden="true"><TextField name="vin" type="text" value={booking.VIN}/></span>
+                                            <center>
+                                                <br/>
+                                                <br/>
+                                                <SubmitButton value="Book Now" />
+                                            </center>
+                                        </LayoutGrid.Cell>
+                                    </LayoutGrid.Inner>
+                                </Form>
+                                </div>
+                            </LayoutGrid.Cell>
+                        </LayoutGrid.Inner>
+                    </LayoutGrid>
+                </div>
+            );
+        }
     }
 }
