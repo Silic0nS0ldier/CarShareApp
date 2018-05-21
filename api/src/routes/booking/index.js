@@ -16,7 +16,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
     // POST: Create booking
     /** @todo testing */
-    router.post("/booking", async (req, res) => {
+    router.post("/booking/new", async (req, res) => {
         // Sanitize user input
         /** @type {string[]} */
         let feedback = [];
@@ -24,7 +24,8 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
         // Ensure dates are valid
         let sdate = Date.parse(req.body.sdate);
-        let sTime = todParser.parse(req.body.sTime);
+        console.log(req.body);
+        let sTime = todParser.parse(req.body.stime);
         if (isNaN(sdate)) {
             feedback.push("Start date is invalid.");
         }
@@ -33,7 +34,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
         }
 
         let edate = Date.parse(req.body.edate);
-        let eTime = todParser.parse(req.body.eTime);
+        let eTime = todParser.parse(req.body.etime);
         if (isNaN(edate)) {
             feedback.push("Start date is invalid.");
         }
@@ -93,6 +94,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
         // Ensure booking is possible
         try {
+            console.log("First");
             let bookings = await BookingModel.query()
                 // Bookings that end after the start date of proposed (we can't cap the results as it'll introduce an edge case for long bookings)
                 .where("ends_at", ">=", startDate.toISOString().slice(0, 19).replace('T', ' '))
@@ -126,6 +128,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
         // Create booking
         try {
+            console.log("second");
             await BookingModel.query()
                 .insert({
                     customer_id: res.locals.user_id,
@@ -133,6 +136,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
                     commences_at: startDate.toISOString().slice(0, 19).replace('T', ' '),
                     ends_at: endDate.toISOString().slice(0, 19).replace('T', ' ')
                 });
+            console.log("third");
             res.sendStatus(200);
             return;
         } catch (error) {

@@ -83,7 +83,7 @@ export default class App extends Component {
 					<VehicleListings path="/vehicles" config={config} store={store} />
 					<VehicleListing path="/vehicle/:vin" config={config} store={store} />
 					<VehicleModify path="/vehicle/modify" config={config} />
-					<BookingNew path="/booking/new" config={config} />
+					<BookingNew path="/booking/new/:vin" config={config} />
 					<BookingModify path="/booking/modify" config={config} />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
