@@ -57,6 +57,8 @@ export default class Login extends Component {
                     <br/>
                     <SubmitButton value="Login" />
                 </Form>
+                Don't have an account yet? <br/>
+                Pop over <a href={config.url.gui + "register"}> registration</a> and make one today.
             </div>
         );
     }

@@ -42,6 +42,9 @@ export default class Register extends Component {
                     <br/>
                     <SubmitButton value="Register" />
                 </Form>
+                Already have an account?
+                <br/>
+                Head over to <a href={config.url.gui + "login"}>login</a> to continue
             </div>
         );
     }
