@@ -59,7 +59,7 @@
 :global(.reviewsCont) {
     max-height: 300px;
     min-height: 200px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 :global(.revSep) {

@@ -1,15 +1,14 @@
+import 'preact-material-components/LayoutGrid/style.css';
 import { h, Component } from 'preact';
+import { route } from "preact-router";
 import authorizedFetch from "../../../lib/authorizedFetch";
-import LayoutGrid from 'preact-material-components/LayoutGrid';
-import Icon from 'preact-material-components/Icon';
+import DateFormField from "../../../components/Forms/DateFormField";
 import Form from "../../../components/Forms/Form";
+import global from '../../globals';
+import LayoutGrid from 'preact-material-components/LayoutGrid';
 import SubmitButton from "../../../components/Forms/SubmitButton";
 import TextField from "../../../components/Forms/TextFormField";
-import DateFormField from "../../../components/Forms/DateFormField";
 import TimeFormField from "../../../components/Forms/TimeFormField";
-import 'preact-material-components/LayoutGrid/style.css';
-import global from '../../globals';
-import style from './style';
 
 export default class BookingReview extends Component {
     componentDidMount = () => {
@@ -18,32 +17,30 @@ export default class BookingReview extends Component {
             headers: {
                 "Accept": "application/json"
             }
-        }, true).then(
-            (response) => {
+        }, true)
+            .then(response => {
                 response.json()
-                    .then((data) => {
+                    .then(data => {
                         if (response.ok) {
                             this.setState({
                                 booking: data.data
                             });
                         } else {
-                            console.log("Well Shit");
+                            route("error");
+                            console.log("Response NOT ok");
                         }
                     })
-                    .catch((error) => {
-                        console.log("Something terrible has happened. Please try again.");
-                        console.log(error);
-                        console.log("Logging session deets");
-                        console.log(localStorage.getItem("access_token"));
+                    .catch(error => {
+                        route("error");
+                        console.log("Failed to fetch booking details.");
                     });
-            },
-            () => {
-                alert("Server is on holidays. Come back later");
-            }
-        );
+            }).catch(error => {
+                route("error");
+                console.log("Failed to reach server, cannot fetch booking details.");
+            });;
     }
 
-    render({ config, store}, { booking }) {
+    render({ config, store }, { booking }) {
         if (!booking) {
             return (
                 <div>
@@ -51,7 +48,7 @@ export default class BookingReview extends Component {
                 </div>
             );
         } else {
-            booking.sdate = booking.commences_at.substr(0,10);
+            booking.sdate = booking.commences_at.substr(0, 10);
             booking.edate = booking.ends_at.substr(0, 10);
             booking.stime = booking.commences_at.substr(11, 8);
             booking.etime = booking.ends_at.substr(11, 8);

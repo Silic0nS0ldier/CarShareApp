@@ -1,8 +1,7 @@
-import objectMerge from "object-merge";
-import express from "express";
 import { readFileSync } from "fs";
-
 import DB from "../../db/src/index";
+import express from "express";
+import objectMerge from "object-merge";
 
 // Load configuration
 const config = (() => {
@@ -42,7 +41,7 @@ async function Main() {
         /** @todo This is dead simple, just need to verify access token */
 
         // 1. Extract image name from URL (system immune to directory traversal attacks)
-        
+
 
         // 2. Map to file in database (if possible) with pattern id.datahash.extension
         // 2.1. Split value into array

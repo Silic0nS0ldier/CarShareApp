@@ -1,7 +1,3 @@
-import Knex from "knex";
-/**
- * @param {Knex.Transaction} trx 
- */
 export default async function Run(trx) {
 
     // Bookings table
@@ -72,6 +68,6 @@ export default async function Run(trx) {
             .defaultTo(false)
             .notNullable();
     });
-    
+
     return "'bookings', 'messages', and 'ratings' tables.";
 }

@@ -1,5 +1,5 @@
-import DB from "../src/index";
 import { existsSync, readFileSync } from "fs";
+import DB from "../src/index";
 import objectMerge from "object-merge";
 
 // Load configuration

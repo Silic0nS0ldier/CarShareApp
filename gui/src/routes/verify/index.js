@@ -1,6 +1,5 @@
 import "preact-material-components/Typography/style";
 import { h, Component } from "preact";
-import { route } from "preact-router";
 import Form from "../../components/Forms/Form";
 import style from "./style";
 import SubmitButton from "../../components/Forms/SubmitButton";

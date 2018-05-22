@@ -8,7 +8,6 @@ import TextField from "../../components/Forms/TextFormField";
 import global from "../globals";
 
 export default class VehicleListings extends Component {
-
     populatePage = (response) => {
         response.json()
             .then(payload => {

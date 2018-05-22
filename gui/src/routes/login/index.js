@@ -52,12 +52,12 @@ export default class Login extends Component {
                 </div>
                 <Form method="POST" action={config.url.api + "login"} onSuccess={this.login}>
                     <TextField type="email" label="Email" name="email" required />
-                    <br/>
+                    <br />
                     <TextField type="password" label="Password" name="pwd" required />
-                    <br/>
+                    <br />
                     <SubmitButton value="Login" />
                 </Form>
-                Don't have an account yet? <br/>
+                Don't have an account yet? <br />
                 Pop over <a href={config.url.gui + "register"}> registration</a> and make one today.
             </div>
         );

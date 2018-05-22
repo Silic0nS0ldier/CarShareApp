@@ -2,23 +2,23 @@ export default async function Run(trx) {
     let makeVIN = () => {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        
+
         for (var i = 0; i < 9; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
-        return text; 
+        return text;
     }
 
     let ranNum = (num) => {
-        return Math.floor(Math.random()*(1+num));
+        return Math.floor(Math.random() * (1 + num));
     }
 
     let ranYear = () => {
         var year = null;
         var yearCheck = true;
-        while(yearCheck) {
-            year = Math.floor(Math.random()*10000);
-            if(year >= 1970 && year <= 2018) {
+        while (yearCheck) {
+            year = Math.floor(Math.random() * 10000);
+            if (year >= 1970 && year <= 2018) {
                 yearCheck = false;
             }
         }
@@ -78,7 +78,7 @@ export default async function Run(trx) {
         lname: "Ivoski",
         email: "admin@norris.codes",
         email_verified: 1,
-        password: "$argon2i$v=19$m=4096,t=3,p=1$ZoxvZuYh9vXFfOuaW2K7tw$VAYY9K/IK/qzsweXgfigT3hf0oc+LMgXEdIVyf8iZog",//qwertyuiop
+        password: "$argon2i$v=19$m=4096,t=3,p=1$ZoxvZuYh9vXFfOuaW2K7tw$VAYY9K/IK/qzsweXgfigT3hf0oc+LMgXEdIVyf8iZog",//qwertyuiops
         disabled: 0,
         user_image: 2,
         credit_approved: 1
@@ -89,7 +89,7 @@ export default async function Run(trx) {
     let brands = ["Suzuki", "Peugeot", "Citroen", "Toyota", "Jeep", "Holden", "Ford", "Fiat", "Honda", "Volkswagen"];
     let models = ["Rav4", "Prado", "Landcruiser", "Commodore", "Tucson", "Barina", "Costa", "Comet", "Wrangler", "Mondeo"];
     let types = ["Hatchback", "Sedan", "SUV", "MUV", "Coupe", "Convertible", "Wagon", "Van", "Jeep", "Shrug"];
-    for (let i = 0;  i < 400; i++) {
+    for (let i = 0; i < 400; i++) {
         await seeder.insert({
             VIN: makeVIN(),
             // created_at: (new Date()).getTime().toISOString().slice(0, 19).replace('T', ' '),
