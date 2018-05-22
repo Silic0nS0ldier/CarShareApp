@@ -27,23 +27,23 @@ export default class Register extends Component {
             <div class={style.register}>
                 <div><Typography headline4>Register</Typography></div>
                 <Form method="POST" action={config.url.api + "register"}
-                messageOnSuccess="We've sent you an email. Please use the enclosed link to continue to the final phase of registration."
-                resetOnSuccess={true}>
+                    messageOnSuccess="We've sent you an email. Please use the enclosed link to continue to the final phase of registration."
+                    resetOnSuccess={true}>
                     <TextField type="text" label="First name" name="fname" required />
                     <TextField type="text" label="Middle name" name="mname" />
                     <TextField type="text" label="Last name" name="lname" required />
-                    <br/>
+                    <br />
                     <TextField type="email" label="Email" name="email" required />
-                    <br/>
+                    <br />
                     <TextField type="password" label="Password" name="pwd" required onInput={this.validatePassword} />
                     <TextField type="password" label="Verify password" name="pwd_verify" required onInput={this.validatePassword} />
-                    <br/>
+                    <br />
                     <FileField label="User Photo" name="usr_img" required />
-                    <br/>
+                    <br />
                     <SubmitButton value="Register" />
                 </Form>
                 Already have an account?
-                <br/>
+                <br />
                 Head over to <a href={config.url.gui + "login"}>login</a> to continue
             </div>
         );
