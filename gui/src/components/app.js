@@ -12,6 +12,7 @@ import OtherProfile from "../routes/profile/otherprofile";
 import Login from "../routes/login";
 import Home from "../routes/home";
 import Header from "./header";
+import VehicleNew from '../routes/vehicle/new';
 import VehicleListings from '../routes/vehicle/listings';
 import VehicleListing from '../routes/vehicle/listing';
 import VehicleModify from '../routes/vehicle/modify';
@@ -81,6 +82,7 @@ export default class App extends Component {
 					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:code" config={config} store={store} />
+					<VehicleNew path="/vehicle/create" config={config} store={store} />
 					<VehicleListings path="/vehicles" config={config} store={store} />
 					<VehicleListing path="/vehicle/:vin" config={config} store={store} />
 					<VehicleModify path="/vehicle/modify" config={config} />

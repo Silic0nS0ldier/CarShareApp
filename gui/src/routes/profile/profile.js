@@ -221,7 +221,7 @@ export default class Profile extends Component {
 										if(formattedRes.length === 0) {
 											formattedRes.push(
 												<div>
-													<span>You haven't had any bookings yet.. Why not try <a href={config.url.gui + "/vehicle/create"}>making a listing</a>?</span>
+													<span>You haven't had any bookings yet.. Why not try <a href={config.url.gui + "vehicle/create"}>making a listing</a>?</span>
 												</div>
 											);
 										}
