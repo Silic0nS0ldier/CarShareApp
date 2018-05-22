@@ -12,12 +12,14 @@ import OtherProfile from "../routes/profile/otherprofile";
 import Login from "../routes/login";
 import Home from "../routes/home";
 import Header from "./header";
+import VehicleNew from '../routes/vehicle/new';
 import VehicleListings from '../routes/vehicle/listings';
 import VehicleListing from '../routes/vehicle/listing';
 import VehicleModify from '../routes/vehicle/modify';
 import BookingNew from '../routes/booking/new';
 import BookingModify from '../routes/booking/modify';
 import BookingReview from '../routes/booking/review';
+import BookingMessage from '../routes/booking/messageview';
 
 const store = createStore();
 
@@ -81,6 +83,7 @@ export default class App extends Component {
 					<Login path="/login/:redirect?" config={config} store={store} />
 					<Register path="/register" config={config} />
 					<Verify path="/verify/:email/:code" config={config} store={store} />
+					<VehicleNew path="/vehicle/create" config={config} store={store} />
 					<VehicleListings path="/vehicles" config={config} store={store} />
 					<VehicleListing path="/vehicle/:vin" config={config} store={store} />
 					<VehicleModify path="/vehicle/modify" config={config} />
@@ -88,6 +91,7 @@ export default class App extends Component {
 					<BookingNew path="/booking/new/:vin" config={config} />
 					<BookingModify path="/booking/modify/:bookingid" config={config} />
 					<BookingReview path="/booking/:bookingid/review" config={config} store={store}/>
+					<BookingMessage path="/booking/messages/:bookingid" config={config} store={store} />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>

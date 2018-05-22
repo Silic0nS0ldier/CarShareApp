@@ -8,7 +8,7 @@ import todParser from "timeofday-parser";
 /**
  * Registers all booking related routes.
  */
-export default function register(authGuard, { BookingModel, ImageModel, UserModel, ListingModel, RatingModel }) {
+export default function register(authGuard, { BookingModel, ImageModel, UserModel, ListingModel, RatingModel, MessageModel }) {
     const router = express.Router();
 
     // Bind middleware
@@ -167,8 +167,8 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             // Fetch booking
             const booking = await BookingModel.query()
                 .where("id", req.params.id)
-                .eager("[provider,listing]")
-                .pick(UserModel, ["fname", "lname"]);
+                .eager("[provider,listing, messages.[sender]]")
+                .pick(UserModel, ["id", "fname", "lname"]);
 
             // Make sure exactly 1 record returned
             if (booking.length > 1) {

@@ -126,9 +126,9 @@ export default class Profile extends Component {
 											let date2 = book.ends_at.substr(0, 10);
 											formattedRes.push(
 												<div>
-													<span>=> {date1} ~ {date2}</span> <a href={config.url.gui + "booking/modify/" + book.id}>Edit Booking</a>
+													<span>=> {date1} ~ {date2}</span> <a href={config.url.gui + "booking/modify/" + book.id}>Edit Booking</a> ~ <a href={config.url.gui + "booking/messages/" + book.id}> View Booking Messages</a>
 												</div>
-											);
+											)
 										}
 
 										if (formattedRes.length === 0) {

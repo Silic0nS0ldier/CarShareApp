@@ -348,6 +348,14 @@ export default async function DB(config) {
                         from: "bookings.id",
                         to: "ratings.booking_id"
                     }
+                },
+                messages: {
+                    relation: Model.HasManyRelation,
+                    modelClass: MessageModel,
+                    join: {
+                        from: "bookings.id",
+                        to: "messages.booking_id"
+                    }
                 }
             }
         }
@@ -372,6 +380,25 @@ export default async function DB(config) {
         }
     }
 
+    class MessageModel extends Model {
+        static get tableName() {
+            return "messages";
+        }
+
+        static get relationMappings() {
+            return {
+                sender: {
+                    relation: Model.HasOneRelation,
+                    modelClass: UserModel,
+                    join: {
+                        from: "messages.sender_id",
+                        to: "users.id"
+                    }
+                }
+            }
+        }
+    }
+
     return {
         Knex: KnexInstance,
         BookingModel,
@@ -382,6 +409,7 @@ export default async function DB(config) {
         LogModel,
         RoleModel,
         UserModel,
-        RatingModel
+        RatingModel,
+        MessageModel
     };
 }
