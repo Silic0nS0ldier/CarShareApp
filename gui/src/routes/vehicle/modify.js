@@ -1,13 +1,10 @@
+import 'preact-material-components/LayoutGrid/style.css';
 import { h, Component } from "preact";
-import { route } from "preact-router";
+import Form from "../../components/Forms/Form";
+import LayoutGrid from 'preact-material-components/LayoutGrid';
 import style from "./style";
 import SubmitButton from "../../components/Forms/SubmitButton";
 import TextField from "../../components/Forms/TextFormField";
-import Typography from "preact-material-components/Typography";
-import Form from "../../components/Forms/Form";
-import LayoutGrid from 'preact-material-components/LayoutGrid';
-import "preact-material-components/Typography/style";
-import 'preact-material-components/LayoutGrid/style.css';
 
 
 export default class VehicleModify extends Component {

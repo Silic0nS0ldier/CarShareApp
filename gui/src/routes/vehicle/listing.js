@@ -39,7 +39,6 @@ export default class VehicleListing extends Component {
     }
 
     render({ config, store }, { vehicle }) {
-        console.log("triggered"); console.log(vehicle);
         if (!vehicle) {
             return (
                 <div>
