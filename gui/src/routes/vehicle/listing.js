@@ -1,12 +1,10 @@
 import 'preact-material-components/LayoutGrid/style.css';
 import { h, Component } from 'preact';
 import authorizedFetch from "../../lib/authorizedFetch";
-import LayoutGrid from 'preact-material-components/LayoutGrid';
 import Icon from 'preact-material-components/Icon';
-
+import LayoutGrid from 'preact-material-components/LayoutGrid';
 import style from './style';
-import { format } from 'url';
-import BookingReview from '../booking/review';
+import { route } from "preact-router";
 
 export default class VehicleListing extends Component {
 
@@ -16,32 +14,32 @@ export default class VehicleListing extends Component {
             headers: {
                 "Accept": "application/json"
             }
-        }, true).then(
-            (response) => {
+        }, true)
+            .then(response => {
                 response.json()
                     .then((data) => {
                         if (response.ok) {
-                            console.log(data);
                             data.odometer_last_update = (new Date(data.odometer_last_update)).toLocaleDateString();
                             this.setState({
                                 vehicle: data
                             });
                         } else {
-                            console.log("Well Shit");
+                            route("error");
+                            console.log("Response NOT ok");
                         }
                     })
                     .catch((error) => {
-                        console.log("Something terrible has happened. Please try again.");
-                        console.log(error);
+                        route("error");
+                        console.log("Failed to fetch listing details.");
                     });
-            },
-            () => {
-                alert("Server is on holidays. Come back later");
-            }
-        );
+            }).catch(error => {
+                route("error");
+                console.log("Failed to reach server, cannot fetch listing details.");
+            });
     }
 
     render({ config, store }, { vehicle }) {
+        console.log("triggered"); console.log(vehicle);
         if (!vehicle) {
             return (
                 <div>
@@ -184,15 +182,15 @@ export default class VehicleListing extends Component {
                                             {(() => {
                                                 let formattedRes = [];
                                                 vehicle.books = [];
-                                                for(let book of vehicle.bookings) {
+                                                for (let book of vehicle.bookings) {
                                                     let date1 = null;
                                                     let date2 = null;
                                                     date1 = book.commences_at.substr(0, 10);
                                                     date2 = book.ends_at.substr(0, 10);
-                                                    vehicle.books.push({sdate: date1, edate: date2});
+                                                    vehicle.books.push({ sdate: date1, edate: date2 });
                                                 }
 
-                                                for(let book of vehicle.books) {
+                                                for (let book of vehicle.books) {
                                                     formattedRes.push(
                                                         <div>{book.sdate} - {book.edate}</div>
                                                     );
@@ -200,7 +198,7 @@ export default class VehicleListing extends Component {
 
                                                 return formattedRes;
                                             })()}
-                                                <a href={config.url.gui + "booking/new/" + vehicle.VIN}>Book Now</a>
+                                            <a href={config.url.gui + "booking/new/" + vehicle.VIN}>Book Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -210,17 +208,17 @@ export default class VehicleListing extends Component {
                                             Reviews:
                                         </h2>
                                         <div class="reviewsCont">
-                                        {(() => {
+                                            {(() => {
                                                 let formattedRes = [];
                                                 vehicle.reviews = [];
 
-                                                if(vehicle.bookings[0].review != null) {
-                                                    for(let book of vehicle.bookings) {
+                                                if (vehicle.bookings.length !== 0) {
+                                                    for (let book of vehicle.bookings) {
                                                         let rev = book.review;
-                                                        vehicle.reviews.push({sub: rev.subject, comm: rev.comment, rec: rev.recommend});
+                                                        vehicle.reviews.push({ sub: rev.subject, comm: rev.comment, rec: rev.recommend });
                                                     }
-                                                
-                                                    for(let rev of vehicle.reviews) {
+
+                                                    for (let rev of vehicle.reviews) {
                                                         formattedRes.push(
                                                             <div class="revSep">
                                                                 <p>
@@ -239,7 +237,7 @@ export default class VehicleListing extends Component {
                                                     }
                                                 }
 
-                                                if(vehicle.reviews.length == 0) {
+                                                if (vehicle.reviews.length == 0) {
                                                     formattedRes.push(
                                                         <div class="revSep">
                                                             <p>
