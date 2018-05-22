@@ -27,19 +27,23 @@ export default class BookingNew extends Component {
                                 vehicle: data
                             });
                         } else {
-                            route("error");
+                            route("/error");
                             console.log("Response NOT ok");
                         }
                     })
                     .catch((error) => {
-                        route("error");
+                        route("/error");
                         console.log("Failed to fetch listing details.");
                     });
             }).catch(error => {
-                route("error");
+                route("/error");
                 console.log("Failed to reach server, cannot fetch listing details.");
             });
     }
+
+    success = () => {
+        route("/profile");
+    };
 
     render({ config }, { vehicle }) {
         if (!vehicle) {
@@ -67,7 +71,7 @@ export default class BookingNew extends Component {
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="12">
                                 <div>
-                                    <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true}>
+                                    <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true} onSuccessMessage="Booking created, we'll redirect you to your profile shortly." onSuccess={this.success}>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="6">
                                                 <div>

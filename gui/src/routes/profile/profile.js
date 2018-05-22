@@ -36,16 +36,16 @@ export default class Profile extends Component {
 								profile: data.data
 							});
 						} else {
-							route("error");
+							route("/error");
 							console.log("Response NOT ok");
 						}
 					})
 					.catch((error) => {
-						route("error");
+						route("/error");
 						console.log("Failed to fetch profile details.");
 					});
 			}).catch(error => {
-				route("error");
+				route("/error");
 				console.log("Failed to reach server, cannot fetch profile details.");
 			});
 	}

@@ -25,16 +25,16 @@ export default class BookingModify extends Component {
                             booking: data.data
                         });
                     } else {
-                        route("error");
+                        route("/error");
                         console.log("Response NOT ok");
                     }
                 })
                 .catch(error => {
-                    route("error");
+                    route("/error");
                     console.log("Failed to fetch booking details.");
                 });
         }).catch(error => {
-            route("error");
+            route("/error");
             console.log("Failed to reach server, cannot fetch booking details.");
         });
     }

@@ -24,16 +24,16 @@ export default class VehicleListing extends Component {
                                 vehicle: data
                             });
                         } else {
-                            route("error");
+                            route("/error");
                             console.log("Response NOT ok");
                         }
                     })
                     .catch((error) => {
-                        route("error");
+                        route("/error");
                         console.log("Failed to fetch listing details.");
                     });
             }).catch(error => {
-                route("error");
+                route("/error");
                 console.log("Failed to reach server, cannot fetch listing details.");
             });
     }
