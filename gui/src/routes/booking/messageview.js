@@ -111,7 +111,7 @@ export default class BookingMessage extends Component {
                                             <LayoutGrid.Inner>
                                                 <LayoutGrid.Cell cols="12">
                                                     <div>
-                                                        <TextField label="Your Message" name="message" required />
+                                                        <TextField label="Your Message" type="text" name="message" required />
                                                     </div>
                                                 </LayoutGrid.Cell>
                                             </LayoutGrid.Inner>
