@@ -1,15 +1,14 @@
+import 'preact-material-components/LayoutGrid/style.css';
 import { h, Component } from 'preact';
+import { route } from "preact-router";
 import authorizedFetch from "../../lib/authorizedFetch";
-import LayoutGrid from 'preact-material-components/LayoutGrid';
-import Icon from 'preact-material-components/Icon';
+import DateFormField from "../../components/Forms/DateFormField";
 import Form from "../../components/Forms/Form";
+import global from '../globals';
+import LayoutGrid from 'preact-material-components/LayoutGrid';
 import SubmitButton from "../../components/Forms/SubmitButton";
 import TextField from "../../components/Forms/TextFormField";
-import DateFormField from "../../components/Forms/DateFormField";
 import TimeFormField from "../../components/Forms/TimeFormField";
-import 'preact-material-components/LayoutGrid/style.css';
-import global from '../globals';
-import style from './style';
 
 export default class BookingModify extends Component {
     componentDidMount = () => {
@@ -18,29 +17,26 @@ export default class BookingModify extends Component {
             headers: {
                 "Accept": "application/json"
             }
-        }, true).then(
-            (response) => {
-                response.json()
-                    .then((data) => {
-                        if (response.ok) {
-                            this.setState({
-                                booking: data.data
-                            });
-                        } else {
-                            console.log("Well Shit");
-                        }
-                    })
-                    .catch((error) => {
-                        console.log("Something terrible has happened. Please try again.");
-                        console.log(error);
-                        console.log("Logging session deets");
-                        console.log(localStorage.getItem("access_token"));
-                    });
-            },
-            () => {
-                alert("Server is on holidays. Come back later");
-            }
-        );
+        }, true).then(response => {
+            response.json()
+                .then(data => {
+                    if (response.ok) {
+                        this.setState({
+                            booking: data.data
+                        });
+                    } else {
+                        route("error");
+                        console.log("Response NOT ok");
+                    }
+                })
+                .catch(error => {
+                    route("error");
+                    console.log("Failed to fetch booking details.");
+                });
+        }).catch(error => {
+            route("error");
+            console.log("Failed to reach server, cannot fetch booking details.");
+        });
     }
 
     render({ config }, { booking }) {
@@ -51,7 +47,7 @@ export default class BookingModify extends Component {
                 </div>
             );
         } else {
-            booking.sdate = booking.commences_at.substr(0,10);
+            booking.sdate = booking.commences_at.substr(0, 10);
             booking.edate = booking.ends_at.substr(0, 10);
             booking.stime = booking.commences_at.substr(11, 8);
             booking.etime = booking.ends_at.substr(11, 8);
