@@ -1,15 +1,11 @@
-import Card from "preact-material-components/Card";
-import Button from "preact-material-components/Button";
-import authorizedFetch from "../../lib/authorizedFetch";
-import { h, Component } from "preact";
-import Form from "../../components/Forms/Form";
-import TextField from "../../components/Forms/TextFormField";
-
-import SubmitButton from "../../components/Forms/SubmitButton";
-import "preact-material-components/Button/style.css";
 import "preact-material-components/Card/style.css";
-
+import { h, Component } from "preact";
+import authorizedFetch from "../../lib/authorizedFetch";
+import Card from "preact-material-components/Card";
+import Form from "../../components/Forms/Form";
 import style from "./style";
+import SubmitButton from "../../components/Forms/SubmitButton";
+import TextField from "../../components/Forms/TextFormField";
 
 export default class Profile extends Component {
 	validatePassword = e => {
@@ -40,22 +36,18 @@ export default class Profile extends Component {
 								profile: data.data
 							});
 						} else {
-							console.log("Well Shit");
+							route("error");
+							console.log("Response NOT ok");
 						}
 					})
 					.catch((error) => {
-						console.log("Something terrible has happened. Please try again.");
-						console.log(error);
+						route("error");
+						console.log("Failed to fetch profile details.");
 					});
-			},
-			() => {
-				alert("Server is on holidays. Come back later");
-			}
-		).catch(
-			(error) => {
-				console.log(error);
-			}
-		);
+			}).catch(error => {
+				route("error");
+				console.log("Failed to reach server, cannot fetch profile details.");
+			});
 	}
 
 	render({ config, store }, { profile }) {
