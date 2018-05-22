@@ -39,6 +39,10 @@ export default class BookingModify extends Component {
         });
     }
 
+    success = () => {
+        route("/profile");
+    };
+
     render({ config }, { booking }) {
         if (!booking) {
             return (
@@ -52,7 +56,7 @@ export default class BookingModify extends Component {
             booking.stime = booking.commences_at.substr(11, 8);
             booking.etime = booking.ends_at.substr(11, 8);
             return (
-                <div class={global.wrapper}>
+                <div class={global.wrapper}>INCOMPLETE: API needs to be created
                     <LayoutGrid>
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="12">
@@ -69,28 +73,28 @@ export default class BookingModify extends Component {
                         <LayoutGrid.Inner>
                             <LayoutGrid.Cell cols="12">
                                 <div>
-                                    <Form method="POST" action={config.url.api + "booking/new"} loginRequired={true}>
+                                    <Form method="POST" action={config.url.api + "booking/modify"} loginRequired={true} onSuccessMessage="Booking modified, you'll be redirected to your profile shortly." onSuccess={this.success}>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="6">
                                                 <div>
-                                                    <DateFormField label="Start Date" name="sdate" required />
+                                                    <DateFormField label="Start Date" name="sdate" value={booking.sdate} required />
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="6">
                                                 <div>
-                                                    <DateFormField label="End Date" name="edate" required />
+                                                    <DateFormField label="End Date" name="edate" value={booking.edate} required />
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
                                         <LayoutGrid.Inner>
                                             <LayoutGrid.Cell cols="6">
                                                 <div>
-                                                    <TimeFormField label="Start Time" name="stime" required />
+                                                    <TimeFormField label="Start Time" name="stime" value={booking.stime} required />
                                                 </div>
                                             </LayoutGrid.Cell>
                                             <LayoutGrid.Cell cols="6">
                                                 <div>
-                                                    <TimeFormField label="End Time" name="etime" required />
+                                                    <TimeFormField label="End Time" name="etime" value={booking.etime} required />
                                                 </div>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
@@ -100,7 +104,7 @@ export default class BookingModify extends Component {
                                                 <center>
                                                     <br />
                                                     <br />
-                                                    <SubmitButton value="Book Now" />
+                                                    <SubmitButton value="MODIFY" />
                                                 </center>
                                             </LayoutGrid.Cell>
                                         </LayoutGrid.Inner>
