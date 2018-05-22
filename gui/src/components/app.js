@@ -19,6 +19,7 @@ import VehicleModify from '../routes/vehicle/modify';
 import BookingNew from '../routes/booking/new';
 import BookingModify from '../routes/booking/modify';
 import BookingReview from '../routes/booking/review';
+import BookingMessage from '../routes/booking/messageview';
 
 const store = createStore();
 
@@ -90,6 +91,7 @@ export default class App extends Component {
 					<BookingNew path="/booking/new/:vin" config={config} />
 					<BookingModify path="/booking/modify/:bookingid" config={config} />
 					<BookingReview path="/booking/:bookingid/review" config={config} store={store}/>
+					<BookingMessage path="/booking/messages/:bookingid" config={config} store={store} />
 					<div path="/error">
 						An unrecoverable error occured. Sorry. 😕
 					</div>
