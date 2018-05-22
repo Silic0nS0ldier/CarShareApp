@@ -415,8 +415,9 @@ export default function register(authGuard, { ImageModel, LogModel, UserModel, E
             const user = await UserModel.query()
                 .where("id", req.params.id)
                 .select("fname", "mnames", "lname", "user_image", "email")
-                .eager("userImage")
+                .eager("[userImage, bookingsProvider.[review]]")
                 .pick(ImageModel, ["num", "integrity", "extension"]);
+                console.log(user);
             // Make sure something was found
             if (user.length > 1) {
                 res.sendStatus(500);

@@ -53,8 +53,23 @@
 
 .owner, .dates, .reviews {
     background: #efefef;
-    height: 150px;
     padding: 20px;
+}
+
+:global(.reviewsCont) {
+    max-height: 300px;
+    min-height: 200px;
+    overflow-y: scroll;
+}
+
+:global(.revSep) {
+    border-bottom: 1px solid #fff;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+:global(.revSep:last-of-type) {
+    border-bottom: none;
 }
 
 /*

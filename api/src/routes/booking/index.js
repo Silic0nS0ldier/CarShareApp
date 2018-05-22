@@ -8,7 +8,7 @@ import todParser from "timeofday-parser";
 /**
  * Registers all booking related routes.
  */
-export default function register(authGuard, { BookingModel, ImageModel, UserModel, ListingModel }) {
+export default function register(authGuard, { BookingModel, ImageModel, UserModel, ListingModel, RatingModel }) {
     const router = express.Router();
 
     // Bind middleware
@@ -198,7 +198,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
 
     // GET: Get users bookings
     /** @todo Testing */
-    router.get("/bookings", async (req, res) => {
+    /* router.get("/bookings", async (req, res) => {
         try {
             // Grab data
             const data = {
@@ -214,7 +214,7 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             res.sendStatus(500);
             return;
         }
-    });
+    }); */
 
     // GET: All dates car is booked out
     router.get("/bookings/:vin", async (req, res) => {
@@ -229,6 +229,32 @@ export default function register(authGuard, { BookingModel, ImageModel, UserMode
             });
 
             return;
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+            return;
+        }
+    });
+
+    router.get("/booking/review", async(req, res) => {
+        try{
+            let model = await RatingModel
+                .query()
+                .where("user_id", 2)
+                .eager("[booking.[review]]");
+            console.log("LOGGING MODEL");
+            console.log(model);
+            res.status(200).send(model);
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+            return;
+        }
+    });
+
+    router.get("/review", async(req, res) => {
+        try{
+
         } catch (error) {
             console.log(error);
             res.sendStatus(500);

@@ -340,6 +340,33 @@ export default async function DB(config) {
                         from: "bookings.VIN",
                         to: "listings.VIN"
                     }
+                },
+                review: {
+                    relation: Model.HasOneRelation,
+                    modelClass: RatingModel,
+                    join: {
+                        from: "bookings.id",
+                        to: "ratings.booking_id"
+                    }
+                }
+            }
+        }
+    }
+
+    class RatingModel extends Model {
+        static get tableName() {
+            return "ratings";
+        }
+
+        static get relationMappings() {
+            return {
+                booking: {
+                    relation: Model.HasOneRelation,
+                    modelClass: BookingModel,
+                    join: {
+                        from: "ratings.booking_id",
+                        to: "bookings.id"
+                    }
                 }
             }
         }
@@ -354,6 +381,7 @@ export default async function DB(config) {
         ListingModel,
         LogModel,
         RoleModel,
-        UserModel
+        UserModel,
+        RatingModel
     };
 }

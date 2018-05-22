@@ -67,6 +67,7 @@ export default class OtherProfile extends Component {
                             this.setState({
                                 profile: data.data
 							});
+							console.log(data.data);
                         } else {
                             console.log("Well Shit");
                         }
@@ -135,48 +136,52 @@ export default class OtherProfile extends Component {
 								<div class=" mdc-typography--caption"></div>
 							</div>
 							<div class={style.cardBody}>
-								<div>
-									<div>
-										<h4>
-											Review Title
-										</h4>
-										<span>
-											The rating
-										</span>
-										&nbsp; - &nbsp;
-										<span>
-											The rating Date
-										</span>
-									</div>
-									<div>
-										<h4>
-											Review Title
-										</h4>
-										<span>
-											The rating
-										</span>
-										&nbsp; - &nbsp;
-										<span>
-											The rating Date
-										</span>
-									</div>
-									<div>
-										<h4>
-											Review Title
-										</h4>
-										<span>
-											The rating
-										</span>
-										&nbsp; - &nbsp;
-										<span>
-											The rating Date
-										</span>
-									</div>
+								<div class="reviewsCont">
+									{(() => {
+										let formattedRes = [];
+										profile.reviews = [];
+
+										if(profile.bookingsProvider[0].review != null) {
+											for(let book of profile.bookingsProvider) {
+												let rev = book.review;
+												profile.reviews.push({sub: rev.subject, comm: rev.comment, rec: rev.recommend});
+											}
+										
+											for(let rev of profile.reviews) {
+												formattedRes.push(
+													<div class="revSep">
+														<p>
+															<em>
+																{rev.sub}
+															</em>
+														</p>
+														<p>
+															{rev.comm}
+														</p>
+														<p>
+															Recommendedation: {rev.rec}
+														</p>
+													</div>
+												);
+											}
+										}
+
+										if(profile.reviews.length == 0) {
+											formattedRes.push(
+												<div class="revSep">
+													<p>
+														<em>
+															There is currently no reviews for this listing
+														</em>
+													</p>
+												</div>
+											);
+										}
+
+										return formattedRes;
+									})()}
 								</div>
 							</div>
-							<Card.Actions>
-								<Card.ActionButton>OKAY</Card.ActionButton>
-							</Card.Actions>
 						</Card>
 					</div>
 				</div>

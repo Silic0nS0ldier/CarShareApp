@@ -6,6 +6,7 @@ import Icon from 'preact-material-components/Icon';
 
 import style from './style';
 import { format } from 'url';
+import BookingReview from '../booking/review';
 
 export default class VehicleListing extends Component {
 
@@ -208,8 +209,50 @@ export default class VehicleListing extends Component {
                                         <h2>
                                             Reviews:
                                         </h2>
-                                        <div>
+                                        <div class="reviewsCont">
+                                        {(() => {
+                                                let formattedRes = [];
+                                                vehicle.reviews = [];
 
+                                                if(vehicle.bookings[0].review != null) {
+                                                    for(let book of vehicle.bookings) {
+                                                        let rev = book.review;
+                                                        vehicle.reviews.push({sub: rev.subject, comm: rev.comment, rec: rev.recommend});
+                                                    }
+                                                
+                                                    for(let rev of vehicle.reviews) {
+                                                        formattedRes.push(
+                                                            <div class="revSep">
+                                                                <p>
+                                                                    <em>
+                                                                        {rev.sub}
+                                                                    </em>
+                                                                </p>
+                                                                <p>
+                                                                    {rev.comm}
+                                                                </p>
+                                                                <p>
+                                                                    Recommendedation: {rev.rec}
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                    }
+                                                }
+
+                                                if(vehicle.reviews.length == 0) {
+                                                    formattedRes.push(
+                                                        <div class="revSep">
+                                                            <p>
+                                                                <em>
+                                                                    There is currently no reviews for this listing
+                                                                </em>
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                return formattedRes;
+                                            })()}
                                         </div>
                                     </div>
                                 </div>
