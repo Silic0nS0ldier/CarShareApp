@@ -1,0 +1,146 @@
+.divSpacer {
+    margin-bottom: 40px;
+}
+
+.divSpacerMini {
+    margin-bottom: 20px;
+}
+
+.centreText {
+    text-align: center;
+}
+
+.gallery {
+    max-height: 300px;
+}
+
+.innerGall {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    max-height: 300px;
+    width: 100%;
+    min-width: 100%;
+    white-space: nowrap;
+}
+
+.gallery .innerGall div {
+    width: 300px;
+    display: inline-block;
+}
+
+.gallery .innerGall img {
+    width: 300px;
+}
+
+.listingInfo {
+    background: #efefef;
+    padding: 20px;
+}
+
+.listingInfo .divSpacerMini {
+    font-size: 20px;
+    display: flex;
+}
+
+.listingInfo .divSpacerMini i {
+    margin-right: 10px;
+}
+
+.desc {
+    background: #efefef;
+    padding: 20px;
+}
+
+.owner, .dates, .reviews {
+    background: #efefef;
+    padding: 20px;
+}
+
+:global(.reviewsCont) {
+    max-height: 300px;
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+:global(.revSep) {
+    border-bottom: 1px solid #fff;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+:global(.revSep:last-of-type) {
+    border-bottom: none;
+}
+
+/*
+ * Modify
+ **********/
+
+.formSection {
+    background: #c4c4c4;
+    padding: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/*
+ * Listings
+ **********/
+
+.filters:first-of-type {
+    margin-top: 0;
+}
+
+.filters:last-of-type {
+    margin-bottom: 0;
+}
+
+.filters {
+    background: #cacaca;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.results:first-of-type {
+    margin-top: 0;
+}
+
+.results:last-of-type {
+    margin-bottom: 0;
+}
+
+.results {
+    background: #d9d9d9;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.listingsSpecs > div {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.listingsSpecs span, .listingsSpecs span i {
+    display: flex;
+}
+
+.searchBar :global(.mdc-text-field--upgraded) {
+    width: 100%;
+}
+
+/*
+ * General
+ **********/
+
+.searchBar {
+    background: #df8926;
+    padding: 10px;
+}
+
+.searchBar > form {
+    padding: 0;
+    padding-left: 5px;
+}

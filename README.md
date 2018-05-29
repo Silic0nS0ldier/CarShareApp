@@ -1,6 +1,6 @@
 # CarShareApp
 
-tl;dr, fastest way to get started is install Docker and run `docker-compose up` from this folder. Ignore any links ommitted in the console, and use those in the Docker section.
+tl;dr, fastest way to get started is install Docker and run `docker-compose up` from this folder. Ignore any links ommitted in the console, and use those in the Docker section. Running this natively is fully supported, but will take more work to get set up (though you also gain the ability to restart a single component compared to compose).
 
 ## Docker
 
@@ -8,6 +8,7 @@ tl;dr, fastest way to get started is install Docker and run `docker-compose up` 
 - API: http://localhost:8080/
 - IMG: http://localhost:8888/
 - Adminer: http://localhost:5050/
+- MailCatcher: http://localhost:1080/
 
 To get running, just use `docker-compose up`. Dependencies will be automatically installed, and thanks to volume mapping changes will be immediately applied to the running containers. The command can be run from the root project folder and all folders it contains.
 

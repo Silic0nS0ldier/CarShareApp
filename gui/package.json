@@ -1,15 +1,22 @@
 {
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-scripts": "1.1.4"
-  },
   "scripts": {
-    "start": "npm install -silent && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "build": "node -r esm configbuild.js && preact build --no-prerender",
+    "serve": "preact serve",
+    "dev": "node -r esm configbuild.js && preact -p 80 watch",
+    "dockerDev": "npm i && node -r esm configbuild.js && preact -p 3000 watch"
+  },
+  "devDependencies": {
+    "esm": "^3.0.32",
+    "object-merge": "^2.5.1",
+    "preact-cli": "^2.0.0"
+  },
+  "dependencies": {
+    "jwt-decode": "^2.2.0",
+    "linkstate": "^1.1.1",
+    "preact": "^8.2.1",
+    "preact-material-components": "^1.4.0",
+    "preact-router": "^2.5.5",
+    "unistore": "^3.0.5"
   }
 }

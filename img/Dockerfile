@@ -1,4 +1,4 @@
-FROM node:9.11.1-alpine
+FROM node:10.0.0-alpine
 
 # Add non-root user
 RUN addgroup -S nupp && adduser -S -g nupp img
@@ -13,6 +13,3 @@ USER img
 
 # Expose server port
 EXPOSE 8888
-
-# Start node server. Container will shut down if this terminates.
-CMD [ "npm", "start" ]

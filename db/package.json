@@ -1,14 +1,15 @@
 {
-    "version": "0.1.0",
     "private": true,
     "main": "src/index.js",
     "scripts": {
-        "migrate": "npm install -silent && node migrations/migrator.js"
+        "migrate": "node -r esm migrations/migrator.js",
+        "dockerMigrate": "npm i && node -r esm migrations/migrator.js"
     },
     "dependencies": {
+        "esm": "^3.0.30",
         "knex": "^0.14.6",
         "mysql": "^2.15.0",
-        "objection": "^1.1.3",
-        "thread-sleep": "^2.0.0"
+        "object-merge": "^2.5.1",
+        "objection": "^1.1.3"
     }
 }

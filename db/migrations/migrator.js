@@ -1,62 +1,79 @@
+import { existsSync, readFileSync } from "fs";
+import DB from "../src/index";
+import objectMerge from "object-merge";
+
+// Load configuration
+const config = (() => {
+    const rawConfig = JSON.parse(readFileSync("../config/config.json", "utf8"));
+    switch (process.env.SCENARIO) {
+        case "production":
+            return rawConfig.production;
+        case "staging":
+            return objectMerge(rawConfig.production, rawConfig.staging);
+        case "development":
+            return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
+        default: {
+            if (process.env.DOCKER == true) throw new Error("Environment variable SCENARIO must be set to production, staging or development.");
+            else {
+                console.log("Assuming local non-docker development environment.");
+                return objectMerge(rawConfig.production, rawConfig.staging, rawConfig.development);
+            }
+        }
+    }
+})();
+
 console.log("************************" + "\n" +
-            "* CarShareApp Migrator *" + "\n" +
-            "************************");
+    "* CarShareApp Migrator *" + "\n" +
+    "************************");
 
 // Wrap everything in an async function to allow await to bring order to chaos
 async function Main() {
-    const { Knex } = require("../src/index");
-    const { existsSync } = require("fs");
-    const { performance } = require("perf_hooks")
+    // Import Knex
+    const { Knex } = await DB(config);
 
-        if (!await Knex.schema.hasTable("migrations")) {
-            console.log("Table 'migrations' does not exist and will be created.");
-            
-            // Attempt to create table within transaction
-            await Knex.transaction(async trx => {
-                try {
-                    performance.mark("ims");
-                    await trx.schema.createTable("migrations", table => {
-                        table.comment("Logs migrations, by migrator.");
-                        table.increments()
-                            .unsigned()
-                            .primary()
-                            .comment("Used to get last migration.");
-                        table.integer("version")
-                            .unsigned()
-                            .notNullable()
-                            .unique()
-                            .comment("Migration version.");
-                        table.timestamp("completed_at")
-                            .defaultTo(trx.fn.now())
-                            .notNullable()
-                            .comment("Time migration was completed.");
-                        table.bigInteger("duration")
-                            .unsigned()
-                            .notNullable()
-                            .comment("Time migration took to complete in milliseconds.");
-                        table.string("comment")
-                            .comment("Optional migration comment.");
-                    });
-                    performance.mark("ime");
+    if (!await Knex.schema.hasTable("migrations")) {
+        console.log("Table 'migrations' does not exist and will be created.");
 
-                    performance.measure("im", "ims", "ime");
+        // Attempt to create table within transaction
+        await Knex.transaction(async trx => {
+            try {
+                await trx.schema.createTable("migrations", table => {
+                    table.comment("Logs migrations, by migrator.");
+                    table.increments()
+                        .unsigned()
+                        .primary()
+                        .comment("Used to get last migration.");
+                    table.integer("version")
+                        .unsigned()
+                        .notNullable()
+                        .unique()
+                        .comment("Migration version.");
+                    table.timestamp("completed_at")
+                        .defaultTo(trx.fn.now())
+                        .notNullable()
+                        .comment("Time migration was completed.");
+                    table.bigInteger("duration")
+                        .unsigned()
+                        .notNullable()
+                        .comment("Time migration took to complete in milliseconds.");
+                    table.string("comment")
+                        .comment("Optional migration comment.");
+                });
 
-                    await trx("migrations").insert({
-                        version: 0,
-                        duration: performance.getEntriesByName("im")[0].duration,
-                        comment: "Creation of this migrations table."
-                    });
+                await trx("migrations").insert({
+                    version: 0,
+                    duration: 0,
+                    comment: "Creation of this migrations table."
+                });
 
-                    performance.clearMarks()
-                    performance.clearMeasures();
-
-                    console.log("Ready to migrate.");
-                } catch (error) {
-                    console.log("Creation of 'migrations' table failed. Database is in an unknown state.");
-                    throw error;
-                }
-            });
-        }
+                console.log("Ready to migrate.");
+            } catch (error) {
+                console.log("Creation of 'migrations' table failed. Database is in an unknown state.");
+                console.log(error);
+                process.exit();
+            }
+        });
+    }
 
     // Determine what migrations, if any, need to be performed.
 
@@ -72,43 +89,34 @@ async function Main() {
         console.log(`Applying migration "./migrations/${version}.js"...`);
         await Knex.transaction(async trx => {
             try {
-                performance.mark("ms");
-                let comment = await require(`./${version}.js`)(trx);
-
-                // Prepare times
-                performance.mark("me");
-                performance.measure("m", "ms", "me");
+                let comment = await (await import(`./${version}.js`)).default(trx);
 
                 await trx("migrations").insert({
                     version: version,
-                    duration: performance.getEntriesByName("m")[0].duration,
+                    duration: 0,
                     comment: comment
                 });
-
-                performance.clearMarks();
-                performance.clearMeasures();
 
                 console.log("Migration succeeded!");
             } catch (error) {
                 console.log("Migration failed! Database is in an unknown state.");
-                throw error;
+                console.log(error);
+                process.exit(1);
             }
         });
         migrations++;
     }
-    
+
     if (migrations === 0) {
         console.log("Already up to date!");
     }
     else {
         console.log(`${migrations} migration(s) performed successfully!`);
     }
+    Knex.destroy(() => {
+        process.exit(0);
+    });
 }
 
-try {
-    Main().catch(err => {
-        throw err;
-    });
-} catch (err) {
-    throw err;
-}
+
+Main();

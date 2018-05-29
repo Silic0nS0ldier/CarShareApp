@@ -11,14 +11,24 @@ services:
     volumes:
       - ./api:/home/api/code
       - ./db:/home/api/db
-  gui: # Hosts the GUI portion of the system.
-    depends_on:
-      - api
-    build: ./gui/
-    ports:
-      - 80:3000
-    volumes:
-      - ./gui:/home/gui/code
+      - ./config:/home/api/config
+    environment:
+      - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerStart
+#  gui: # Hosts the GUI portion of the system.
+#    depends_on:
+#      - api
+#    build: ./gui/
+#    ports:
+#      - 80:3000
+#    volumes:
+#      - ./gui:/home/gui/code
+#      - ./config:/home/gui/config
+#    environment:
+#      - SCENARIO=development
+#      - DOCKER=1
+#    command: npm run dockerDev
   img: # Hosts the image server portion of the system.
     depends_on:
       - migrator
@@ -26,8 +36,13 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./img:/home/img/code/img
-      - ./db:/home/img/code/db
+      - ./img:/home/img/code
+      - ./db:/home/img/db
+      - ./config:/home/img/config
+    environment:
+      - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerStart
   db: # Hosts the database. This currently will not persist database contents.
     image: mysql:5.7.21
     environment:
@@ -45,6 +60,14 @@ services:
     build: ./db/
     volumes:
       - ./db:/home/migrator/code
-
-# should there be a special installer service? might allow for ways to reduce start time, and race conditions.
+      - ./config:/home/migrator/config
+    environment:
+      - SCENARIO=development
+      - DOCKER=1
+    command: npm run dockerMigrate
+  mail: # Catches sent emails
+    image: schickling/mailcatcher
+    ports:
+      - 1080:1080
+# For later: Production deployment should handle install operations, not each container. Automatic install here is for convenience.
     

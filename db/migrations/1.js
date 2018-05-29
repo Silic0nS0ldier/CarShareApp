@@ -1,7 +1,7 @@
 /**
  * @param {Knex.Transaction} trx 
  */
-async function Run(trx) {
+export default async function Run(trx) {
     // System logs table
     await trx.schema.createTable("logs", table => {
         table.comment("System logs.");
@@ -23,7 +23,6 @@ async function Run(trx) {
     await trx.schema.createTable("images", table => {
         table.comment("Stores site images.");
         table.increments()
-            .unsigned()
             .comment("Unique identifier for image, used for internal purposes.");
         table.integer("num")
             .unsigned()
@@ -53,8 +52,7 @@ async function Run(trx) {
     // Users table
     await trx.schema.createTable("users", table => {
         table.comment("Contains user account data.");
-        table.increments("id")
-            .unsigned()
+        table.increments()
             .comment("Used by system to efficiently retrieve user data.");
         table.string("fname")
             .notNullable()
@@ -93,8 +91,7 @@ async function Run(trx) {
     // Roles table
     await trx.schema.createTable("roles", table => {
         table.comment("Defines roles a user can have. Roles control access.")
-        table.increments("id")
-            .unsigned()
+        table.increments()
             .comment("Unqiue identifier for role.");
         table.string("name")
             .notNullable()
@@ -169,9 +166,9 @@ async function Run(trx) {
             .unsigned()
             .notNullable()
             .comment("Odometer value in thousands.");
-        table.date("odometer_last_update")
-            .notNullable()
+        table.dateTime("odometer_last_update")
             .defaultTo(trx.fn.now())
+            .notNullable()
             .comment("Date odometer value was last changed.");
         table.string("brand")
             .comment("Vehicle brand. NULL indicates custom.");
@@ -215,5 +212,3 @@ async function Run(trx) {
 
     return "'logs', 'images', 'users', 'roles', 'users_roles', and 'listings' tables created.";
 }
-
-module.exports = Run;
